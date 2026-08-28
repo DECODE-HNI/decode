@@ -351,3 +351,22 @@ würde für diese Elemente Duplikate anlegen statt zu mergen. Empfehlung: Import
 in ein **neues, leeres EA-Projekt** (mit importiertem RFLPV2-Profil), um den
 Ist-Zustand des Graphen sauber zu spiegeln; `rflpv2.qea` bleibt das separate
 Hand-Testprojekt.
+
+**Diagramm-Erzeugung (28.08.2026, auf ausdrücklichen Wunsch ergänzt).** Der
+Export bringt jetzt zusätzlich ein einziges EA-Diagramm mit — jeder Knoten
+und jede Kante ist darauf platziert, kein Filtern/Kuratieren. Layout: pro
+Stereotyp-Kategorie ein eigenes Zeilen-Raster ("Band"), Bänder untereinander
+gestapelt; bewusst kein Anspruch auf hübsches Layout, nur ein reproduzierbarer
+Ausgangspunkt (in EA per "Layout Diagram" weiter verfeinerbar). Format
+(`<xmi:Extension>`/`<diagrams>`, `DUID`-basierte Verknüpfung von Shape zu
+Kante über `EOID`/`SOID`) wurde Zeichen für Zeichen gegen `rflpv2_package.xml`
+verifiziert, inklusive der Kantenrichtung (`SOID`=Start, `EOID`=Ende — bei
+Komposition zeigt `SOID` auf das Kind, `EOID` auf den Elternteil, exakt
+dieselbe Regel wie beim `aggregation="composite"`-Ende in `<uml:Model>`,
+dort ebenfalls empirisch bestätigt). **Noch offen:** ob der `<diagrams>`-Block
+auch *ohne* die begleitenden, stark redundanten `<elements>`/`<connectors>`-
+Bookkeeping-Blöcke, die EAs eigener Exporter zusätzlich schreibt, beim Import
+genügt — bloße Elementerzeugung ganz ohne `<xmi:Extension>` funktioniert
+nachweislich (`rflpv2_merge_test.xml`), das Diagramm ist der noch ungetestete
+Teil. Abschaltbar über `--no-diagram`, falls der Import mit Diagramm-Block
+Probleme macht.

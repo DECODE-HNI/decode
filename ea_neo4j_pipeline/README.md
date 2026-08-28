@@ -108,8 +108,12 @@ Then in EA: *Project ▸ Model Exchange ▸ Import Package from XMI* →
 > project that already has hand-authored elements with the same business
 > keys (different, random GUIDs) will end up with **duplicates**, not
 > merges, if you import into it. Use a fresh EA project for the bootstrap
-> import. The import brings in model elements only, not diagrams — lay the
-> imported elements out on a diagram yourself as needed.
+> import.
+
+The export includes one diagram with every element and every edge, laid out
+in a simple per-stereotype grid — a starting point to clean up with EA's own
+"Layout Diagram", not a finished layout. Pass `--no-diagram` to export bare
+model elements only, if the diagram block turns out to cause import trouble.
 
 ## Stereotype → Neo4j label mapping (summary)
 
