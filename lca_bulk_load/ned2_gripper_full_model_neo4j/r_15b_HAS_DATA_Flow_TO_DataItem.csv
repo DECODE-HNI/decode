@@ -1,0 +1,2 @@
+from_id,to_id,exchangeId,role
+FLOW_ELECTRICITY,DATA_0019,EX_PROC_MJF_FLOW_ELEC_IN,assessment-relevant value

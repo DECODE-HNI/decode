@@ -1,0 +1,8 @@
+﻿id,name,behaviorType,state,description
+BEH_CLOSE,Close jaws,closing,defined,
+BEH_OPEN,Open jaws,opening,defined,
+BEH_CENTER,Self-center object,centering,defined,
+BEH_ADAPT,Adapt fingers,adaptive,defined,
+BEH_VACUUM,Establish vacuum,vacuum,defined,
+BEH_MAGNET,Energize magnet,magnetic,defined,
+BEH_RELEASE,Release object,release,defined,

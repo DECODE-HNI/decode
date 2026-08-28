@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Regenerierter ILCD-Process-Dataset-Export fuer PROC_CNC (Ned2-Greifer-Graph).
+  WICHTIG: Dies ist KEIN originales Sphera-Exportpaket. PROC_CNC ist ein
+  Engineering-Prozess aus dem Wissensgraphen, kein per ilcd_to_csv_v2.ps1
+  extrahierter Bibliotheksprozess. Diese Datei wird aus den echten Graphwerten
+  regeneriert, um sie im ILCD-Format an nachgelagerte Lieferkettenpartner
+  weiterzugeben (Grey-Box-Anwendungsfall). Erzeugt: 2026-08-26.
+
+  Die XML-Kommentare der Form "exchangeId: ..." neben jedem Exchange sind das
+  Fragment, auf das die AAS-Grey-Box-Instanz per FragmentReference zeigt
+  (Konvention "ilcd:exchange:exchangeId", siehe AAS-Boxenmodell-Dokument,
+  Abschnitt 5), kein natives ILCD-Feld, sondern eine externe Ergaenzung.
+-->
+<processDataSet xmlns="http://lca.jrc.it/ILCD/Process">
+  <processInformation>
+    <dataSetInformation>
+      <UUID>7c1f9e2a-4b6d-4a91-9c3e-2f8a1d5b6e40</UUID>
+      <name>
+        <baseName>CNC milling -- Precision jaws / Al7075 / CNC contact element</baseName>
+      </name>
+      <generalComment>Regeneriert aus Neo4j-Graph (Process-Knoten PROC_CNC, Ned2-Greifer-Wissensgraph). Referenzmenge: 1 Stueck gefertigtes Bauteil (FLOW_COMPONENT).</generalComment>
+    </dataSetInformation>
+  </processInformation>
+  <exchanges>
+    <!-- exchangeId: PROC_CNC#0 -->
+    <exchange dataSetInternalID="0">
+      <referenceToFlowDataSet type="flow data set" refObjectId="ae206e6f-e4f5-4dbf-8de7-42576f6da892">
+        <shortDescription>Aluminium ingot</shortDescription>
+      </referenceToFlowDataSet>
+      <exchangeDirection>Input</exchangeDirection>
+      <meanAmount>1.0</meanAmount>
+      <resultingAmount>1.0</resultingAmount>
+      <referenceUnit>kg</referenceUnit>
+    </exchange>
+
+    <!-- exchangeId: PROC_CNC#1 -->
+    <exchange dataSetInternalID="1">
+      <referenceToFlowDataSet type="flow data set" refObjectId="890a70b7-b677-4e2a-8a1b-7d017e0a10ae">
+        <shortDescription>Electricity</shortDescription>
+      </referenceToFlowDataSet>
+      <exchangeDirection>Input</exchangeDirection>
+      <meanAmount>3.6</meanAmount>
+      <resultingAmount>3.6</resultingAmount>
+      <referenceUnit>MJ</referenceUnit>
+    </exchange>
+
+    <!-- exchangeId: PROC_CNC#2 -->
+    <exchange dataSetInternalID="2">
+      <referenceToFlowDataSet type="flow data set" refObjectId="FLOW_COMPONENT">
+        <shortDescription>Finished gripper component</shortDescription>
+      </referenceToFlowDataSet>
+      <exchangeDirection>Output</exchangeDirection>
+      <meanAmount>1.0</meanAmount>
+      <resultingAmount>1.0</resultingAmount>
+      <referenceUnit>pcs</referenceUnit>
+      <quantitativeReference>true</quantitativeReference>
+    </exchange>
+
+    <!-- exchangeId: PROC_CNC#3 -->
+    <exchange dataSetInternalID="3">
+      <referenceToFlowDataSet type="flow data set" refObjectId="FLOW_WASTE">
+        <shortDescription>Manufacturing waste</shortDescription>
+      </referenceToFlowDataSet>
+      <exchangeDirection>Output</exchangeDirection>
+      <meanAmount>0.0</meanAmount>
+      <resultingAmount>0.0</resultingAmount>
+      <referenceUnit>kg</referenceUnit>
+    </exchange>
+  </exchanges>
+
+  <!--
+    Hinweis zur Charakterisierung: PROC_CNCs eigene Exchanges sind
+    Zwischenprodukt-/Materialfluesse, keine Elementarfluesse, sie tragen
+    daher selbst keine CHARACTERIZES-Faktoren. Der deklarierte PCFCO2eq-Wert
+    (siehe AAS) stammt aus den Vorketten-Prozessen PROC_ALU_INGOT_MIX_CONSUMPTION
+    (9.083655796559631 kg CO2-eq/kg) und PROC_ELECTRICITY_GREEN_GRID_MIX_DE
+    (0.07130700539498436 kg CO2-eq/3.6 MJ), nicht aus dieser Datei allein.
+  -->
+</processDataSet>

@@ -1,0 +1,87 @@
+﻿id,name,partType,variant,mass_g,status
+PART_CUSTOM_CONTACT,Custom Gripper contact element,Jaw/Finger/Cup/Pole,official-custom,,reference
+PART_CUSTOM_INTERFACE,Custom Gripper interface/adaptor,Interface,official-custom,,reference
+PART_LARGE_CONTACT,Large Gripper contact element,Jaw/Finger/Cup/Pole,official-large,,reference
+PART_LARGE_INTERFACE,Large Gripper interface/adaptor,Interface,official-large,,reference
+PART_ADAPTIVE_CONTACT,Adaptive Gripper contact element,Jaw/Finger/Cup/Pole,official-adaptive,,reference
+PART_ADAPTIVE_INTERFACE,Adaptive Gripper interface/adaptor,Interface,official-adaptive,,reference
+PART_VACUUM_CONTACT,Vacuum Pump / Suction Tool contact element,Jaw/Finger/Cup/Pole,official-vacuum,,reference
+PART_VACUUM_INTERFACE,Vacuum Pump / Suction Tool interface/adaptor,Interface,official-vacuum,,reference
+PART_MAGNET_CONTACT,Electromagnet contact element,Jaw/Finger/Cup/Pole,official-magnetic,,reference
+PART_MAGNET_INTERFACE,Electromagnet interface/adaptor,Interface,official-magnetic,,reference
+PART_FLAT_PA12_CONTACT,Custom + Flat jaws / PA12 / MJF contact element,Jaw/Finger/Cup/Pole,custom-flat,,candidate
+PART_FLAT_PA12_INTERFACE,Custom + Flat jaws / PA12 / MJF interface/adaptor,Interface,custom-flat,,candidate
+PART_PREC_PA12_CONTACT,Custom + Precision jaws / PA12 / MJF contact element,Jaw/Finger/Cup/Pole,custom-precision,,candidate
+PART_PREC_PA12_INTERFACE,Custom + Precision jaws / PA12 / MJF interface/adaptor,Interface,custom-precision,,candidate
+PART_XL_PA12_CONTACT,Custom + XL jaws / PA12 / MJF contact element,Jaw/Finger/Cup/Pole,custom-xl,,candidate
+PART_XL_PA12_INTERFACE,Custom + XL jaws / PA12 / MJF interface/adaptor,Interface,custom-xl,,candidate
+PART_FLAT_PETG_CONTACT,Flat jaws / PETG / FFF contact element,Jaw/Finger/Cup/Pole,custom-flat,,candidate
+PART_FLAT_PETG_INTERFACE,Flat jaws / PETG / FFF interface/adaptor,Interface,custom-flat,,candidate
+PART_FLAT_AL_CONTACT,Flat jaws / Al6061 / CNC contact element,Jaw/Finger/Cup/Pole,custom-flat,,candidate
+PART_FLAT_AL_INTERFACE,Flat jaws / Al6061 / CNC interface/adaptor,Interface,custom-flat,,candidate
+PART_PREC_POM_CONTACT,Precision jaws / POM / CNC contact element,Jaw/Finger/Cup/Pole,custom-precision,,candidate
+PART_PREC_POM_INTERFACE,Precision jaws / POM / CNC interface/adaptor,Interface,custom-precision,,candidate
+PART_PREC_AL7075_CONTACT,Precision jaws / Al7075 / CNC contact element,Jaw/Finger/Cup/Pole,custom-precision,,candidate
+PART_PREC_AL7075_INTERFACE,Precision jaws / Al7075 / CNC interface/adaptor,Interface,custom-precision,,candidate
+PART_XL_CFPA_CONTACT,XL jaws / CF-PA / FFF contact element,Jaw/Finger/Cup/Pole,custom-xl,,candidate
+PART_XL_CFPA_INTERFACE,XL jaws / CF-PA / FFF interface/adaptor,Interface,custom-xl,,candidate
+PART_V_PA12_CONTACT,V-groove jaws / PA12 / MJF contact element,Jaw/Finger/Cup/Pole,v-groove,,candidate
+PART_V_PA12_INTERFACE,V-groove jaws / PA12 / MJF interface/adaptor,Interface,v-groove,,candidate
+PART_V_PETG_CONTACT,V-groove jaws / PETG / FFF contact element,Jaw/Finger/Cup/Pole,v-groove,,candidate
+PART_V_PETG_INTERFACE,V-groove jaws / PETG / FFF interface/adaptor,Interface,v-groove,,candidate
+PART_V_POM_CONTACT,V-groove jaws / POM / CNC contact element,Jaw/Finger/Cup/Pole,v-groove,,candidate
+PART_V_POM_INTERFACE,V-groove jaws / POM / CNC interface/adaptor,Interface,v-groove,,candidate
+PART_V_AL_CONTACT,V-groove jaws / Al6061 / CNC contact element,Jaw/Finger/Cup/Pole,v-groove,,candidate
+PART_V_AL_INTERFACE,V-groove jaws / Al6061 / CNC interface/adaptor,Interface,v-groove,,candidate
+PART_CONC_PA12_CONTACT,Concave jaws / PA12 / MJF contact element,Jaw/Finger/Cup/Pole,concave,,candidate
+PART_CONC_PA12_INTERFACE,Concave jaws / PA12 / MJF interface/adaptor,Interface,concave,,candidate
+PART_CONC_POM_CONTACT,Concave jaws / POM / CNC contact element,Jaw/Finger/Cup/Pole,concave,,candidate
+PART_CONC_POM_INTERFACE,Concave jaws / POM / CNC interface/adaptor,Interface,concave,,candidate
+PART_TPU_PAD_CONTACT,PA12 jaws + TPU pads contact element,Jaw/Finger/Cup/Pole,soft-pad,,candidate
+PART_TPU_PAD_INTERFACE,PA12 jaws + TPU pads interface/adaptor,Interface,soft-pad,,candidate
+PART_SIL_PAD_CONTACT,Aluminum jaws + silicone pads contact element,Jaw/Finger/Cup/Pole,soft-pad,,candidate
+PART_SIL_PAD_INTERFACE,Aluminum jaws + silicone pads interface/adaptor,Interface,soft-pad,,candidate
+PART_FINRAY_TPU_CONTACT,Fin-Ray fingers / TPU / FFF contact element,Jaw/Finger/Cup/Pole,finray,,candidate
+PART_FINRAY_TPU_INTERFACE,Fin-Ray fingers / TPU / FFF interface/adaptor,Interface,finray,,candidate
+PART_FINRAY_TPE_CONTACT,Fin-Ray fingers / TPE / FFF contact element,Jaw/Finger/Cup/Pole,finray,,candidate
+PART_FINRAY_TPE_INTERFACE,Fin-Ray fingers / TPE / FFF interface/adaptor,Interface,finray,,candidate
+PART_LONG_CFPA_CONTACT,Long-reach fingers / CF-PA / FFF contact element,Jaw/Finger/Cup/Pole,long-reach,,candidate
+PART_LONG_CFPA_INTERFACE,Long-reach fingers / CF-PA / FFF interface/adaptor,Interface,long-reach,,candidate
+PART_LONG_AL_CONTACT,Long-reach fingers / Al6061 / CNC contact element,Jaw/Finger/Cup/Pole,long-reach,,candidate
+PART_LONG_AL_INTERFACE,Long-reach fingers / Al6061 / CNC interface/adaptor,Interface,long-reach,,candidate
+PART_THIN_POM_CONTACT,Thin precision fingers / POM / CNC contact element,Jaw/Finger/Cup/Pole,precision,,candidate
+PART_THIN_POM_INTERFACE,Thin precision fingers / POM / CNC interface/adaptor,Interface,precision,,candidate
+PART_THIN_STEEL_CONTACT,Thin compliant fingers / spring steel contact element,Jaw/Finger/Cup/Pole,precision-compliant,,candidate
+PART_THIN_STEEL_INTERFACE,Thin compliant fingers / spring steel interface/adaptor,Interface,precision-compliant,,candidate
+PART_INTERNAL_PA12_CONTACT,Internal-expansion fingers / PA12 / MJF contact element,Jaw/Finger/Cup/Pole,internal,,candidate
+PART_INTERNAL_PA12_INTERFACE,Internal-expansion fingers / PA12 / MJF interface/adaptor,Interface,internal,,candidate
+PART_INTERNAL_AL_CONTACT,Internal-expansion fingers / Al6061 / CNC contact element,Jaw/Finger/Cup/Pole,internal,,candidate
+PART_INTERNAL_AL_INTERFACE,Internal-expansion fingers / Al6061 / CNC interface/adaptor,Interface,internal,,candidate
+PART_3FINGER_PA12_CONTACT,Three-finger underactuated / PA12 contact element,Jaw/Finger/Cup/Pole,three-finger,,candidate
+PART_3FINGER_PA12_INTERFACE,Three-finger underactuated / PA12 interface/adaptor,Interface,three-finger,,candidate
+PART_SOFT_SIL_CONTACT,Soft pneumatic fingers / silicone contact element,Jaw/Finger/Cup/Pole,soft-pneumatic,,candidate
+PART_SOFT_SIL_INTERFACE,Soft pneumatic fingers / silicone interface/adaptor,Interface,soft-pneumatic,,candidate
+PART_VAC_SMALL_NBR_CONTACT,Small suction cup / NBR contact element,Jaw/Finger/Cup/Pole,vacuum-small,,candidate
+PART_VAC_SMALL_NBR_INTERFACE,Small suction cup / NBR interface/adaptor,Interface,vacuum-small,,candidate
+PART_VAC_LARGE_SIL_CONTACT,Large suction cup / silicone contact element,Jaw/Finger/Cup/Pole,vacuum-large,,candidate
+PART_VAC_LARGE_SIL_INTERFACE,Large suction cup / silicone interface/adaptor,Interface,vacuum-large,,candidate
+PART_VAC_ARRAY_CONTACT,Four-cup vacuum array contact element,Jaw/Finger/Cup/Pole,vacuum-array,,candidate
+PART_VAC_ARRAY_INTERFACE,Four-cup vacuum array interface/adaptor,Interface,vacuum-array,,candidate
+PART_MAG_SMALL_CONTACT,Small magnetic pole shoe contact element,Jaw/Finger/Cup/Pole,magnetic-small,,candidate
+PART_MAG_SMALL_INTERFACE,Small magnetic pole shoe interface/adaptor,Interface,magnetic-small,,candidate
+PART_MAG_WIDE_CONTACT,Wide magnetic pole shoe contact element,Jaw/Finger/Cup/Pole,magnetic-wide,,candidate
+PART_MAG_WIDE_INTERFACE,Wide magnetic pole shoe interface/adaptor,Interface,magnetic-wide,,candidate
+PART_HYBRID_CONTACT,Rigid-soft hybrid jaw / PA12+TPU contact element,Jaw/Finger/Cup/Pole,hybrid,,candidate
+PART_HYBRID_INTERFACE,Rigid-soft hybrid jaw / PA12+TPU interface/adaptor,Interface,hybrid,,candidate
+PART_FLAT_ABS_CONTACT,Flat jaws / ABS / FFF contact element,Jaw/Finger/Cup/Pole,custom-flat,,candidate
+PART_FLAT_ABS_INTERFACE,Flat jaws / ABS / FFF interface/adaptor,Interface,custom-flat,,candidate
+PART_FLAT_ASA_CONTACT,Flat jaws / ASA / FFF contact element,Jaw/Finger/Cup/Pole,custom-flat,,candidate
+PART_FLAT_ASA_INTERFACE,Flat jaws / ASA / FFF interface/adaptor,Interface,custom-flat,,candidate
+PART_FLAT_PLA_CONTACT,Flat jaws / PLA / FFF contact element,Jaw/Finger/Cup/Pole,custom-flat,,candidate
+PART_FLAT_PLA_INTERFACE,Flat jaws / PLA / FFF interface/adaptor,Interface,custom-flat,,candidate
+PART_PREC_PA11_CONTACT,Precision jaws / PA11 / SLS contact element,Jaw/Finger/Cup/Pole,custom-precision,,candidate
+PART_PREC_PA11_INTERFACE,Precision jaws / PA11 / SLS interface/adaptor,Interface,custom-precision,,candidate
+PART_PREC_PC_CONTACT,Precision jaws / PC / CNC contact element,Jaw/Finger/Cup/Pole,custom-precision,,candidate
+PART_PREC_PC_INTERFACE,Precision jaws / PC / CNC interface/adaptor,Interface,custom-precision,,candidate
+PART_PU_PAD_CONTACT,PA12 jaws + PU pads contact element,Jaw/Finger/Cup/Pole,soft-pad,,candidate
+PART_PU_PAD_INTERFACE,PA12 jaws + PU pads interface/adaptor,Interface,soft-pad,,candidate

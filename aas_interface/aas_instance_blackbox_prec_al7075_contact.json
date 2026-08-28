@@ -1,0 +1,98 @@
+{
+  "assetAdministrationShells": [
+    {
+      "modelType": "AssetAdministrationShell",
+      "id": "https://ned2-gripper.example/ids/aas/PART_PREC_AL7075_CONTACT_BLACKBOX",
+      "idShort": "AAS_PART_PREC_AL7075_CONTACT_BlackBox",
+      "description": [
+        {
+          "language": "de",
+          "text": "Black-Box-AAS fuer PART_PREC_AL7075_CONTACT: EPD-artige Mehrindikator-Deklaration (Vorbild IDTA 02093, Feldnamen provisorisch nach EN15804/ISO14025, da die offizielle Spec noch nicht oeffentlich ist). Alle zehn Werte real aus den CHARACTERIZES-Faktoren der drei Vorketten-Prozesse berechnet (PROC_ALU_INGOT_MIX_CONSUMPTION, PROC_ELECTRICITY_GREEN_GRID_MIX_DE, PROC_SCREW_GALVANIZED), skaliert auf die tatsaechlich verbrauchten Mengen von PROC_CNC+PROC_SCREW+PROC_FINISH. Bewusst: KEINE Relationship-Elemente zur angehaengten Datei -- das ist der methodische Unterschied zur Grey-Box-Instanz (aas_instance_greybox_prec_al7075_contact.json), die dieselbe Datei per FragmentReference verlinkt."
+        }
+      ],
+      "assetInformation": {
+        "assetKind": "Instance",
+        "globalAssetId": "https://ned2-gripper.example/ids/asset/PART_PREC_AL7075_CONTACT",
+        "specificAssetIds": [
+          { "name": "graphNodeId", "value": "PART_PREC_AL7075_CONTACT" },
+          { "name": "boxType", "value": "black" }
+        ]
+      },
+      "submodels": [
+        {
+          "type": "ModelReference",
+          "keys": [
+            { "type": "Submodel", "value": "https://ned2-gripper.example/ids/sm/EnvironmentalFootprintBlack_PART_PREC_AL7075_CONTACT" }
+          ]
+        }
+      ]
+    }
+  ],
+
+  "submodels": [
+    {
+      "modelType": "Submodel",
+      "id": "https://ned2-gripper.example/ids/sm/EnvironmentalFootprintBlack_PART_PREC_AL7075_CONTACT",
+      "idShort": "EnvironmentalFootprintBlack",
+      "kind": "Instance",
+      "submodelElements": [
+        {
+          "modelType": "SubmodelElementCollection",
+          "idShort": "EPDMetadata",
+          "value": [
+            { "modelType": "Property", "idShort": "ProgramOperator",  "valueType": "xs:string", "value": "IBU" },
+            { "modelType": "Property", "idShort": "UnderlyingPCR",    "valueType": "xs:string", "value": "PCR Teil B: Metalle" },
+            { "modelType": "Property", "idShort": "ValidUntil",       "valueType": "xs:string", "value": "2031-08-26" },
+            { "modelType": "Property", "idShort": "Verifier",         "valueType": "xs:string", "value": "unabhaengiger Dritt-Pruefer (Typ III, illustrativ)" }
+          ]
+        },
+
+        {
+          "modelType": "SubmodelElementCollection",
+          "idShort": "EnvironmentalIndicators",
+          "value": [
+            { "modelType": "Property", "idShort": "LifeCycleStage", "valueType": "xs:string", "value": "A1-A3 (PROC_CNC + PROC_SCREW + PROC_FINISH)" },
+            { "modelType": "Property", "idShort": "GWPTotal",        "valueType": "xs:double", "value": "9.178024104499100" },
+            { "modelType": "Property", "idShort": "GWPTotalUnit",    "valueType": "xs:string", "value": "kg CO2-eq" },
+
+            { "modelType": "Property", "idShort": "ODP",             "valueType": "xs:double", "value": "1.0777159620947944E-10" },
+            { "modelType": "Property", "idShort": "ODPUnit",         "valueType": "xs:string", "value": "kg CFC11-eq" },
+
+            { "modelType": "Property", "idShort": "AP",              "valueType": "xs:double", "value": "1.0611392739045878" },
+            { "modelType": "Property", "idShort": "APUnit",          "valueType": "xs:string", "value": "mol H+-eq" },
+
+            { "modelType": "Property", "idShort": "EPFreshwater",    "valueType": "xs:double", "value": "5.740953145927146E-6" },
+            { "modelType": "Property", "idShort": "EPFreshwaterUnit","valueType": "xs:string", "value": "kg P-eq" },
+
+            { "modelType": "Property", "idShort": "EPMarine",        "valueType": "xs:double", "value": "0.3759123610593301" },
+            { "modelType": "Property", "idShort": "EPMarineUnit",    "valueType": "xs:string", "value": "kg N-eq" },
+
+            { "modelType": "Property", "idShort": "EPTerrestrial",   "valueType": "xs:double", "value": "1.574630337203425" },
+            { "modelType": "Property", "idShort": "EPTerrestrialUnit","valueType": "xs:string", "value": "mol N-eq" },
+
+            { "modelType": "Property", "idShort": "POCP",            "valueType": "xs:double", "value": "1.0399849904303108" },
+            { "modelType": "Property", "idShort": "POCPUnit",        "valueType": "xs:string", "value": "kg NMVOC-eq" },
+
+            { "modelType": "Property", "idShort": "ADPE",            "valueType": "xs:double", "value": "1.6167E-6" },
+            { "modelType": "Property", "idShort": "ADPEUnit",        "valueType": "xs:string", "value": "kg Sb-eq" },
+
+            { "modelType": "Property", "idShort": "ADPF",            "valueType": "xs:double", "value": "114.4404662529269" },
+            { "modelType": "Property", "idShort": "ADPFUnit",        "valueType": "xs:string", "value": "MJ" },
+
+            { "modelType": "Property", "idShort": "WDP",             "valueType": "xs:double", "value": "562.4514668924422" },
+            { "modelType": "Property", "idShort": "WDPUnit",         "valueType": "xs:string", "value": "m3 world-eq" }
+          ]
+        },
+
+        {
+          "modelType": "File",
+          "idShort": "SupportingReport",
+          "contentType": "application/xml",
+          "value": "./ilcd/ilcd_export_proc_cnc.xml"
+        }
+      ]
+    }
+  ],
+
+  "conceptDescriptions": []
+}

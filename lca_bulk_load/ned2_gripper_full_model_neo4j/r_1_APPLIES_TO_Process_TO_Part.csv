@@ -1,0 +1,197 @@
+﻿from_id,to_id,role
+PROC_MJF,PART_CUSTOM_CONTACT,manufactures contact element
+PROC_FINISH,PART_CUSTOM_CONTACT,optional finishing
+PROC_MJF,PART_LARGE_CONTACT,manufactures contact element
+PROC_FINISH,PART_LARGE_CONTACT,optional finishing
+PROC_MJF,PART_ADAPTIVE_CONTACT,manufactures contact element
+PROC_FINISH,PART_ADAPTIVE_CONTACT,optional finishing
+PROC_RUBBER,PART_VACUUM_CONTACT,manufactures contact element
+PROC_FINISH,PART_VACUUM_CONTACT,optional finishing
+PROC_CNC,PART_MAGNET_CONTACT,manufactures contact element
+PROC_FINISH,PART_MAGNET_CONTACT,optional finishing
+PROC_MJF,PART_FLAT_PA12_CONTACT,manufactures contact element
+PROC_FINISH,PART_FLAT_PA12_CONTACT,optional finishing
+PROC_MJF,PART_PREC_PA12_CONTACT,manufactures contact element
+PROC_FINISH,PART_PREC_PA12_CONTACT,optional finishing
+PROC_MJF,PART_XL_PA12_CONTACT,manufactures contact element
+PROC_FINISH,PART_XL_PA12_CONTACT,optional finishing
+PROC_FFF,PART_FLAT_PETG_CONTACT,manufactures contact element
+PROC_FINISH,PART_FLAT_PETG_CONTACT,optional finishing
+PROC_CNC,PART_FLAT_AL_CONTACT,manufactures contact element
+PROC_FINISH,PART_FLAT_AL_CONTACT,optional finishing
+PROC_CNC,PART_PREC_POM_CONTACT,manufactures contact element
+PROC_FINISH,PART_PREC_POM_CONTACT,optional finishing
+PROC_CNC,PART_PREC_AL7075_CONTACT,manufactures contact element
+PROC_FINISH,PART_PREC_AL7075_CONTACT,optional finishing
+PROC_FFF,PART_XL_CFPA_CONTACT,manufactures contact element
+PROC_FINISH,PART_XL_CFPA_CONTACT,optional finishing
+PROC_MJF,PART_V_PA12_CONTACT,manufactures contact element
+PROC_FINISH,PART_V_PA12_CONTACT,optional finishing
+PROC_FFF,PART_V_PETG_CONTACT,manufactures contact element
+PROC_FINISH,PART_V_PETG_CONTACT,optional finishing
+PROC_CNC,PART_V_POM_CONTACT,manufactures contact element
+PROC_FINISH,PART_V_POM_CONTACT,optional finishing
+PROC_CNC,PART_V_AL_CONTACT,manufactures contact element
+PROC_FINISH,PART_V_AL_CONTACT,optional finishing
+PROC_MJF,PART_CONC_PA12_CONTACT,manufactures contact element
+PROC_FINISH,PART_CONC_PA12_CONTACT,optional finishing
+PROC_CNC,PART_CONC_POM_CONTACT,manufactures contact element
+PROC_FINISH,PART_CONC_POM_CONTACT,optional finishing
+PROC_FFF,PART_TPU_PAD_CONTACT,manufactures contact element
+PROC_FINISH,PART_TPU_PAD_CONTACT,optional finishing
+PROC_SILCAST,PART_SIL_PAD_CONTACT,manufactures contact element
+PROC_FINISH,PART_SIL_PAD_CONTACT,optional finishing
+PROC_FFF,PART_FINRAY_TPU_CONTACT,manufactures contact element
+PROC_FINISH,PART_FINRAY_TPU_CONTACT,optional finishing
+PROC_FFF,PART_FINRAY_TPE_CONTACT,manufactures contact element
+PROC_FINISH,PART_FINRAY_TPE_CONTACT,optional finishing
+PROC_FFF,PART_LONG_CFPA_CONTACT,manufactures contact element
+PROC_FINISH,PART_LONG_CFPA_CONTACT,optional finishing
+PROC_CNC,PART_LONG_AL_CONTACT,manufactures contact element
+PROC_FINISH,PART_LONG_AL_CONTACT,optional finishing
+PROC_CNC,PART_THIN_POM_CONTACT,manufactures contact element
+PROC_FINISH,PART_THIN_POM_CONTACT,optional finishing
+PROC_LASER,PART_THIN_STEEL_CONTACT,manufactures contact element
+PROC_FINISH,PART_THIN_STEEL_CONTACT,optional finishing
+PROC_MJF,PART_INTERNAL_PA12_CONTACT,manufactures contact element
+PROC_FINISH,PART_INTERNAL_PA12_CONTACT,optional finishing
+PROC_CNC,PART_INTERNAL_AL_CONTACT,manufactures contact element
+PROC_FINISH,PART_INTERNAL_AL_CONTACT,optional finishing
+PROC_MJF,PART_3FINGER_PA12_CONTACT,manufactures contact element
+PROC_FINISH,PART_3FINGER_PA12_CONTACT,optional finishing
+PROC_SILCAST,PART_SOFT_SIL_CONTACT,manufactures contact element
+PROC_FINISH,PART_SOFT_SIL_CONTACT,optional finishing
+PROC_RUBBER,PART_VAC_SMALL_NBR_CONTACT,manufactures contact element
+PROC_FINISH,PART_VAC_SMALL_NBR_CONTACT,optional finishing
+PROC_SILCAST,PART_VAC_LARGE_SIL_CONTACT,manufactures contact element
+PROC_FINISH,PART_VAC_LARGE_SIL_CONTACT,optional finishing
+PROC_MJF,PART_VAC_ARRAY_CONTACT,manufactures contact element
+PROC_FINISH,PART_VAC_ARRAY_CONTACT,optional finishing
+PROC_CNC,PART_MAG_SMALL_CONTACT,manufactures contact element
+PROC_FINISH,PART_MAG_SMALL_CONTACT,optional finishing
+PROC_CNC,PART_MAG_WIDE_CONTACT,manufactures contact element
+PROC_FINISH,PART_MAG_WIDE_CONTACT,optional finishing
+PROC_OVERMOLD,PART_HYBRID_CONTACT,manufactures contact element
+PROC_FINISH,PART_HYBRID_CONTACT,optional finishing
+PROC_SCREW,PART_CUSTOM_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_LARGE_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_ADAPTIVE_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_VACUUM_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_MAGNET_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_FLAT_PA12_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_PREC_PA12_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_XL_PA12_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_FLAT_PETG_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_FLAT_AL_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_PREC_POM_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_PREC_AL7075_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_XL_CFPA_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_V_PA12_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_V_PETG_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_V_POM_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_V_AL_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_CONC_PA12_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_CONC_POM_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_TPU_PAD_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_SIL_PAD_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_FINRAY_TPU_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_FINRAY_TPE_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_LONG_CFPA_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_LONG_AL_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_THIN_POM_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_THIN_STEEL_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_INTERNAL_PA12_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_INTERNAL_AL_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_3FINGER_PA12_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_SOFT_SIL_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_VAC_SMALL_NBR_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_VAC_LARGE_SIL_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_VAC_ARRAY_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_MAG_SMALL_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_MAG_WIDE_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_HYBRID_CONTACT,reversible fastening (contact to interface)
+PROC_SCREW,PART_CUSTOM_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_LARGE_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_ADAPTIVE_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_VACUUM_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_MAGNET_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_FLAT_PA12_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_PREC_PA12_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_XL_PA12_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_FLAT_PETG_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_FLAT_AL_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_PREC_POM_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_PREC_AL7075_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_XL_CFPA_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_V_PA12_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_V_PETG_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_V_POM_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_V_AL_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_CONC_PA12_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_CONC_POM_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_TPU_PAD_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_SIL_PAD_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_FINRAY_TPU_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_FINRAY_TPE_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_LONG_CFPA_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_LONG_AL_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_THIN_POM_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_THIN_STEEL_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_INTERNAL_PA12_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_INTERNAL_AL_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_3FINGER_PA12_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_SOFT_SIL_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_VAC_SMALL_NBR_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_VAC_LARGE_SIL_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_VAC_ARRAY_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_MAG_SMALL_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_MAG_WIDE_INTERFACE,reversible fastening (contact to interface)
+PROC_SCREW,PART_HYBRID_INTERFACE,reversible fastening (contact to interface)
+PROC_REPAIR,PART_CUSTOM_CONTACT,replaceable wear part
+PROC_REPAIR,PART_LARGE_CONTACT,replaceable wear part
+PROC_REPAIR,PART_ADAPTIVE_CONTACT,replaceable wear part
+PROC_REPAIR,PART_VACUUM_CONTACT,replaceable wear part
+PROC_REPAIR,PART_MAGNET_CONTACT,replaceable wear part
+PROC_REPAIR,PART_FLAT_PA12_CONTACT,replaceable wear part
+PROC_REPAIR,PART_PREC_PA12_CONTACT,replaceable wear part
+PROC_REPAIR,PART_XL_PA12_CONTACT,replaceable wear part
+PROC_REPAIR,PART_FLAT_PETG_CONTACT,replaceable wear part
+PROC_REPAIR,PART_FLAT_AL_CONTACT,replaceable wear part
+PROC_REPAIR,PART_PREC_POM_CONTACT,replaceable wear part
+PROC_REPAIR,PART_PREC_AL7075_CONTACT,replaceable wear part
+PROC_REPAIR,PART_XL_CFPA_CONTACT,replaceable wear part
+PROC_REPAIR,PART_V_PA12_CONTACT,replaceable wear part
+PROC_REPAIR,PART_V_PETG_CONTACT,replaceable wear part
+PROC_REPAIR,PART_V_POM_CONTACT,replaceable wear part
+PROC_REPAIR,PART_V_AL_CONTACT,replaceable wear part
+PROC_REPAIR,PART_CONC_PA12_CONTACT,replaceable wear part
+PROC_REPAIR,PART_CONC_POM_CONTACT,replaceable wear part
+PROC_REPAIR,PART_TPU_PAD_CONTACT,replaceable wear part
+PROC_REPAIR,PART_SIL_PAD_CONTACT,replaceable wear part
+PROC_REPAIR,PART_FINRAY_TPU_CONTACT,replaceable wear part
+PROC_REPAIR,PART_FINRAY_TPE_CONTACT,replaceable wear part
+PROC_REPAIR,PART_LONG_CFPA_CONTACT,replaceable wear part
+PROC_REPAIR,PART_LONG_AL_CONTACT,replaceable wear part
+PROC_REPAIR,PART_THIN_POM_CONTACT,replaceable wear part
+PROC_REPAIR,PART_THIN_STEEL_CONTACT,replaceable wear part
+PROC_REPAIR,PART_INTERNAL_PA12_CONTACT,replaceable wear part
+PROC_REPAIR,PART_INTERNAL_AL_CONTACT,replaceable wear part
+PROC_REPAIR,PART_3FINGER_PA12_CONTACT,replaceable wear part
+PROC_REPAIR,PART_SOFT_SIL_CONTACT,replaceable wear part
+PROC_REPAIR,PART_VAC_SMALL_NBR_CONTACT,replaceable wear part
+PROC_REPAIR,PART_VAC_LARGE_SIL_CONTACT,replaceable wear part
+PROC_REPAIR,PART_VAC_ARRAY_CONTACT,replaceable wear part
+PROC_REPAIR,PART_MAG_SMALL_CONTACT,replaceable wear part
+PROC_REPAIR,PART_MAG_WIDE_CONTACT,replaceable wear part
+PROC_REPAIR,PART_HYBRID_CONTACT,replaceable wear part
+PROC_FFF,PART_FLAT_ABS_CONTACT,manufactures contact element
+PROC_FINISH,PART_FLAT_ABS_CONTACT,optional finishing
+PROC_FFF,PART_FLAT_ASA_CONTACT,manufactures contact element
+PROC_FINISH,PART_FLAT_ASA_CONTACT,optional finishing
+PROC_FFF,PART_FLAT_PLA_CONTACT,manufactures contact element
+PROC_FINISH,PART_FLAT_PLA_CONTACT,optional finishing
+PROC_SLS,PART_PREC_PA11_CONTACT,manufactures contact element
+PROC_FINISH,PART_PREC_PA11_CONTACT,optional finishing
+PROC_CNC,PART_PREC_PC_CONTACT,manufactures contact element
+PROC_FINISH,PART_PREC_PC_CONTACT,optional finishing
+PROC_RUBBER,PART_PU_PAD_CONTACT,manufactures contact element

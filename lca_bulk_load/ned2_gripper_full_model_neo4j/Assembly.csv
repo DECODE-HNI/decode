@@ -1,0 +1,44 @@
+﻿id,name,assemblyType,variant,status
+ASSY_CUSTOM,Custom Gripper assembly,End-effector assembly,official-custom,reference
+ASSY_LARGE,Large Gripper assembly,End-effector assembly,official-large,reference
+ASSY_ADAPTIVE,Adaptive Gripper assembly,End-effector assembly,official-adaptive,reference
+ASSY_VACUUM,Vacuum Pump / Suction Tool assembly,End-effector assembly,official-vacuum,reference
+ASSY_MAGNET,Electromagnet assembly,End-effector assembly,official-magnetic,reference
+ASSY_FLAT_PA12,Custom + Flat jaws / PA12 / MJF assembly,End-effector assembly,custom-flat,candidate
+ASSY_PREC_PA12,Custom + Precision jaws / PA12 / MJF assembly,End-effector assembly,custom-precision,candidate
+ASSY_XL_PA12,Custom + XL jaws / PA12 / MJF assembly,End-effector assembly,custom-xl,candidate
+ASSY_FLAT_PETG,Flat jaws / PETG / FFF assembly,End-effector assembly,custom-flat,candidate
+ASSY_FLAT_AL,Flat jaws / Al6061 / CNC assembly,End-effector assembly,custom-flat,candidate
+ASSY_PREC_POM,Precision jaws / POM / CNC assembly,End-effector assembly,custom-precision,candidate
+ASSY_PREC_AL7075,Precision jaws / Al7075 / CNC assembly,End-effector assembly,custom-precision,candidate
+ASSY_XL_CFPA,XL jaws / CF-PA / FFF assembly,End-effector assembly,custom-xl,candidate
+ASSY_V_PA12,V-groove jaws / PA12 / MJF assembly,End-effector assembly,v-groove,candidate
+ASSY_V_PETG,V-groove jaws / PETG / FFF assembly,End-effector assembly,v-groove,candidate
+ASSY_V_POM,V-groove jaws / POM / CNC assembly,End-effector assembly,v-groove,candidate
+ASSY_V_AL,V-groove jaws / Al6061 / CNC assembly,End-effector assembly,v-groove,candidate
+ASSY_CONC_PA12,Concave jaws / PA12 / MJF assembly,End-effector assembly,concave,candidate
+ASSY_CONC_POM,Concave jaws / POM / CNC assembly,End-effector assembly,concave,candidate
+ASSY_TPU_PAD,PA12 jaws + TPU pads assembly,End-effector assembly,soft-pad,candidate
+ASSY_SIL_PAD,Aluminum jaws + silicone pads assembly,End-effector assembly,soft-pad,candidate
+ASSY_FINRAY_TPU,Fin-Ray fingers / TPU / FFF assembly,End-effector assembly,finray,candidate
+ASSY_FINRAY_TPE,Fin-Ray fingers / TPE / FFF assembly,End-effector assembly,finray,candidate
+ASSY_LONG_CFPA,Long-reach fingers / CF-PA / FFF assembly,End-effector assembly,long-reach,candidate
+ASSY_LONG_AL,Long-reach fingers / Al6061 / CNC assembly,End-effector assembly,long-reach,candidate
+ASSY_THIN_POM,Thin precision fingers / POM / CNC assembly,End-effector assembly,precision,candidate
+ASSY_THIN_STEEL,Thin compliant fingers / spring steel assembly,End-effector assembly,precision-compliant,candidate
+ASSY_INTERNAL_PA12,Internal-expansion fingers / PA12 / MJF assembly,End-effector assembly,internal,candidate
+ASSY_INTERNAL_AL,Internal-expansion fingers / Al6061 / CNC assembly,End-effector assembly,internal,candidate
+ASSY_3FINGER_PA12,Three-finger underactuated / PA12 assembly,End-effector assembly,three-finger,candidate
+ASSY_SOFT_SIL,Soft pneumatic fingers / silicone assembly,End-effector assembly,soft-pneumatic,candidate
+ASSY_VAC_SMALL_NBR,Small suction cup / NBR assembly,End-effector assembly,vacuum-small,candidate
+ASSY_VAC_LARGE_SIL,Large suction cup / silicone assembly,End-effector assembly,vacuum-large,candidate
+ASSY_VAC_ARRAY,Four-cup vacuum array assembly,End-effector assembly,vacuum-array,candidate
+ASSY_MAG_SMALL,Small magnetic pole shoe assembly,End-effector assembly,magnetic-small,candidate
+ASSY_MAG_WIDE,Wide magnetic pole shoe assembly,End-effector assembly,magnetic-wide,candidate
+ASSY_HYBRID,Rigid-soft hybrid jaw / PA12+TPU assembly,End-effector assembly,hybrid,candidate
+ASSY_FLAT_ABS,Flat jaws / ABS / FFF assembly,End-effector assembly,custom-flat,candidate
+ASSY_FLAT_ASA,Flat jaws / ASA / FFF assembly,End-effector assembly,custom-flat,candidate
+ASSY_FLAT_PLA,Flat jaws / PLA / FFF assembly,End-effector assembly,custom-flat,candidate
+ASSY_PREC_PA11,Precision jaws / PA11 / SLS assembly,End-effector assembly,custom-precision,candidate
+ASSY_PREC_PC,Precision jaws / PC / CNC assembly,End-effector assembly,custom-precision,candidate
+ASSY_PU_PAD,PA12 jaws + PU pads assembly,End-effector assembly,soft-pad,candidate

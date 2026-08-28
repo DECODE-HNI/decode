@@ -1,0 +1,46 @@
+<?xml  version='1.0' encoding='windows-1252' ?>
+<xmi:XMI xmlns:xmi="http://schema.omg.org/spec/XMI/2.1" xmi:version="2.1" xmlns:uml="http://schema.omg.org/spec/UML/2.1" xmlns:RFLPV2_Sustainability_Process_Extension="http://www.sparxsystems.com/profiles/RFLPV2_Sustainability_Process_Extension/1.0">
+	<xmi:Documentation exporter="Enterprise Architect" exporterVersion="6.5" exporterID="1721"/>
+	<uml:Model xmi:type="uml:Model" name="EA_Model" visibility="public">
+		<packagedElement xmi:type="uml:Package" xmi:id="EAPK_MERGETEST" name="MergeTest" visibility="public">
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_TEST_FUNC_GRASP" name="Grasp object" visibility="public"/>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_TEST_SP_PARALLEL" name="Parallel-jaw clamping" visibility="public"/>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_TEST_ART_CUSTOM" name="Custom Gripper" visibility="public"/>
+			<packagedElement xmi:type="uml:Association" xmi:id="EAID_TEST_ASSOC1" visibility="public">
+				<memberEnd xmi:idref="EAID_TEST_ASSOC1_DST"/>
+				<memberEnd xmi:idref="EAID_TEST_ASSOC1_SRC"/>
+				<ownedEnd xmi:type="uml:Property" xmi:id="EAID_TEST_ASSOC1_SRC" visibility="public" association="EAID_TEST_ASSOC1" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false" aggregation="composite">
+					<type xmi:idref="EAID_TEST_ASSY_CUSTOM"/>
+				</ownedEnd>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_TEST_ASSY_CUSTOM" name="Custom Gripper assembly" visibility="public">
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_TEST_ASSOC1_DST" visibility="public" association="EAID_TEST_ASSOC1" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false" aggregation="none">
+					<type xmi:idref="EAID_TEST_ART_CUSTOM"/>
+				</ownedAttribute>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Association" xmi:id="EAID_TEST_ASSOC2" visibility="public">
+				<memberEnd xmi:idref="EAID_TEST_ASSOC2_DST"/>
+				<memberEnd xmi:idref="EAID_TEST_ASSOC2_SRC"/>
+				<ownedEnd xmi:type="uml:Property" xmi:id="EAID_TEST_ASSOC2_SRC" visibility="public" association="EAID_TEST_ASSOC2" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false" aggregation="composite">
+					<type xmi:idref="EAID_TEST_PART_CUSTOM_CONTACT"/>
+				</ownedEnd>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_TEST_PART_CUSTOM_CONTACT" name="Custom Gripper contact element" visibility="public">
+				<ownedAttribute xmi:type="uml:Property" xmi:id="EAID_TEST_ASSOC2_DST" visibility="public" association="EAID_TEST_ASSOC2" isStatic="false" isReadOnly="false" isDerived="false" isOrdered="false" isUnique="true" isDerivedUnion="false" aggregation="none">
+					<type xmi:idref="EAID_TEST_ASSY_CUSTOM"/>
+				</ownedAttribute>
+			</packagedElement>
+			<packagedElement xmi:type="uml:Class" xmi:id="EAID_TEST_REQ_COMPAT" name="Ned2 compatibility" visibility="public"/>
+			<packagedElement xmi:type="uml:Dependency" xmi:id="EAID_TEST_DEP_REALIZES" visibility="public" client="EAID_TEST_SP_PARALLEL" supplier="EAID_TEST_FUNC_GRASP"/>
+			<packagedElement xmi:type="uml:Dependency" xmi:id="EAID_TEST_DEP_SATISFIES" visibility="public" client="EAID_TEST_ART_CUSTOM" supplier="EAID_TEST_REQ_COMPAT"/>
+		</packagedElement>
+		<RFLPV2_Sustainability_Process_Extension:Function base_Class="EAID_TEST_FUNC_GRASP" functionID="FUNC_GRASP" safetyCritical="False"/>
+		<RFLPV2_Sustainability_Process_Extension:Logical_Element base_Class="EAID_TEST_SP_PARALLEL" __EAStereoName="Logical Element" logicalID="SP_PARALLEL" logicalType="gripping principle"/>
+		<RFLPV2_Sustainability_Process_Extension:Product_Element base_Class="EAID_TEST_ART_CUSTOM" __EAStereoName="Product Element" productID="ART_CUSTOM"/>
+		<RFLPV2_Sustainability_Process_Extension:Product_Element base_Class="EAID_TEST_ASSY_CUSTOM" __EAStereoName="Product Element" productID="ASSY_CUSTOM"/>
+		<RFLPV2_Sustainability_Process_Extension:Product_Element base_Class="EAID_TEST_PART_CUSTOM_CONTACT" __EAStereoName="Product Element" productID="PART_CUSTOM_CONTACT" materialRef="MAT_ALU_GENERIC"/>
+		<RFLPV2_Sustainability_Process_Extension:System_Requirement base_Class="EAID_TEST_REQ_COMPAT" __EAStereoName="System Requirement" systemRequirementID="REQ_COMPAT" sustainabilityIndicatorRef="IC_CLIMATE" sustainabilityOperator="lessOrEqual" sustainabilityThreshold="3.0" sustainabilityUnit="kg CO2-eq"/>
+		<RFLPV2_Sustainability_Process_Extension:Realizes base_Dependency="EAID_TEST_DEP_REALIZES"/>
+		<RFLPV2_Sustainability_Process_Extension:Satisfies base_Dependency="EAID_TEST_DEP_SATISFIES"/>
+	</uml:Model>
+</xmi:XMI>

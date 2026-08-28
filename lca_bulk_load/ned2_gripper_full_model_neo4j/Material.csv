@@ -1,0 +1,24 @@
+﻿id,name,materialType,density_kg_m3,recycledContent_pct,status,description
+MAT_PA12,PA12,polymer,1010.0,,candidate,Production nylon for MJF/SLS
+MAT_PA11,PA11,polymer,1030.0,,candidate,Tough nylon alternative
+MAT_PLA,PLA,polymer,1240.0,,candidate,FFF prototyping
+MAT_PETG,PETG,polymer,1270.0,,candidate,Tough FFF option
+MAT_ABS,ABS,polymer,1040.0,,candidate,Engineering thermoplastic
+MAT_ASA,ASA,polymer,1070.0,,candidate,Engineering thermoplastic
+MAT_PC,Polycarbonate,polymer,1200.0,,candidate,High-impact thermoplastic
+MAT_POM,POM / Acetal,polymer,1410.0,,candidate,Machinable low-friction polymer
+MAT_TPU,TPU 95A,elastomer,1200.0,,candidate,Flexible high-friction contact
+MAT_TPE,TPE,elastomer,1100.0,,candidate,Flexible contact
+MAT_SILICONE,Silicone rubber,elastomer,1100.0,,candidate,Soft compliant contact
+MAT_NBR,NBR rubber,elastomer,1000.0,,candidate,Suction/contact elastomer
+MAT_PU,Polyurethane elastomer,elastomer,1200.0,,candidate,Wear-resistant elastomer
+MAT_AL6061,Aluminum 6061,metal,2700.0,,candidate,Light structural metal candidate
+MAT_AL7075,Aluminum 7075,metal,2810.0,,candidate,High-strength light metal
+MAT_STEEL,Low-carbon steel,metal,7850.0,,candidate,Ferromagnetic pole material
+MAT_SPRING,Spring steel,metal,7850.0,,candidate,Compliant thin finger material
+MAT_CFPA,CF-reinforced PA,composite,1150.0,,candidate,Stiff lightweight FFF option
+MAT_ALU_GENERIC,"Aluminium (generic, ILCD/IDEMAT)",metal,2700.0,,reference,Generic aluminium background data (extrusion/sheet routes); not bound to a specific alloy (see MAT_AL6061/MAT_AL7075 for engineering-candidate alloys).
+MAT_STEEL_GENERIC,"Steel (generic, ILCD/IDEMAT)",metal,7850.0,,reference,Generic steel background data across multiple production routes (blast furnace/EAF, hot rolled, galvanized, tinplate); not bound to a specific grade.
+MAT_COPPER_GENERIC,"Copper (generic, ILCD/IDEMAT)",metal,8960.0,,reference,Generic copper background data (wire/sheet/tube, market and consumption mixes).
+MAT_LEAD_GENERIC,"Lead (generic, ILCD/IDEMAT)",metal,11340.0,,reference,Generic lead background data (primary/secondary production mixes).
+MAT_ZINC_GENERIC,"Zinc (generic, ILCD/IDEMAT)",metal,7140.0,,reference,Generic special high grade zinc primary production background data.

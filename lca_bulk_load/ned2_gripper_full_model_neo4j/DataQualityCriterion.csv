@@ -1,0 +1,9 @@
+﻿id,name,category,definition,weight,direction
+DQC_TEMP,Temporal representativeness,representativeness,How well the data matches the relevant time period,1.0,higher is better
+DQC_GEO,Geographical representativeness,representativeness,How well the data matches the relevant geography,1.0,higher is better
+DQC_TECH,Technological representativeness,representativeness,How well the data matches the relevant technology,1.0,higher is better
+DQC_ACC,Accuracy,intrinsic,Closeness of data to the intended value,1.0,higher is better
+DQC_COMP,Completeness,intrinsic,Coverage of required information,1.0,higher is better
+DQC_CONS,Consistency,intrinsic,Consistency across data and methods,1.0,higher is better
+DQC_COMPAB,Comparability,contextual,Suitability for comparison of alternatives,1.0,higher is better
+DQC_UNC,Uncertainty,contextual,Degree of uncertainty in the information,1.0,higher is better

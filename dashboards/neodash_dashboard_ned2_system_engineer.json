@@ -1,0 +1,254 @@
+{
+    "title":  "Ned2 - System Engineer",
+    "version":  "2.4",
+    "settings":  {
+                     "pagenumber":  0,
+                     "editable":  true,
+                     "fullscreenEnabled":  false,
+                     "parameters":  {
+
+                                    },
+                     "theme":  "light"
+                 },
+    "pages":  [
+                  {
+                      "title":  "Katalogüberblick",
+                      "reports":  [
+                                      {
+                                          "id":  "se1-intro",
+                                          "title":  "Zweck dieser Seite",
+                                          "query":  "## System Engineer - Katalogüberblick\n\nStatus, Masse und Kernabmessungen über alle Varianten des Ned2-Greifer-Kataloges. Alle Zahlen live aus dem Graphen, keine Schätzwerte.",
+                                          "width":  12,
+                                          "height":  3,
+                                          "x":  0,
+                                          "y":  0,
+                                          "type":  "text",
+                                          "selection":  {
+
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      },
+                                      {
+                                          "id":  "se1-total-variants",
+                                          "title":  "Varianten gesamt",
+                                          "query":  "MATCH (a:Artifact) RETURN count(a) AS Varianten",
+                                          "width":  4,
+                                          "height":  3,
+                                          "x":  0,
+                                          "y":  3,
+                                          "type":  "value",
+                                          "selection":  {
+                                                            "value":  "Varianten"
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      },
+                                      {
+                                          "id":  "se1-total-req",
+                                          "title":  "Anforderungen gesamt",
+                                          "query":  "MATCH (r:Requirement) RETURN count(r) AS Anforderungen",
+                                          "width":  4,
+                                          "height":  3,
+                                          "x":  4,
+                                          "y":  3,
+                                          "type":  "value",
+                                          "selection":  {
+                                                            "value":  "Anforderungen"
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      },
+                                      {
+                                          "id":  "se1-part-status",
+                                          "title":  "Bauteile nach Status",
+                                          "query":  "MATCH (p:Part) RETURN p.status AS Status, count(*) AS Anzahl ORDER BY Anzahl DESC",
+                                          "width":  4,
+                                          "height":  3,
+                                          "x":  8,
+                                          "y":  3,
+                                          "type":  "table",
+                                          "selection":  {
+
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      },
+                                      {
+                                          "id":  "se1-catalog",
+                                          "title":  "Vollständiger Variantenkatalog",
+                                          "query":  "MATCH (a:Artifact) RETURN a.name AS Variante, a.variantFamily AS Familie, a.status AS Status, a.mass_g AS Masse_g, a.opening_mm AS Öffnung_mm ORDER BY a.name",
+                                          "width":  12,
+                                          "height":  6,
+                                          "x":  0,
+                                          "y":  6,
+                                          "type":  "table",
+                                          "selection":  {
+
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      }
+                                  ]
+                  },
+                  {
+                      "title":  "Reparierbarkeit \u0026 Anforderungen",
+                      "reports":  [
+                                      {
+                                          "id":  "se2-intro",
+                                          "title":  "Zweck dieser Seite",
+                                          "query":  "## Reparierbarkeit \u0026 Anforderungs-Nachweis\n\nEs existiert noch kein quantifizierter Reparierbarkeits-Score im Graphen. Diese Seite zeigt die tatsächlich vorhandenen strukturellen Signale: Fügetechnik, Service-Prozessabdeckung und Requirements-Traceability.",
+                                          "width":  12,
+                                          "height":  3,
+                                          "x":  0,
+                                          "y":  0,
+                                          "type":  "text",
+                                          "selection":  {
+
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      },
+                                      {
+                                          "id":  "se2-screw-pct",
+                                          "title":  "Variantenanteil mit reversibler Fügung (Schraube statt Kleben/Schweißen)",
+                                          "query":  "MATCH (pp:ProcessPlan) WITH count(pp) AS total MATCH (s:ProcessPlan)-[:CONTAINS_PROCESS]-\u003e(:Process {id:\u0027PROC_SCREW\u0027}) WITH total, count(DISTINCT s) AS mit RETURN round(100.0*mit/total) AS Prozent_reversibel_gefügt",
+                                          "width":  6,
+                                          "height":  3,
+                                          "x":  0,
+                                          "y":  3,
+                                          "type":  "value",
+                                          "selection":  {
+                                                            "value":  "Prozent_reversibel_gefügt"
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      },
+                                      {
+                                          "id":  "se2-repair-pct",
+                                          "title":  "Variantenanteil mit modelliertem Service-/Reparaturprozess",
+                                          "query":  "MATCH (pp:ProcessPlan) WITH count(pp) AS total MATCH (s:ProcessPlan)-[:CONTAINS_PROCESS]-\u003e(:Process {id:\u0027PROC_REPAIR\u0027}) WITH total, count(DISTINCT s) AS mit RETURN round(100.0*mit/total) AS Prozent_mit_Serviceprozess",
+                                          "width":  6,
+                                          "height":  3,
+                                          "x":  6,
+                                          "y":  3,
+                                          "type":  "value",
+                                          "selection":  {
+                                                            "value":  "Prozent_mit_Serviceprozess"
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      },
+                                      {
+                                          "id":  "se2-req-coverage",
+                                          "title":  "Requirements-Traceability: Reparierbarkeit \u0026 Kreislauffähigkeit",
+                                          "query":  "MATCH (r:Requirement) WHERE r.id IN [\u0027REQ_REPLACEABLE\u0027,\u0027REQ_MATERIAL_DIVERSITY\u0027,\u0027REQ_RECYCLABLE\u0027,\u0027REQ_REPAIR\u0027,\u0027REQ_REV_JOIN\u0027,\u0027REQ_DISASSEMBLY\u0027] OPTIONAL MATCH (x)-[s:SATISFIES_REQUIREMENT]-\u003e(r) RETURN r.name AS Anforderung, r.statement AS Beschreibung, count(x) AS Varianten_mit_Nachweis, collect(DISTINCT s.verificationStatus) AS Nachweisstatus ORDER BY Varianten_mit_Nachweis DESC",
+                                          "width":  12,
+                                          "height":  6,
+                                          "x":  0,
+                                          "y":  6,
+                                          "type":  "table",
+                                          "selection":  {
+
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      }
+                                  ]
+                  },
+                  {
+                      "title":  "Design-for-Repair-Signale (iFixit-inspiriert)",
+                      "reports":  [
+                                      {
+                                          "id":  "se3-intro",
+                                          "title":  "Zweck dieser Seite",
+                                          "query":  "## Design-for-Repair-Signale, inspiriert an iFixits Teardown-Kriterien\n\niFixit veröffentlicht keine einzelne offizielle Formel, sondern eine über Jahre gewachsene Teardown-Rubrik (u. a. Fügetechnik, Modularität, Ersatzteilverfügbarkeit, Dokumentation, benötigte Werkzeuge). Vier davon sind im Graphen heute ehrlich ableitbar: reversible Fügung, dokumentierte Ersatzteilfähigkeit, druckbare Ersatzteile, Materialeinfalt. Werkzeug-/Schrittanzahl und eine eigene Reparaturanleitung fehlen als Daten noch komplett — dafür gibt es bewusst keine Kachel, um nichts zu schätzen.",
+                                          "width":  12,
+                                          "height":  4,
+                                          "x":  0,
+                                          "y":  0,
+                                          "type":  "text",
+                                          "selection":  {
+
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      },
+                                      {
+                                          "id":  "se3-signal-distribution",
+                                          "title":  "Wie viele der 4 Signale erfüllt jede Variante?",
+                                          "query":  "MATCH (art:Artifact) OPTIONAL MATCH (art)-[:HAS_PROCESS_PLAN]-\u003e(pp:ProcessPlan)-[:CONTAINS_PROCESS]-\u003e(:Process {id:\u0027PROC_SCREW\u0027}) WITH art, count(pp) \u003e 0 AS ReversibleFügung OPTIONAL MATCH (art)-[:SATISFIES_REQUIREMENT]-\u003e(r:Requirement) WHERE r.id IN [\u0027REQ_REPLACEABLE\u0027,\u0027REQ_REPAIR\u0027] WITH art, ReversibleFügung, count(DISTINCT r) \u003e 0 AS ErsatzDokumentiert OPTIONAL MATCH (art)-[:HAS_FEATURE]-\u003e(feat:Feature {id:\u0027FEAT_PRINTABLE\u0027}) WITH art, ReversibleFügung, ErsatzDokumentiert, count(feat) \u003e 0 AS DruckbaresErsatzteil OPTIONAL MATCH (art)-[:HAS_COMPONENT]-\u003e(:Assembly)-[:HAS_COMPONENT]-\u003e(part:Part)-[:USES_MATERIAL]-\u003e(m:Material) WITH art, ReversibleFügung, ErsatzDokumentiert, DruckbaresErsatzteil, count(DISTINCT m.materialType) AS Materialarten RETURN (CASE WHEN ReversibleFügung THEN 1 ELSE 0 END + CASE WHEN ErsatzDokumentiert THEN 1 ELSE 0 END + CASE WHEN DruckbaresErsatzteil THEN 1 ELSE 0 END + CASE WHEN Materialarten \u003c= 1 THEN 1 ELSE 0 END) AS Signale_erfüllt, count(art) AS Anzahl_Varianten ORDER BY Signale_erfüllt DESC",
+                                          "width":  6,
+                                          "height":  4,
+                                          "x":  0,
+                                          "y":  4,
+                                          "type":  "table",
+                                          "selection":  {
+
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      },
+                                      {
+                                          "id":  "se3-material-diversity",
+                                          "title":  "Materialvielfalt je Baugruppe (Kontakt- + Interface-Teil)",
+                                          "query":  "MATCH (a:Assembly)-[:HAS_COMPONENT]-\u003e(part:Part)-[:USES_MATERIAL]-\u003e(m:Material) WITH a, collect(DISTINCT m.materialType) AS Materialarten RETURN size(Materialarten) AS Anzahl_Materialarten, count(*) AS Anzahl_Baugruppen ORDER BY Anzahl_Materialarten",
+                                          "width":  3,
+                                          "height":  4,
+                                          "x":  6,
+                                          "y":  4,
+                                          "type":  "table",
+                                          "selection":  {
+
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      },
+                                      {
+                                          "id":  "se3-printable-count",
+                                          "title":  "Varianten mit druckbaren Ersatz-Backen",
+                                          "query":  "MATCH (art:Artifact)-[:HAS_FEATURE]-\u003e(:Feature {id:\u0027FEAT_PRINTABLE\u0027}) RETURN count(art) AS Varianten_mit_druckbaren_Ersatzteilen",
+                                          "width":  3,
+                                          "height":  4,
+                                          "x":  9,
+                                          "y":  4,
+                                          "type":  "value",
+                                          "selection":  {
+                                                            "value":  "Varianten_mit_druckbaren_Ersatzteilen"
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      },
+                                      {
+                                          "id":  "se3-scorecard",
+                                          "title":  "iFixit-inspirierte Scorecard je Variante (alle 43)",
+                                          "query":  "MATCH (art:Artifact) OPTIONAL MATCH (art)-[:HAS_PROCESS_PLAN]-\u003e(pp:ProcessPlan)-[:CONTAINS_PROCESS]-\u003e(:Process {id:\u0027PROC_SCREW\u0027}) WITH art, count(pp) \u003e 0 AS ReversibleFügung OPTIONAL MATCH (art)-[:SATISFIES_REQUIREMENT]-\u003e(r:Requirement) WHERE r.id IN [\u0027REQ_REPLACEABLE\u0027,\u0027REQ_REPAIR\u0027] WITH art, ReversibleFügung, count(DISTINCT r) \u003e 0 AS ErsatzDokumentiert OPTIONAL MATCH (art)-[:HAS_FEATURE]-\u003e(feat:Feature {id:\u0027FEAT_PRINTABLE\u0027}) WITH art, ReversibleFügung, ErsatzDokumentiert, count(feat) \u003e 0 AS DruckbaresErsatzteil OPTIONAL MATCH (art)-[:HAS_COMPONENT]-\u003e(:Assembly)-[:HAS_COMPONENT]-\u003e(part:Part)-[:USES_MATERIAL]-\u003e(m:Material) WITH art, ReversibleFügung, ErsatzDokumentiert, DruckbaresErsatzteil, count(DISTINCT m.materialType) AS Materialarten RETURN art.name AS Variante, ReversibleFügung, ErsatzDokumentiert, DruckbaresErsatzteil, Materialarten, (CASE WHEN ReversibleFügung THEN 1 ELSE 0 END + CASE WHEN ErsatzDokumentiert THEN 1 ELSE 0 END + CASE WHEN DruckbaresErsatzteil THEN 1 ELSE 0 END + CASE WHEN Materialarten \u003c= 1 THEN 1 ELSE 0 END) AS Signale_erfüllt ORDER BY Signale_erfüllt DESC, Variante",
+                                          "width":  12,
+                                          "height":  8,
+                                          "x":  0,
+                                          "y":  8,
+                                          "type":  "table",
+                                          "selection":  {
+
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      }
+                                  ]
+                  }
+              ]
+}

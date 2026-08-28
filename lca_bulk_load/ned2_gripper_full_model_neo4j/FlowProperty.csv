@@ -1,0 +1,4 @@
+﻿id,name,propertyType,referenceUnit,description
+FP_MASS,Mass,physical quantity,kg,Reference mass property
+FP_ENERGY,Energy,physical quantity,kWh,Reference energy property for screening exchanges
+FP_COUNT,Number of items,count,pcs,Reference count property

@@ -1,0 +1,17 @@
+﻿from_id,to_id,role
+ART_CUSTOM,DATA_0001,assessment-relevant value
+ART_CUSTOM,DATA_0002,assessment-relevant value
+ART_CUSTOM,DATA_0003,assessment-relevant value
+ART_CUSTOM,DATA_0004,assessment-relevant value
+ART_LARGE,DATA_0005,assessment-relevant value
+ART_LARGE,DATA_0006,assessment-relevant value
+ART_LARGE,DATA_0007,assessment-relevant value
+ART_LARGE,DATA_0008,assessment-relevant value
+ART_ADAPTIVE,DATA_0009,assessment-relevant value
+ART_ADAPTIVE,DATA_0010,assessment-relevant value
+ART_ADAPTIVE,DATA_0011,assessment-relevant value
+ART_ADAPTIVE,DATA_0012,assessment-relevant value
+ART_VACUUM,DATA_0013,assessment-relevant value
+ART_VACUUM,DATA_0014,assessment-relevant value
+ART_MAGNET,DATA_0015,assessment-relevant value
+ART_MAGNET,DATA_0016,assessment-relevant value

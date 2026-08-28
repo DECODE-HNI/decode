@@ -1,0 +1,16 @@
+﻿id,name,sourceType,provider,uri,accessedAt,evidenceLevel
+SRC_NIRYO_NED2,Niryo Ned2 product page,manufacturer_product_page,Niryo,https://niryo.com/product/educational-desktop-robotic-arm/,2026-08-24,manufacturer_current
+SRC_NIRYO_CUSTOM,Niryo Custom Gripper product page,manufacturer_product_page,Niryo,https://niryo.com/product/custom-gripper/,2026-08-24,manufacturer_current
+SRC_NIRYO_LARGE,Niryo Large Gripper product page,manufacturer_product_page,Niryo,https://niryo.com/product/large-gripper/,2026-08-24,manufacturer_current
+SRC_NIRYO_ADAPTIVE,Niryo Adaptive Gripper product page,manufacturer_product_page,Niryo,https://niryo.com/product/adaptative-gripper/,2026-08-24,manufacturer_current
+SRC_NIRYO_MAGNET,Niryo Electromagnet product page,manufacturer_product_page,Niryo,https://niryo.com/product/electro-magnet/,2026-08-24,manufacturer_current
+SRC_NED2_MANUAL,Ned2 User Manual,manufacturer_manual,Niryo,https://uploads.unchainedrobotics.de/media/file_upload/Niryo%20Manual%20EN_bfe4e1b0.pdf,2026-08-24,manufacturer_manual
+SRC_DS_CUSTOM,Custom Gripper technical sheet,technical_datasheet,Niryo / distributor mirror,https://static.generation-robots.com/media/fiche-technique-pince-modulable-niryo-ned2.pdf,2026-08-24,technical_datasheet
+SRC_DS_LARGE,Large Gripper technical sheet,technical_datasheet,Niryo / distributor mirror,https://static.generation-robots.com/media/fiche-technique-gripper-large-niryo.pdf,2026-08-24,technical_datasheet
+SRC_DS_ADAPTIVE,Adaptive Gripper technical sheet,technical_datasheet,Niryo / distributor mirror,https://static.generation-robots.com/media/fiche-technique-niryo-gripper-adaptative.pdf,2026-08-24,technical_datasheet
+SRC_DS_MAGNET,Electromagnet technical sheet,technical_datasheet,Niryo / distributor mirror,https://static.generation-robots.com/media/fiche-technique-niryo-electroaimant.pdf,2026-08-24,technical_datasheet
+SRC_DS_VACUUM,Vacuum Pump technical sheet,technical_datasheet,Niryo,https://manuals.plus/m/924225d9570768558f6c3516cf5f3895fa064502618153f14e02b81fd8b0c681.pdf,2026-08-24,technical_datasheet
+SRC_UNIPOS_JAWS,Ned2 jaw pack overview,reseller_page,UNIPOS,https://www.unipos.net/products/niryo-ned2/,2026-08-24,reseller_documented
+SRC_ENGINEERING,Systematically generated engineering alternatives,engineering_inference,Engineering model,,2026-08-24,conceptual_validation_required
+"SRC_SPHERA_ALU_EXTRUSION_EF","ILCD/EF dataset: Aluminium profile (EN15804 A1-A3), Sphera/GaBi","LCA_database_ILCD_EF","Sphera Solutions GmbH","","2026-08-24","third_party_lca_dataset"
+SRC_SUSTAINABILITY_ENGINEERING,Internal Sustainability Engineering review,internal_expert_judgment,Sustainability Engineering,,2026-08-24,internal_reviewed

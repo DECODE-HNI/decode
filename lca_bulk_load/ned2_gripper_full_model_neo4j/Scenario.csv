@@ -1,0 +1,18 @@
+﻿id,name,scenarioType,objectGeometry,objectMaterial,fragility,porosity,ferromagnetic,description
+SC_SMALL_SCREW,Small steel screw,gripping,small cylindrical,steel,low,non-porous,true,Precision magnetic or mechanical
+SC_WASHER,Steel washer,gripping,flat/ring,steel,low,non-porous,true,Small ferromagnetic
+SC_NUT,Steel nut,gripping,hexagonal,steel,low,non-porous,true,Small rigid
+SC_SMALL_CUBE,Small polymer cube,gripping,prismatic,polymer,low,non-porous,false,Small rigid part
+SC_LARGE_BOX,Large lightweight box,gripping,prismatic,cardboard/polymer,medium,variable,false,Bulky lightweight
+SC_EGG,Egg-like fragile object,gripping,curved,organic/shell,high,non-porous,false,Fragile
+SC_CUP,Cup,gripping,hollow curved,polymer/ceramic,medium,non-porous,false,Internal or external grip
+SC_AL_TUBE,Aluminum tube,gripping,hollow cylindrical,aluminum,low,non-porous,false,Internal/external cylindrical
+SC_STEEL_TUBE,Steel tube,gripping,hollow cylindrical,steel,low,non-porous,true,Cylindrical ferromagnetic
+SC_PLATE,Plastic plate,gripping,flat,polymer,low,non-porous,false,Vacuum-capable
+SC_STEEL_PLATE,Steel plate,gripping,flat,steel,low,non-porous,true,Vacuum or magnetic
+SC_GLASS,Glass plate,gripping,flat,glass,high,non-porous,false,Fragile flat
+SC_FOAM,Foam part,gripping,irregular,foam,high,porous,false,Soft/deformable
+SC_BOTTLE,Bottle,gripping,curved/hollow,polymer/glass,medium,non-porous,false,Curved
+SC_PCB,Printed circuit board,gripping,thin/flat,composite,high,non-porous,false,Precision handling
+SC_CABLE,Cable bundle,gripping,flexible/irregular,polymer/metal,medium,non-porous,false,Flexible irregular
+SC_BALL,Spherical object,gripping,spherical,polymer,medium,non-porous,false,Round object

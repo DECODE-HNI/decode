@@ -1,0 +1,6 @@
+﻿id,name,method,overallScore,scale,comment
+DQ_MANUF,Manufacturer / datasheet data,provenance confidence,5.0,1..5,Current manufacturer/datasheet data
+DQ_MANUAL,Older manufacturer manual,provenance confidence,4.0,1..5,May represent older revision
+DQ_RESELLER,Reseller documentation,provenance confidence,3.0,1..5,Requires manufacturer verification if critical
+DQ_CONCEPT,Engineering concept,provenance confidence,2.0,1..5,Not manufacturer validated
+DQ_SCREW_JOIN,PROC_SCREW joining type assessment,expert review confidence,4.0,1..5,Based on process technology description (reversible joining); not yet independently re-verified against CAD/BOM.

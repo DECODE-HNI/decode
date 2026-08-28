@@ -1,0 +1,87 @@
+﻿from_id,to_id,mass_g,fraction,role
+PART_CUSTOM_CONTACT,MAT_PA12,,1.0,primary candidate material
+PART_CUSTOM_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_LARGE_CONTACT,MAT_PA12,,1.0,primary candidate material
+PART_LARGE_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_ADAPTIVE_CONTACT,MAT_PA12,,1.0,primary candidate material
+PART_ADAPTIVE_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_VACUUM_CONTACT,MAT_NBR,,1.0,primary candidate material
+PART_VACUUM_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_MAGNET_CONTACT,MAT_STEEL,,1.0,primary candidate material
+PART_MAGNET_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_FLAT_PA12_CONTACT,MAT_PA12,,1.0,primary candidate material
+PART_FLAT_PA12_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_PREC_PA12_CONTACT,MAT_PA12,,1.0,primary candidate material
+PART_PREC_PA12_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_XL_PA12_CONTACT,MAT_PA12,,1.0,primary candidate material
+PART_XL_PA12_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_FLAT_PETG_CONTACT,MAT_PETG,,1.0,primary candidate material
+PART_FLAT_PETG_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_FLAT_AL_CONTACT,MAT_AL6061,,1.0,primary candidate material
+PART_FLAT_AL_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_PREC_POM_CONTACT,MAT_POM,,1.0,primary candidate material
+PART_PREC_POM_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_PREC_AL7075_CONTACT,MAT_AL7075,,1.0,primary candidate material
+PART_PREC_AL7075_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_XL_CFPA_CONTACT,MAT_CFPA,,1.0,primary candidate material
+PART_XL_CFPA_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_V_PA12_CONTACT,MAT_PA12,,1.0,primary candidate material
+PART_V_PA12_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_V_PETG_CONTACT,MAT_PETG,,1.0,primary candidate material
+PART_V_PETG_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_V_POM_CONTACT,MAT_POM,,1.0,primary candidate material
+PART_V_POM_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_V_AL_CONTACT,MAT_AL6061,,1.0,primary candidate material
+PART_V_AL_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_CONC_PA12_CONTACT,MAT_PA12,,1.0,primary candidate material
+PART_CONC_PA12_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_CONC_POM_CONTACT,MAT_POM,,1.0,primary candidate material
+PART_CONC_POM_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_TPU_PAD_CONTACT,MAT_TPU,,1.0,primary candidate material
+PART_TPU_PAD_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_SIL_PAD_CONTACT,MAT_SILICONE,,1.0,primary candidate material
+PART_SIL_PAD_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_FINRAY_TPU_CONTACT,MAT_TPU,,1.0,primary candidate material
+PART_FINRAY_TPU_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_FINRAY_TPE_CONTACT,MAT_TPE,,1.0,primary candidate material
+PART_FINRAY_TPE_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_LONG_CFPA_CONTACT,MAT_CFPA,,1.0,primary candidate material
+PART_LONG_CFPA_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_LONG_AL_CONTACT,MAT_AL6061,,1.0,primary candidate material
+PART_LONG_AL_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_THIN_POM_CONTACT,MAT_POM,,1.0,primary candidate material
+PART_THIN_POM_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_THIN_STEEL_CONTACT,MAT_SPRING,,1.0,primary candidate material
+PART_THIN_STEEL_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_INTERNAL_PA12_CONTACT,MAT_PA12,,1.0,primary candidate material
+PART_INTERNAL_PA12_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_INTERNAL_AL_CONTACT,MAT_AL6061,,1.0,primary candidate material
+PART_INTERNAL_AL_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_3FINGER_PA12_CONTACT,MAT_PA12,,1.0,primary candidate material
+PART_3FINGER_PA12_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_SOFT_SIL_CONTACT,MAT_SILICONE,,1.0,primary candidate material
+PART_SOFT_SIL_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_VAC_SMALL_NBR_CONTACT,MAT_NBR,,1.0,primary candidate material
+PART_VAC_SMALL_NBR_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_VAC_LARGE_SIL_CONTACT,MAT_SILICONE,,1.0,primary candidate material
+PART_VAC_LARGE_SIL_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_VAC_ARRAY_CONTACT,MAT_PA12,,1.0,primary candidate material
+PART_VAC_ARRAY_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_MAG_SMALL_CONTACT,MAT_STEEL,,1.0,primary candidate material
+PART_MAG_SMALL_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_MAG_WIDE_CONTACT,MAT_STEEL,,1.0,primary candidate material
+PART_MAG_WIDE_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_HYBRID_CONTACT,MAT_TPU,,1.0,primary candidate material
+PART_HYBRID_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_FLAT_ABS_CONTACT,MAT_ABS,,1.0,primary candidate material
+PART_FLAT_ABS_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_FLAT_ASA_CONTACT,MAT_ASA,,1.0,primary candidate material
+PART_FLAT_ASA_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_FLAT_PLA_CONTACT,MAT_PLA,,1.0,primary candidate material
+PART_FLAT_PLA_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_PREC_PA11_CONTACT,MAT_PA11,,1.0,primary candidate material
+PART_PREC_PA11_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_PREC_PC_CONTACT,MAT_PC,,1.0,primary candidate material
+PART_PREC_PC_INTERFACE,MAT_PA12,,1.0,interface candidate
+PART_PU_PAD_CONTACT,MAT_PU,,1.0,primary candidate material
+PART_PU_PAD_INTERFACE,MAT_PA12,,1.0,interface candidate

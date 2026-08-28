@@ -1,0 +1,44 @@
+﻿id,name,artifactType,variantFamily,manufacturer,mass_g,opening_mm,tcp_mm,evidenceLevel,validationRequired,status,description
+ART_CUSTOM,Custom Gripper,GripperSolution,official-custom,Niryo,115.0,43.0,85.0,technical_datasheet,false,official,Ned2 gripper/end-effector solution alternative.
+ART_LARGE,Large Gripper,GripperSolution,official-large,Niryo,81.0,79.0,115.0,technical_datasheet,false,official,Ned2 gripper/end-effector solution alternative.
+ART_ADAPTIVE,Adaptive Gripper,GripperSolution,official-adaptive,Niryo,93.0,97.49,120.0,technical_datasheet,false,official,Ned2 gripper/end-effector solution alternative.
+ART_VACUUM,Vacuum Pump / Suction Tool,GripperSolution,official-vacuum,Niryo,19.5,,47.0,technical_datasheet,false,official,Ned2 gripper/end-effector solution alternative.
+ART_MAGNET,Electromagnet,GripperSolution,official-magnetic,Niryo,55.0,,48.0,technical_datasheet,false,official,Ned2 gripper/end-effector solution alternative.
+ART_FLAT_PA12,Custom + Flat jaws / PA12 / MJF,GripperSolution,custom-flat,Engineering concept,,43.0,,documented+engineering,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_PREC_PA12,Custom + Precision jaws / PA12 / MJF,GripperSolution,custom-precision,Engineering concept,,43.0,,documented+engineering,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_XL_PA12,Custom + XL jaws / PA12 / MJF,GripperSolution,custom-xl,Engineering concept,,79.0,,documented+engineering,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_FLAT_PETG,Flat jaws / PETG / FFF,GripperSolution,custom-flat,Engineering concept,,43.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_FLAT_AL,Flat jaws / Al6061 / CNC,GripperSolution,custom-flat,Engineering concept,,43.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_PREC_POM,Precision jaws / POM / CNC,GripperSolution,custom-precision,Engineering concept,,43.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_PREC_AL7075,Precision jaws / Al7075 / CNC,GripperSolution,custom-precision,Engineering concept,,43.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_XL_CFPA,XL jaws / CF-PA / FFF,GripperSolution,custom-xl,Engineering concept,,80.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_V_PA12,V-groove jaws / PA12 / MJF,GripperSolution,v-groove,Engineering concept,,45.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_V_PETG,V-groove jaws / PETG / FFF,GripperSolution,v-groove,Engineering concept,,45.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_V_POM,V-groove jaws / POM / CNC,GripperSolution,v-groove,Engineering concept,,45.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_V_AL,V-groove jaws / Al6061 / CNC,GripperSolution,v-groove,Engineering concept,,45.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_CONC_PA12,Concave jaws / PA12 / MJF,GripperSolution,concave,Engineering concept,,45.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_CONC_POM,Concave jaws / POM / CNC,GripperSolution,concave,Engineering concept,,45.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_TPU_PAD,PA12 jaws + TPU pads,GripperSolution,soft-pad,Engineering concept,,43.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_SIL_PAD,Aluminum jaws + silicone pads,GripperSolution,soft-pad,Engineering concept,,43.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_FINRAY_TPU,Fin-Ray fingers / TPU / FFF,GripperSolution,finray,Engineering concept,,60.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_FINRAY_TPE,Fin-Ray fingers / TPE / FFF,GripperSolution,finray,Engineering concept,,60.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_LONG_CFPA,Long-reach fingers / CF-PA / FFF,GripperSolution,long-reach,Engineering concept,,55.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_LONG_AL,Long-reach fingers / Al6061 / CNC,GripperSolution,long-reach,Engineering concept,,55.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_THIN_POM,Thin precision fingers / POM / CNC,GripperSolution,precision,Engineering concept,,35.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_THIN_STEEL,Thin compliant fingers / spring steel,GripperSolution,precision-compliant,Engineering concept,,35.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_INTERNAL_PA12,Internal-expansion fingers / PA12 / MJF,GripperSolution,internal,Engineering concept,,35.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_INTERNAL_AL,Internal-expansion fingers / Al6061 / CNC,GripperSolution,internal,Engineering concept,,35.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_3FINGER_PA12,Three-finger underactuated / PA12,GripperSolution,three-finger,Engineering concept,,70.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_SOFT_SIL,Soft pneumatic fingers / silicone,GripperSolution,soft-pneumatic,Engineering concept,,70.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_VAC_SMALL_NBR,Small suction cup / NBR,GripperSolution,vacuum-small,Engineering concept,,,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_VAC_LARGE_SIL,Large suction cup / silicone,GripperSolution,vacuum-large,Engineering concept,,,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_VAC_ARRAY,Four-cup vacuum array,GripperSolution,vacuum-array,Engineering concept,,,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_MAG_SMALL,Small magnetic pole shoe,GripperSolution,magnetic-small,Engineering concept,,,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_MAG_WIDE,Wide magnetic pole shoe,GripperSolution,magnetic-wide,Engineering concept,,,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_HYBRID,Rigid-soft hybrid jaw / PA12+TPU,GripperSolution,hybrid,Engineering concept,,45.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_FLAT_ABS,Flat jaws / ABS / FFF,GripperSolution,custom-flat,Engineering concept,,43.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_FLAT_ASA,Flat jaws / ASA / FFF,GripperSolution,custom-flat,Engineering concept,,43.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_FLAT_PLA,Flat jaws / PLA / FFF,GripperSolution,custom-flat,Engineering concept,,43.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_PREC_PA11,Precision jaws / PA11 / SLS,GripperSolution,custom-precision,Engineering concept,,43.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_PREC_PC,Precision jaws / PC / CNC,GripperSolution,custom-precision,Engineering concept,,43.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.
+ART_PU_PAD,PA12 jaws + PU pads,GripperSolution,soft-pad,Engineering concept,,43.0,,engineering_concept,true,candidate,Ned2 gripper/end-effector solution alternative.

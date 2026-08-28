@@ -1,0 +1,11 @@
+﻿id,name,propertyType,valueNumber,valueText,unit,status
+CP_OPENING,Opening width,geometry/performance,,,mm,candidate
+CP_MASS,Tool mass,mass,,,g,candidate
+CP_TCP,TCP offset,geometry,,,mm,candidate
+CP_STIFFNESS,Finger stiffness,mechanical,,,,candidate
+CP_COMPLIANCE,Contact compliance,mechanical,,,,candidate
+CP_FRICTION,Contact friction,surface,,,,candidate
+CP_GRIP_FORCE,Gripping / holding force,performance,,,,candidate
+CP_PAYLOAD_MARGIN,Payload margin,performance,,,g,candidate
+CP_CONTACT_PRESSURE,Contact pressure,performance,,,,candidate
+CP_DISASSEMBLY,Disassembly capability,sustainability,,,,candidate

@@ -1,0 +1,109 @@
+{
+  "assetAdministrationShells": [
+    {
+      "modelType": "AssetAdministrationShell",
+      "id": "https://ned2-gripper.example/ids/aas/PART_PREC_AL7075_CONTACT_GREYBOX",
+      "idShort": "AAS_PART_PREC_AL7075_CONTACT_GreyBox",
+      "description": [
+        {
+          "language": "de",
+          "text": "Grey-Box-AAS fuer PART_PREC_AL7075_CONTACT: aggregierter PCF-Wert plus gezielte FragmentReference-Verlinkung in eine angehaengte, aus dem Graphen regenerierte ILCD-Datei (ilcd_export_proc_cnc.xml). Deklaration deckt PROC_CNC ab (Aluminium + Strom); PROC_SCREW/PROC_FINISH wuerden in der Praxis eigene Grey-Box-Deklarationen erhalten, siehe AAS-Boxenmodell-Dokument Abschnitt 5."
+        }
+      ],
+      "assetInformation": {
+        "assetKind": "Instance",
+        "globalAssetId": "https://ned2-gripper.example/ids/asset/PART_PREC_AL7075_CONTACT",
+        "specificAssetIds": [
+          { "name": "graphNodeId", "value": "PART_PREC_AL7075_CONTACT" },
+          { "name": "boxType", "value": "grey" }
+        ]
+      },
+      "submodels": [
+        {
+          "type": "ModelReference",
+          "keys": [
+            { "type": "Submodel", "value": "https://ned2-gripper.example/ids/sm/CarbonFootprintGrey_PART_PREC_AL7075_CONTACT" }
+          ]
+        }
+      ]
+    }
+  ],
+
+  "submodels": [
+    {
+      "modelType": "Submodel",
+      "id": "https://ned2-gripper.example/ids/sm/CarbonFootprintGrey_PART_PREC_AL7075_CONTACT",
+      "idShort": "CarbonFootprintGrey",
+      "kind": "Instance",
+      "submodelElements": [
+        {
+          "modelType": "SubmodelElementCollection",
+          "idShort": "ProductCarbonFootprint",
+          "value": [
+            { "modelType": "Property", "idShort": "PCFCO2eq",             "valueType": "xs:double", "value": "9.154962801954616" },
+            { "modelType": "Property", "idShort": "PCFCalculationMethod", "valueType": "xs:string", "value": "EF 3.1 -- Climate change" },
+            { "modelType": "Property", "idShort": "PCFLifeCyclePhase",    "valueType": "xs:string", "value": "A1-A3 (PROC_CNC: CNC milling)" },
+            { "modelType": "Property", "idShort": "PCFReferenceValueForCalculation", "valueType": "xs:string", "value": "1 Stueck gefertigtes Kontaktelement" }
+          ]
+        },
+
+        {
+          "modelType": "File",
+          "idShort": "AttachedILCDDataset",
+          "contentType": "application/xml",
+          "value": "./ilcd/ilcd_export_proc_cnc.xml"
+        },
+
+        {
+          "modelType": "AnnotatedRelationshipElement",
+          "idShort": "PCFCO2eq_Provenance_Aluminum",
+          "first": {
+            "type": "ModelReference",
+            "keys": [
+              { "type": "Submodel", "value": "https://ned2-gripper.example/ids/sm/CarbonFootprintGrey_PART_PREC_AL7075_CONTACT" },
+              { "type": "SubmodelElementCollection", "value": "ProductCarbonFootprint" },
+              { "type": "Property", "value": "PCFCO2eq" }
+            ]
+          },
+          "second": {
+            "type": "ModelReference",
+            "keys": [
+              { "type": "Submodel", "value": "https://ned2-gripper.example/ids/sm/CarbonFootprintGrey_PART_PREC_AL7075_CONTACT" },
+              { "type": "File", "value": "AttachedILCDDataset" },
+              { "type": "FragmentReference", "value": "ilcd:exchange:PROC_CNC#0" }
+            ]
+          },
+          "annotations": [
+            { "modelType": "Property", "idShort": "ContributionNote", "valueType": "xs:string", "value": "1 kg Aluminium-Ingot, Vorkette PROC_ALU_INGOT_MIX_CONSUMPTION, 9.083655796559631 kg CO2-eq" }
+          ]
+        },
+
+        {
+          "modelType": "AnnotatedRelationshipElement",
+          "idShort": "PCFCO2eq_Provenance_Electricity",
+          "first": {
+            "type": "ModelReference",
+            "keys": [
+              { "type": "Submodel", "value": "https://ned2-gripper.example/ids/sm/CarbonFootprintGrey_PART_PREC_AL7075_CONTACT" },
+              { "type": "SubmodelElementCollection", "value": "ProductCarbonFootprint" },
+              { "type": "Property", "value": "PCFCO2eq" }
+            ]
+          },
+          "second": {
+            "type": "ModelReference",
+            "keys": [
+              { "type": "Submodel", "value": "https://ned2-gripper.example/ids/sm/CarbonFootprintGrey_PART_PREC_AL7075_CONTACT" },
+              { "type": "File", "value": "AttachedILCDDataset" },
+              { "type": "FragmentReference", "value": "ilcd:exchange:PROC_CNC#1" }
+            ]
+          },
+          "annotations": [
+            { "modelType": "Property", "idShort": "ContributionNote", "valueType": "xs:string", "value": "3.6 MJ (= 1 kWh) Oekostrom DE, Vorkette PROC_ELECTRICITY_GREEN_GRID_MIX_DE, 0.07130700539498436 kg CO2-eq" }
+          ]
+        }
+      ]
+    }
+  ],
+
+  "conceptDescriptions": []
+}

@@ -1,0 +1,303 @@
+{
+  "assetAdministrationShells": [
+    {
+      "modelType": "AssetAdministrationShell",
+      "id": "https://ned2-gripper.example/ids/aas/PART_PREC_AL7075_CONTACT",
+      "idShort": "AAS_PART_PREC_AL7075_CONTACT",
+      "description": [
+        {
+          "language": "de",
+          "text": "White-Box-AAS fuer das Kontaktelement PART_PREC_AL7075_CONTACT (Baugruppe ASSY_PREC_AL7075). Alle Prozess-, Flow- und Ergebniswerte 1:1 aus der lokalen Neo4j-Instanz (2.722 Knoten / 79.651 Relationships, Stand 26.08.2026) exportiert -- keine erfundenen Beispielwerte, mit Ausnahme der explizit als 'assumed' markierten Mengen fuer PROC_SCREW/PROC_FINISH/PROC_REPAIR."
+        }
+      ],
+      "assetInformation": {
+        "assetKind": "Instance",
+        "globalAssetId": "https://ned2-gripper.example/ids/asset/PART_PREC_AL7075_CONTACT",
+        "specificAssetIds": [
+          { "name": "graphNodeId", "value": "PART_PREC_AL7075_CONTACT" },
+          { "name": "assemblyId", "value": "ASSY_PREC_AL7075" }
+        ]
+      },
+      "submodels": [
+        {
+          "type": "ModelReference",
+          "keys": [
+            { "type": "Submodel", "value": "https://ned2-gripper.example/ids/sm/ILCDProcessDataset_PART_PREC_AL7075_CONTACT" }
+          ]
+        },
+        {
+          "type": "ModelReference",
+          "keys": [
+            { "type": "Submodel", "value": "https://ned2-gripper.example/ids/sm/CarbonFootprintSummary_PART_PREC_AL7075_CONTACT" }
+          ]
+        }
+      ]
+    }
+  ],
+
+  "submodels": [
+    {
+      "modelType": "Submodel",
+      "id": "https://ned2-gripper.example/ids/sm/ILCDProcessDataset_PART_PREC_AL7075_CONTACT",
+      "idShort": "ILCDProcessDataset",
+      "kind": "Instance",
+      "semanticId": {
+        "type": "ExternalReference",
+        "keys": [{ "type": "GlobalReference", "value": "urn:ilcd-aas:whitebox:1:0:ProcessDataset" }]
+      },
+      "submodelElements": [
+        {
+          "modelType": "SubmodelElementCollection",
+          "idShort": "PartInformation",
+          "value": [
+            { "modelType": "Property", "idShort": "PartId",     "valueType": "xs:string", "value": "PART_PREC_AL7075_CONTACT" },
+            { "modelType": "Property", "idShort": "PartName",   "valueType": "xs:string", "value": "Precision jaws / Al7075 / CNC contact element" },
+            { "modelType": "Property", "idShort": "Material",   "valueType": "xs:string", "value": "MAT_AL7075 -- Aluminum 7075" },
+            { "modelType": "Property", "idShort": "Assembly",   "valueType": "xs:string", "value": "ASSY_PREC_AL7075 -- Precision jaws / Al7075 / CNC assembly" },
+            { "modelType": "Property", "idShort": "Artifact",   "valueType": "xs:string", "value": "ART_PREC_AL7075 -- Precision jaws / Al7075 / CNC" }
+          ]
+        },
+
+        {
+          "modelType": "SubmodelElementList",
+          "typeValueListElement": "SubmodelElementCollection",
+          "idShort": "ManufacturingProcesses",
+          "description": [{ "language": "de", "text": "Lebenszyklusstufe ~A1-A3. Prozesse, die real auf PART_PREC_AL7075_CONTACT angewendet werden (APPLIES_TO im Graphen)." }],
+          "value": [
+            {
+              "modelType": "SubmodelElementCollection",
+              "idShort": "Process_PROC_CNC",
+              "value": [
+                { "modelType": "Property", "idShort": "ProcessId",   "valueType": "xs:string", "value": "PROC_CNC" },
+                { "modelType": "Property", "idShort": "ProcessName", "valueType": "xs:string", "value": "CNC milling" },
+                {
+                  "modelType": "SubmodelElementList",
+                  "typeValueListElement": "SubmodelElementCollection",
+                  "idShort": "Exchanges",
+                  "value": [
+                    {
+                      "modelType": "SubmodelElementCollection", "idShort": "Exchange_AL_IN",
+                      "value": [
+                        { "modelType": "Property", "idShort": "ExchangeId", "valueType": "xs:string", "value": "PROC_CNC#0" },
+                        { "modelType": "Property", "idShort": "Direction",  "valueType": "xs:string", "value": "input" },
+                        { "modelType": "Property", "idShort": "MeanAmount", "valueType": "xs:double", "value": "1.0" },
+                        { "modelType": "Property", "idShort": "Unit",       "valueType": "xs:string", "value": "kg" },
+                        { "modelType": "Property", "idShort": "FlowId",     "valueType": "xs:string", "value": "ae206e6f-e4f5-4dbf-8de7-42576f6da892" },
+                        { "modelType": "Property", "idShort": "FlowName",   "valueType": "xs:string", "value": "Aluminium ingot" },
+                        {
+                          "modelType": "SubmodelElementCollection", "idShort": "UpstreamContribution",
+                          "value": [
+                            { "modelType": "Property", "idShort": "BackgroundProcessId",   "valueType": "xs:string", "value": "PROC_ALU_INGOT_MIX_CONSUMPTION" },
+                            { "modelType": "Property", "idShort": "BackgroundProcessName", "valueType": "xs:string", "value": "Aluminium ingot mix - consumption mix" },
+                            { "modelType": "Property", "idShort": "ImpactCategory",        "valueType": "xs:string", "value": "IC_CLIMATE -- Climate change" },
+                            { "modelType": "Property", "idShort": "PerReferenceUnitGWP",   "valueType": "xs:double", "value": "9.083655796559631" },
+                            { "modelType": "Property", "idShort": "ReferenceUnit",         "valueType": "xs:string", "value": "1 kg Aluminium ingot" },
+                            { "modelType": "Property", "idShort": "ContributingElementaryFlows", "valueType": "xs:int",    "value": "37" },
+                            { "modelType": "Property", "idShort": "ScaledContribution",    "valueType": "xs:double", "value": "9.083655796559631" }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "modelType": "SubmodelElementCollection", "idShort": "Exchange_ELEC_IN",
+                      "value": [
+                        { "modelType": "Property", "idShort": "ExchangeId", "valueType": "xs:string", "value": "PROC_CNC#1" },
+                        { "modelType": "Property", "idShort": "Direction",  "valueType": "xs:string", "value": "input" },
+                        { "modelType": "Property", "idShort": "MeanAmount", "valueType": "xs:double", "value": "3.6" },
+                        { "modelType": "Property", "idShort": "Unit",       "valueType": "xs:string", "value": "MJ" },
+                        { "modelType": "Property", "idShort": "FlowId",     "valueType": "xs:string", "value": "890a70b7-b677-4e2a-8a1b-7d017e0a10ae" },
+                        { "modelType": "Property", "idShort": "FlowName",   "valueType": "xs:string", "value": "Electricity" },
+                        {
+                          "modelType": "SubmodelElementCollection", "idShort": "UpstreamContribution",
+                          "value": [
+                            { "modelType": "Property", "idShort": "BackgroundProcessId",   "valueType": "xs:string", "value": "PROC_ELECTRICITY_GREEN_GRID_MIX_DE" },
+                            { "modelType": "Property", "idShort": "BackgroundProcessName", "valueType": "xs:string", "value": "Green electricity grid mix (production mix) (2021)" },
+                            { "modelType": "Property", "idShort": "ImpactCategory",        "valueType": "xs:string", "value": "IC_CLIMATE -- Climate change" },
+                            { "modelType": "Property", "idShort": "PerReferenceUnitGWP",   "valueType": "xs:double", "value": "0.07130700539498436" },
+                            { "modelType": "Property", "idShort": "ReferenceUnit",         "valueType": "xs:string", "value": "3.6 MJ (= 1 kWh) Electricity" },
+                            { "modelType": "Property", "idShort": "ContributingElementaryFlows", "valueType": "xs:int",    "value": "37" },
+                            { "modelType": "Property", "idShort": "ScaledContribution",    "valueType": "xs:double", "value": "0.07130700539498436" }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "modelType": "SubmodelElementCollection", "idShort": "Exchange_PART_OUT",
+                      "value": [
+                        { "modelType": "Property", "idShort": "ExchangeId", "valueType": "xs:string", "value": "PROC_CNC#2" },
+                        { "modelType": "Property", "idShort": "Direction",  "valueType": "xs:string", "value": "output" },
+                        { "modelType": "Property", "idShort": "MeanAmount", "valueType": "xs:double", "value": "1.0" },
+                        { "modelType": "Property", "idShort": "Unit",       "valueType": "xs:string", "value": "pcs" },
+                        { "modelType": "Property", "idShort": "FlowId",     "valueType": "xs:string", "value": "FLOW_COMPONENT" },
+                        { "modelType": "Property", "idShort": "FlowName",   "valueType": "xs:string", "value": "Finished gripper component" }
+                      ]
+                    },
+                    {
+                      "modelType": "SubmodelElementCollection", "idShort": "Exchange_WASTE_OUT",
+                      "value": [
+                        { "modelType": "Property", "idShort": "ExchangeId", "valueType": "xs:string", "value": "PROC_CNC#3" },
+                        { "modelType": "Property", "idShort": "Direction",  "valueType": "xs:string", "value": "output" },
+                        { "modelType": "Property", "idShort": "MeanAmount", "valueType": "xs:double", "value": "0.0" },
+                        { "modelType": "Property", "idShort": "Unit",       "valueType": "xs:string", "value": "kg" },
+                        { "modelType": "Property", "idShort": "FlowId",     "valueType": "xs:string", "value": "FLOW_WASTE" },
+                        { "modelType": "Property", "idShort": "FlowName",   "valueType": "xs:string", "value": "Manufacturing waste" }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+
+            {
+              "modelType": "SubmodelElementCollection",
+              "idShort": "Process_PROC_SCREW",
+              "value": [
+                { "modelType": "Property", "idShort": "ProcessId",   "valueType": "xs:string", "value": "PROC_SCREW" },
+                { "modelType": "Property", "idShort": "ProcessName", "valueType": "xs:string", "value": "Screw fastening" },
+                {
+                  "modelType": "SubmodelElementList",
+                  "typeValueListElement": "SubmodelElementCollection",
+                  "idShort": "Exchanges",
+                  "value": [
+                    {
+                      "modelType": "SubmodelElementCollection", "idShort": "Exchange_SCREW_IN",
+                      "value": [
+                        { "modelType": "Property", "idShort": "ExchangeId", "valueType": "xs:string", "value": "PROC_SCREW#0" },
+                        { "modelType": "Property", "idShort": "Direction",  "valueType": "xs:string", "value": "input" },
+                        { "modelType": "Property", "idShort": "MeanAmount", "valueType": "xs:double", "value": "0.006" },
+                        { "modelType": "Property", "idShort": "Unit",       "valueType": "xs:string", "value": "kg" },
+                        { "modelType": "Property", "idShort": "FlowId",     "valueType": "xs:string", "value": "0d925357-e1c9-48c1-a5c7-caaae8185108" },
+                        { "modelType": "Property", "idShort": "FlowName",   "valueType": "xs:string", "value": "Screw M6 (hardened; zinc coated)" },
+                        { "modelType": "Property", "idShort": "AmountAssumption", "valueType": "xs:string", "value": "ANGENOMMEN: 4x Schraube M6 verzinkt a ca. 1.5 g -- keine Originalmenge im Modell vorhanden" },
+                        {
+                          "modelType": "SubmodelElementCollection", "idShort": "UpstreamContribution",
+                          "value": [
+                            { "modelType": "Property", "idShort": "BackgroundProcessId",   "valueType": "xs:string", "value": "PROC_SCREW_GALVANIZED" },
+                            { "modelType": "Property", "idShort": "BackgroundProcessName", "valueType": "xs:string", "value": "Fixing material screws galvanized (EN15804 A1-A3)" },
+                            { "modelType": "Property", "idShort": "ImpactCategory",        "valueType": "xs:string", "value": "IC_CLIMATE -- Climate change" },
+                            { "modelType": "Property", "idShort": "PerReferenceUnitGWP",   "valueType": "xs:double", "value": "3.249325379122652" },
+                            { "modelType": "Property", "idShort": "ReferenceUnit",         "valueType": "xs:string", "value": "1 kg Screw M6" },
+                            { "modelType": "Property", "idShort": "ContributingElementaryFlows", "valueType": "xs:int",    "value": "37" },
+                            { "modelType": "Property", "idShort": "ScaledContribution",    "valueType": "xs:double", "value": "0.019495952274735912" }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+
+            {
+              "modelType": "SubmodelElementCollection",
+              "idShort": "Process_PROC_FINISH",
+              "value": [
+                { "modelType": "Property", "idShort": "ProcessId",   "valueType": "xs:string", "value": "PROC_FINISH" },
+                { "modelType": "Property", "idShort": "ProcessName", "valueType": "xs:string", "value": "Deburring / finishing" },
+                {
+                  "modelType": "SubmodelElementList",
+                  "typeValueListElement": "SubmodelElementCollection",
+                  "idShort": "Exchanges",
+                  "value": [
+                    {
+                      "modelType": "SubmodelElementCollection", "idShort": "Exchange_ELEC_IN",
+                      "value": [
+                        { "modelType": "Property", "idShort": "ExchangeId", "valueType": "xs:string", "value": "PROC_FINISH#0" },
+                        { "modelType": "Property", "idShort": "Direction",  "valueType": "xs:string", "value": "input" },
+                        { "modelType": "Property", "idShort": "MeanAmount", "valueType": "xs:double", "value": "0.18" },
+                        { "modelType": "Property", "idShort": "Unit",       "valueType": "xs:string", "value": "MJ" },
+                        { "modelType": "Property", "idShort": "FlowId",     "valueType": "xs:string", "value": "890a70b7-b677-4e2a-8a1b-7d017e0a10ae" },
+                        { "modelType": "Property", "idShort": "FlowName",   "valueType": "xs:string", "value": "Electricity" },
+                        { "modelType": "Property", "idShort": "AmountAssumption", "valueType": "xs:string", "value": "ANGENOMMEN: 0.05 kWh fuer kurzen Entgrat-Vorgang -- keine Originalmenge im Modell vorhanden" },
+                        {
+                          "modelType": "SubmodelElementCollection", "idShort": "UpstreamContribution",
+                          "value": [
+                            { "modelType": "Property", "idShort": "BackgroundProcessId",   "valueType": "xs:string", "value": "PROC_ELECTRICITY_GREEN_GRID_MIX_DE" },
+                            { "modelType": "Property", "idShort": "PerReferenceUnitGWP",   "valueType": "xs:double", "value": "0.07130700539498436" },
+                            { "modelType": "Property", "idShort": "ReferenceUnit",         "valueType": "xs:string", "value": "3.6 MJ (= 1 kWh) Electricity" },
+                            { "modelType": "Property", "idShort": "ScaledContribution",    "valueType": "xs:double", "value": "0.003565350269749218" }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "modelType": "SubmodelElementCollection",
+          "idShort": "ServiceStageProcess_PROC_REPAIR",
+          "description": [{ "language": "de", "text": "Lebenszyklusstufe B4 (Replace/Repair) -- separat von der Fertigungsstufe gehalten, siehe CarbonFootprintSummary. Annahme: Reparatur = Neuproduktion eines Ersatz-Kontaktelements." }],
+          "value": [
+            { "modelType": "Property", "idShort": "ProcessId",   "valueType": "xs:string", "value": "PROC_REPAIR" },
+            { "modelType": "Property", "idShort": "ProcessName", "valueType": "xs:string", "value": "Replace jaw / pad" },
+            {
+              "modelType": "SubmodelElementList",
+              "typeValueListElement": "SubmodelElementCollection",
+              "idShort": "Exchanges",
+              "value": [
+                {
+                  "modelType": "SubmodelElementCollection", "idShort": "Exchange_AL_IN",
+                  "value": [
+                    { "modelType": "Property", "idShort": "ExchangeId", "valueType": "xs:string", "value": "PROC_REPAIR#0" },
+                    { "modelType": "Property", "idShort": "MeanAmount", "valueType": "xs:double", "value": "1.0" },
+                    { "modelType": "Property", "idShort": "Unit",       "valueType": "xs:string", "value": "kg" },
+                    { "modelType": "Property", "idShort": "FlowId",     "valueType": "xs:string", "value": "ae206e6f-e4f5-4dbf-8de7-42576f6da892" },
+                    { "modelType": "Property", "idShort": "FlowName",   "valueType": "xs:string", "value": "Aluminium ingot" },
+                    { "modelType": "Property", "idShort": "ScaledContribution", "valueType": "xs:double", "value": "9.083655796559631" }
+                  ]
+                },
+                {
+                  "modelType": "SubmodelElementCollection", "idShort": "Exchange_ELEC_IN",
+                  "value": [
+                    { "modelType": "Property", "idShort": "ExchangeId", "valueType": "xs:string", "value": "PROC_REPAIR#1" },
+                    { "modelType": "Property", "idShort": "MeanAmount", "valueType": "xs:double", "value": "3.6" },
+                    { "modelType": "Property", "idShort": "Unit",       "valueType": "xs:string", "value": "MJ" },
+                    { "modelType": "Property", "idShort": "FlowId",     "valueType": "xs:string", "value": "890a70b7-b677-4e2a-8a1b-7d017e0a10ae" },
+                    { "modelType": "Property", "idShort": "FlowName",   "valueType": "xs:string", "value": "Electricity" },
+                    { "modelType": "Property", "idShort": "ScaledContribution", "valueType": "xs:double", "value": "0.07130700539498436" }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "modelType": "Submodel",
+      "id": "https://ned2-gripper.example/ids/sm/CarbonFootprintSummary_PART_PREC_AL7075_CONTACT",
+      "idShort": "CarbonFootprintSummary",
+      "kind": "Instance",
+      "description": [{ "language": "de", "text": "Zusammenfassung, abgeleitet aus ILCDProcessDataset in diesem selben Environment -- reine Bequemlichkeits-Rollup, keine eigenstaendige Quelle. Feldnamen an IDTA 02023 (Carbon Footprint) angelehnt; semanticIds hier bewusst ausgelassen, da nicht gegen die offizielle Spec verifiziert." }],
+      "submodelElements": [
+        {
+          "modelType": "SubmodelElementCollection",
+          "idShort": "ProductCarbonFootprint_Manufacturing",
+          "value": [
+            { "modelType": "Property", "idShort": "PCFCO2eq",             "valueType": "xs:double", "value": "9.178024104499102" },
+            { "modelType": "Property", "idShort": "PCFCalculationMethod", "valueType": "xs:string", "value": "EF 3.1 -- Climate change" },
+            { "modelType": "Property", "idShort": "PCFLifeCyclePhase",    "valueType": "xs:string", "value": "A1-A3 (Manufacturing: PROC_CNC + PROC_SCREW + PROC_FINISH)" },
+            { "modelType": "Property", "idShort": "SourceImpactResultId", "valueType": "xs:string", "value": "RES_PREC_AL7075_CC" }
+          ]
+        },
+        {
+          "modelType": "SubmodelElementCollection",
+          "idShort": "ProductCarbonFootprint_Service",
+          "value": [
+            { "modelType": "Property", "idShort": "PCFCO2eq",             "valueType": "xs:double", "value": "9.154962801954616" },
+            { "modelType": "Property", "idShort": "PCFCalculationMethod", "valueType": "xs:string", "value": "EF 3.1 -- Climate change" },
+            { "modelType": "Property", "idShort": "PCFLifeCyclePhase",    "valueType": "xs:string", "value": "B4 (Replace/Repair: PROC_REPAIR)" },
+            { "modelType": "Property", "idShort": "SourceImpactResultId", "valueType": "xs:string", "value": "RES_PREC_AL7075_REPAIR_CC" }
+          ]
+        }
+      ]
+    }
+  ],
+
+  "conceptDescriptions": []
+}

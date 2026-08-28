@@ -1,0 +1,23 @@
+﻿id,name,propertyName,valueText,valueNumber,unit,maturity,validFrom,note
+DATA_0001,ART_CUSTOM – mass,mass,,115.0,g,Current technical sheet,2026-08-24,
+DATA_0002,ART_CUSTOM – mass,mass,,87.0,g,Older manual; retained as conflicting observation,2026-08-24,
+DATA_0003,ART_CUSTOM – opening,opening,,43.0,mm,,2026-08-24,
+DATA_0004,ART_CUSTOM – TCP,TCP,,85.0,mm,,2026-08-24,
+DATA_0005,ART_LARGE – mass,mass,,81.0,g,Current technical sheet,2026-08-24,
+DATA_0006,ART_LARGE – mass,mass,,72.5,g,Older manual; conflicting observation,2026-08-24,
+DATA_0007,ART_LARGE – opening,opening,,79.0,mm,,2026-08-24,
+DATA_0008,ART_LARGE – TCP,TCP,,115.0,mm,,2026-08-24,
+DATA_0009,ART_ADAPTIVE – mass,mass,,93.0,g,Current technical sheet,2026-08-24,
+DATA_0010,ART_ADAPTIVE – mass,mass,,83.0,g,Older manual; conflicting observation,2026-08-24,
+DATA_0011,ART_ADAPTIVE – opening,opening,,97.49,mm,,2026-08-24,
+DATA_0012,ART_ADAPTIVE – TCP,TCP,,120.0,mm,,2026-08-24,
+DATA_0013,ART_VACUUM – tool mass,tool mass,,19.5,g,Wrist-mounted suction tool,2026-08-24,
+DATA_0014,ART_VACUUM – payload,payload,,250.0,g,Vacuum system datasheet,2026-08-24,
+DATA_0015,ART_MAGNET – mass,mass,,55.0,g,,2026-08-24,
+DATA_0016,ART_MAGNET – holding force,holding force,,3.0,kgf nominal,Holding force is not robot payload,2026-08-24,
+DATA_0017,MAT_PA12 – material role,material role,structural polymer,,,concept,2026-08-24,Used in multiple AM variants
+DATA_0018,PROC_MJF – technology,technology,powder-bed polymer AM,,,concept,2026-08-24,Candidate manufacturing route
+DATA_0019,EX_PROC_MJF_FLOW_ELEC_IN – amount,amount,,1.0,kWh,placeholder,2026-08-24,Reference exchange quantity after conversion from ProcessFlow to ILCD-like Exchange.
+DATA_0020,RES_CUSTOM_CC – calculation status,calculation status,not calculated,,,concept,2026-08-24,Impact quantity intentionally empty
+"DATA_0021","PROC_ALU_EXTRUSION_EF - dataset provenance","LCI dataset reference","ILCD/EF 2.0, dataset version 00.00.001, reference year 2024, valid until 2027, Fully compliant (ILCD Data Network)","","","background/secondary data (Sphera GaBi database), no site-specific primary data","2026-08-24","Imported from ILCD package 'Aluminium profile (EN15804 A1-A3) EF2.0 2025_07_02'; process UUID 62d37cbd-7499-4ed3-9354-e71cfcc56252"
+DATA_0022,PROC_SCREW - joining type,joiningType,screw (reversible),,,internal_review,2026-08-24,Expert judgment on fastening reversibility; basis for repairability/fastener scoring.

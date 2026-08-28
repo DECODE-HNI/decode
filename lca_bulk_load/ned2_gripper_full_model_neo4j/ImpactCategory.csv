@@ -1,0 +1,29 @@
+id,name,indicator,unit
+IC_CLIMATE,Climate change,GWP,kg CO2-eq
+IC_ENERGY,Energy use,Energy demand,MJ
+IC_WASTE,Waste generation,Waste mass,kg
+IC_EF_CLIMATE_CHANGE_BIOGENIC,Climate change-Biogenic,Radiative forcing as Global Warming Potential (GWP100),kg CO2-Equivalents
+IC_EF_CLIMATE_CHANGE_FOSSIL,Climate change-Fossil,Radiative forcing as Global Warming Potential (GWP100),kg CO2 Equivalents
+IC_EF_CLIMATE_CHANGE_LAND_USE_AND_LAND_USE_CHANGE,Climate change-Land use and land use change,Radiative forcing as Global Warming Potential (GWP100),kg CO2-Equivalents
+IC_EF_EF_RESOURCE_USE_FOSSILS,EF-Resource use; fossils,Abiotic resource depletion fossil fuels (ADP-fossil),MJ
+IC_EF_EF_RESOURCE_USE_MINERALS_AND_METALS,EF-Resource use; minerals and metals,Abiotic resource depletion (ADP ultimate reserve),kg Sb equivalents
+IC_EF_WATER_USE,EF-Water use,User deprivation potential (deprivation-weighted water consumption),m3-world equivalents
+IC_EF_LAND_USE,EF-Land use,Soil quality index,dimensionless (pt)
+IC_EF_CLIMATE_TOTAL,EF-Climate change,Radiative forcing as Global Warming Potential (GWP100),kg CO2 Equivalents
+IC_EF_EF_EUTROPHICATION_FRESHWATER,EF-Eutrophication; freshwater,Fraction of nutrients reaching freshwater end compartment (P),kg P equivalents
+IC_EF_PARTICULATE_MATTER,EF-particulate Matter,Impact on human health,disease incidence
+IC_EF_PHOTOCHEM_OZONE,EF-Photochemical ozone formation - human health,Tropospheric ozone concentration increase,kg NMVOC equivalents
+IC_EF_ACIDIFICATION,EF-Acidification,Accumulated Exceedance (AE),mol H+ equivalents
+IC_EF_EF_EUTROPHICATION_TERRESTRIAL,EF-Eutrophication; terrestrial,Accumulated Exceedance (AE),mol N equivalents
+IC_EF_EUTROPH_MARINE,EF-Eutrophication marine,Fraction of nutrients reaching marine end compartment (N),kg N equivalents
+IC_EF_HUMAN_TOXICITY_CANCER,Human toxicity; cancer,Comparative Toxic Unit for human (CTUh),CTUh
+IC_EF_ECOTOXICITY_FRESHWATER,Ecotoxicity; freshwater,Comparative Toxic Unit for ecosystems (CTUe),CTUe
+IC_EF_OZONE_DEPLETION,EF-Ozone depletion,Ozone Depletion Potential (ODP),kg CFC11 equivalents
+IC_EF_EF_IONISING_RADIATION_HUMAN_HEALTH,EF-Ionising radiation; human health,Human exposure efficiency relative to U235,kBq U235 equivalents
+IC_EF_HUMAN_TOXICITY_NON_CANCER,Human toxicity; non-cancer,Comparative Toxic Unit for human (CTUh),CTUh
+IC_EF_HUMAN_TOXICITY_CANCER_INORGANICS,Human toxicity; cancer_inorganics,Comparative Toxic Unit for human (CTUh),CTUh
+IC_EF_HUMAN_TOXICITY_NON_CANCER_ORGANICS,Human toxicity; non-cancer_organics,Comparative Toxic Unit for human (CTUh),CTUh
+IC_EF_HUMAN_TOXICITY_NON_CANCER_INORGANICS,Human toxicity; non-cancer_inorganics,Comparative Toxic Unit for human (CTUh),CTUh
+IC_EF_HUMAN_TOXICITY_CANCER_ORGANICS,Human toxicity; cancer_organics,Comparative Toxic Unit for human (CTUh),CTUh
+IC_EF_ECOTOXICITY_FRESHWATER_INORGANICS,Ecotoxicity; freshwater_inorganics,Comparative Toxic Unit for ecosystems (CTUe),CTUe
+IC_EF_ECOTOXICITY_FRESHWATER_ORGANICS,Ecotoxicity; freshwater_organics,Comparative Toxic Unit for ecosystems (CTUe),CTUe

@@ -1,0 +1,342 @@
+<?xml  version='1.0' encoding='windows-1252' ?>
+<UMLProfile profiletype="uml2">
+	<Documentation id="D6051D3DE0" name="RFLPV2_Sustainability_Process_Extension" version="1.0" notes="RFLPV2_Sustainability_Process_Extension"/>
+	<Content>
+		<Stereotypes>
+			<Stereotype name="Affects" notes="" generalizes="SysML1.4::trace" baseStereotypes="SysML1.4::trace">
+				<AppliesTo>
+					<Apply type="Dependency">
+						<Property name="direction" value="Source -&gt; Destination"/>
+					</Apply>
+				</AppliesTo>
+			</Stereotype>
+			<Stereotype name="Analysis" notes="" generalizes="Validation" baseStereotypes="Validation Verification">
+				<AppliesTo>
+					<Apply type="Activity">
+						<Property name="isReentrant" value=""/>
+					</Apply>
+					<Apply type="Operation">
+						<Property name="isOrdered" value=""/>
+						<Property name="isQuery" value="false"/>
+						<Property name="isUnique" value=""/>
+						<Property name="lower" value=""/>
+						<Property name="upper" value=""/>
+					</Apply>
+				</AppliesTo>
+			</Stereotype>
+			<Stereotype name="Customer Need" notes="" generalizes="SysML1.4::requirement" baseStereotypes="SysML1.4::requirement">
+				<AppliesTo>
+					<Apply type="Class">
+						<Property name="isActive" value=""/>
+					</Apply>
+				</AppliesTo>
+				<TaggedValues>
+					<Tag name="needID" type="String" description="" unit="" values="" default=""/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="Customer Requirement" notes="" generalizes="SysML1.4::requirement" baseStereotypes="SysML1.4::requirement">
+				<AppliesTo>
+					<Apply type="Class">
+						<Property name="isActive" value=""/>
+					</Apply>
+				</AppliesTo>
+				<TaggedValues>
+					<Tag name="customerRequirementID" type="String" description="" unit="" values="" default=""/>
+					<Tag name="Mainfeature" type="String" description="" unit="" values="" default=""/>
+					<Tag name="requirementParameter" type="Real" description="" unit="" values="" default=""/>
+					<Tag name="requirementPriority" type="Real" description="" unit="" values="" default=""/>
+					<Tag name="requirementValueType" type="String" description="" unit="" values="" default=""/>
+					<Tag name="source" type="String" description="" unit="" values="" default=""/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="Demonstration" notes="" generalizes="Validation" baseStereotypes="Validation Verification">
+				<AppliesTo>
+					<Apply type="Activity">
+						<Property name="isReentrant" value=""/>
+					</Apply>
+					<Apply type="Operation">
+						<Property name="isOrdered" value=""/>
+						<Property name="isQuery" value="false"/>
+						<Property name="isUnique" value=""/>
+						<Property name="lower" value=""/>
+						<Property name="upper" value=""/>
+					</Apply>
+				</AppliesTo>
+			</Stereotype>
+			<Stereotype name="Derives" notes="" generalizes="SysML1.4::deriveReqt" baseStereotypes="SysML1.4::deriveReqt">
+				<AppliesTo>
+					<Apply type="Dependency">
+						<Property name="direction" value="Source -&gt; Destination"/>
+					</Apply>
+				</AppliesTo>
+			</Stereotype>
+			<Stereotype name="Function" notes="" generalizes="SysML1.4::block" baseStereotypes="SysML1.4::block">
+				<AppliesTo>
+					<Apply type="Class">
+						<Property name="isActive" value=""/>
+					</Apply>
+				</AppliesTo>
+				<TaggedValues>
+					<Tag name="functionID" type="String" description="" unit="" values="" default=""/>
+					<Tag name="functionType" type="String" description="" unit="" values="" default=""/>
+					<Tag name="safetyCritical" type="Boolean" description="" unit="" values="True,False" default=""/>
+					<Tag name="variantTag" type="String" description="" unit="" values="" default=""/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="Inspection" notes="" generalizes="Validation" baseStereotypes="Validation Verification">
+				<AppliesTo>
+					<Apply type="Activity">
+						<Property name="isReentrant" value=""/>
+					</Apply>
+					<Apply type="Operation">
+						<Property name="isOrdered" value=""/>
+						<Property name="isQuery" value="false"/>
+						<Property name="isUnique" value=""/>
+						<Property name="lower" value=""/>
+						<Property name="upper" value=""/>
+					</Apply>
+				</AppliesTo>
+			</Stereotype>
+			<Stereotype name="Logical Element" notes="" generalizes="SysML1.4::block" baseStereotypes="SysML1.4::block">
+				<AppliesTo>
+					<Apply type="Class">
+						<Property name="isActive" value=""/>
+					</Apply>
+				</AppliesTo>
+				<TaggedValues>
+					<Tag name="logicalID" type="String" description="" unit="" values="" default=""/>
+					<Tag name="logicalParameter" type="String" description="" unit="" values="" default=""/>
+					<Tag name="logicalParameterType" type="String" description="" unit="" values="" default=""/>
+					<Tag name="logicalType" type="String" description="" unit="" values="" default=""/>
+					<Tag name="variantTag" type="String" description="" unit="" values="" default=""/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="Process Element" notes="" generalizes="SysML1.4::block" baseStereotypes="SysML1.4::block">
+				<AppliesTo>
+					<Apply type="Class">
+						<Property name="isActive" value=""/>
+					</Apply>
+				</AppliesTo>
+				<TaggedValues>
+					<Tag name="lifecycleModule" type="String" description="" unit="" values="" default=""/>
+					<Tag name="processID" type="String" description="" unit="" values="" default=""/>
+					<Tag name="processParameter" type="String" description="" unit="" values="" default=""/>
+					<Tag name="processParameterType" type="String" description="" unit="" values="" default=""/>
+					<Tag name="processRef" type="String" description="" unit="" values="" default=""/>
+					<Tag name="processType" type="String" description="" unit="" values="" default=""/>
+					<Tag name="variantTag" type="String" description="" unit="" values="" default=""/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="Product Element" notes="" generalizes="SysML1.4::block" baseStereotypes="SysML1.4::block">
+				<AppliesTo>
+					<Apply type="Class">
+						<Property name="isActive" value=""/>
+					</Apply>
+				</AppliesTo>
+				<TaggedValues>
+					<Tag name="costs" type="Real" description="" unit="" values="" default=""/>
+					<Tag name="discipline" type="String" description="" unit="" values="" default=""/>
+					<Tag name="elementOwner" type="String" description="" unit="" values="" default=""/>
+					<Tag name="materialRef" type="String" description="" unit="" values="" default=""/>
+					<Tag name="productID" type="String" description="" unit="" values="" default=""/>
+					<Tag name="productParameter" type="String" description="" unit="" values="" default=""/>
+					<Tag name="productParameterType" type="String" description="" unit="" values="" default=""/>
+					<Tag name="productType" type="String" description="" unit="" values="" default=""/>
+					<Tag name="realizationType" type="enumeration" description="" unit="" values="hardware,software,hybrid" default=""/>
+					<Tag name="variantTag" type="String" description="" unit="" values="" default=""/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="Realizes" notes="" generalizes="SysML1.4::allocate" baseStereotypes="SysML1.4::allocate">
+				<AppliesTo>
+					<Apply type="Dependency">
+						<Property name="direction" value="Source -&gt; Destination"/>
+					</Apply>
+				</AppliesTo>
+			</Stereotype>
+			<Stereotype name="Refines" notes="" generalizes="SysML1.4::allocate" baseStereotypes="SysML1.4::allocate">
+				<AppliesTo>
+					<Apply type="Dependency">
+						<Property name="direction" value="Source -&gt; Destination"/>
+					</Apply>
+				</AppliesTo>
+			</Stereotype>
+			<Stereotype name="Requires" notes="" generalizes="SysML1.4::allocate" baseStereotypes="SysML1.4::allocate">
+				<AppliesTo>
+					<Apply type="Dependency">
+						<Property name="direction" value="Source -&gt; Destination"/>
+					</Apply>
+				</AppliesTo>
+			</Stereotype>
+			<Stereotype name="Satisfies" notes="" generalizes="SysML1.4::satisfy" baseStereotypes="SysML1.4::satisfy">
+				<AppliesTo>
+					<Apply type="Dependency">
+						<Property name="direction" value="Source -&gt; Destination"/>
+					</Apply>
+				</AppliesTo>
+			</Stereotype>
+			<Stereotype name="Simulation" notes="" generalizes="Validation" baseStereotypes="Validation Verification">
+				<AppliesTo>
+					<Apply type="Activity">
+						<Property name="isReentrant" value=""/>
+					</Apply>
+					<Apply type="Operation">
+						<Property name="isOrdered" value=""/>
+						<Property name="isQuery" value="false"/>
+						<Property name="isUnique" value=""/>
+						<Property name="lower" value=""/>
+						<Property name="upper" value=""/>
+					</Apply>
+				</AppliesTo>
+			</Stereotype>
+			<Stereotype name="Specifies" notes="" generalizes="SysML1.4::trace" baseStereotypes="SysML1.4::trace">
+				<AppliesTo>
+					<Apply type="Dependency">
+						<Property name="direction" value="Source -&gt; Destination"/>
+					</Apply>
+				</AppliesTo>
+			</Stereotype>
+			<Stereotype name="System Requirement" notes="" generalizes="SysML1.4::requirement" baseStereotypes="SysML1.4::requirement">
+				<AppliesTo>
+					<Apply type="Class">
+						<Property name="isActive" value=""/>
+					</Apply>
+				</AppliesTo>
+				<TaggedValues>
+					<Tag name="requirementParameter" type="Real" description="" unit="" values="" default=""/>
+					<Tag name="requirementPriority" type="Real" description="" unit="" values="" default=""/>
+					<Tag name="sustainabilityIndicatorRef" type="String" description="" unit="" values="" default=""/>
+					<Tag name="sustainabilityOperator" type="enumeration" description="" unit="" values="lessThan,lessOrEqual,equal,greaterOrEqual,greaterThan" default=""/>
+					<Tag name="sustainabilityScope" type="String" description="" unit="" values="" default=""/>
+					<Tag name="sustainabilityThreshold" type="Real" description="" unit="" values="" default=""/>
+					<Tag name="sustainabilityUnit" type="String" description="" unit="" values="" default=""/>
+					<Tag name="systemRequirementID" type="String" description="" unit="" values="" default=""/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="Test" notes="" generalizes="Validation" baseStereotypes="Validation Verification">
+				<AppliesTo>
+					<Apply type="Activity">
+						<Property name="isReentrant" value=""/>
+					</Apply>
+					<Apply type="Operation">
+						<Property name="isOrdered" value=""/>
+						<Property name="isQuery" value="false"/>
+						<Property name="isUnique" value=""/>
+						<Property name="lower" value=""/>
+						<Property name="upper" value=""/>
+					</Apply>
+				</AppliesTo>
+			</Stereotype>
+			<Stereotype name="Test Case" notes="" generalizes="Verification" baseStereotypes="Verification">
+				<AppliesTo>
+					<Apply type="Activity">
+						<Property name="isReentrant" value=""/>
+					</Apply>
+					<Apply type="Operation">
+						<Property name="isOrdered" value=""/>
+						<Property name="isQuery" value="false"/>
+						<Property name="isUnique" value=""/>
+						<Property name="lower" value=""/>
+						<Property name="upper" value=""/>
+					</Apply>
+				</AppliesTo>
+				<TaggedValues>
+					<Tag name="dataAnalysisType" type="String" description="" unit="" values="" default=""/>
+					<Tag name="sustainabilityResult" type="Real" description="" unit="" values="" default=""/>
+					<Tag name="sustainabilityStatus" type="String" description="" unit="" values="" default=""/>
+					<Tag name="systemLevel" type="String" description="" unit="" values="" default=""/>
+					<Tag name="testCaseID" type="String" description="" unit="" values="" default=""/>
+					<Tag name="testCaseOwner" type="String" description="" unit="" values="" default=""/>
+					<Tag name="testMethod" type="String" description="" unit="" values="" default=""/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="Test Case Description" notes="">
+				<AppliesTo>
+					<Apply type="Class">
+						<Property name="isActive" value=""/>
+					</Apply>
+				</AppliesTo>
+				<TaggedValues>
+					<Tag name="environmentalConditions" type="String" description="" unit="" values="" default=""/>
+					<Tag name="expectedResults" type="String" description="" unit="" values="" default=""/>
+					<Tag name="systemState" type="String" description="" unit="" values="" default=""/>
+					<Tag name="testCaseDescriptionID" type="String" description="" unit="" values="" default=""/>
+					<Tag name="user" type="String" description="" unit="" values="" default=""/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="Test Scenario" notes="" generalizes="Verification" baseStereotypes="Verification">
+				<AppliesTo>
+					<Apply type="Activity">
+						<Property name="isReentrant" value=""/>
+					</Apply>
+					<Apply type="Operation">
+						<Property name="isOrdered" value=""/>
+						<Property name="isQuery" value="false"/>
+						<Property name="isUnique" value=""/>
+						<Property name="lower" value=""/>
+						<Property name="upper" value=""/>
+					</Apply>
+				</AppliesTo>
+				<TaggedValues>
+					<Tag name="testItems" type="String" description="" unit="" values="" default=""/>
+					<Tag name="testScenarioEnvironmentalParameters" type="String" description="" unit="" values="" default=""/>
+					<Tag name="testScenarioID" type="String" description="" unit="" values="" default=""/>
+					<Tag name="testScenarioOwner" type="String" description="" unit="" values="" default=""/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="Validates" notes="" generalizes="SysML1.4::trace" baseStereotypes="SysML1.4::trace">
+				<AppliesTo>
+					<Apply type="Dependency">
+						<Property name="direction" value="Source -&gt; Destination"/>
+					</Apply>
+				</AppliesTo>
+			</Stereotype>
+			<Stereotype name="Validation" notes="" generalizes="SysML1.4::testCase" baseStereotypes="SysML1.4::testCase">
+				<AppliesTo>
+					<Apply type="Activity">
+						<Property name="isReentrant" value=""/>
+					</Apply>
+					<Apply type="Operation">
+						<Property name="isOrdered" value=""/>
+						<Property name="isQuery" value="false"/>
+						<Property name="isUnique" value=""/>
+						<Property name="lower" value=""/>
+						<Property name="upper" value=""/>
+					</Apply>
+				</AppliesTo>
+				<TaggedValues>
+					<Tag name="validationID" type="String" description="" unit="" values="" default=""/>
+					<Tag name="validationMethod" type="String" description="" unit="" values="" default=""/>
+					<Tag name="validationParameter" type="Real" description="" unit="" values="" default=""/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="Verification" notes="" generalizes="SysML1.4::testCase" baseStereotypes="SysML1.4::testCase">
+				<AppliesTo>
+					<Apply type="Activity">
+						<Property name="isReentrant" value=""/>
+					</Apply>
+					<Apply type="Operation">
+						<Property name="isOrdered" value=""/>
+						<Property name="isQuery" value="false"/>
+						<Property name="isUnique" value=""/>
+						<Property name="lower" value=""/>
+						<Property name="upper" value=""/>
+					</Apply>
+				</AppliesTo>
+				<TaggedValues>
+					<Tag name="verificationID" type="String" description="" unit="" values="" default=""/>
+					<Tag name="verificationParameter" type="Real" description="" unit="" values="" default=""/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="Verifies" notes="" generalizes="SysML1.4::verify" baseStereotypes="SysML1.4::verify">
+				<AppliesTo>
+					<Apply type="Dependency">
+						<Property name="direction" value="Source -&gt; Destination"/>
+					</Apply>
+				</AppliesTo>
+			</Stereotype>
+		</Stereotypes>
+		<TaggedValueTypes/>
+		<ViewDefinitions/>
+		<Metamodel/>
+	</Content>
+</UMLProfile>

@@ -1,0 +1,25 @@
+﻿id,name,requirementType,statement,priority,status
+REQ_COMPAT,Ned2 compatibility,interface,The gripper solution shall be mechanically and functionally compatible with the Niryo Ned2.,must,candidate
+REQ_EASYCONNECT,EasyConnect interface,interface,Preferred solutions shall use or adapt to the EasyConnect tool interface.,must,candidate
+REQ_PAYLOAD,Payload constraint,performance,Tool mass and object mass shall remain within the robot payload envelope.,must,candidate
+REQ_OPENING,Opening width,performance,Opening width shall match the target object geometry.,should,candidate
+REQ_CENTERING,Object centering,function,The gripper should provide repeatable object centering.,should,candidate
+REQ_FRAGILE,Fragile-object handling,application,The contact concept should limit local pressure for fragile objects.,should,candidate
+REQ_IRREGULAR,Irregular-object handling,application,The solution should accommodate irregular geometries when required.,should,candidate
+REQ_INTERNAL,Internal gripping,application,A solution alternative should support internal gripping of hollow parts.,could,candidate
+REQ_FLAT,Flat non-porous gripping,application,"Vacuum alternatives require flat, sufficiently non-porous surfaces.",should,candidate
+REQ_FERRO,Ferromagnetic gripping,application,Magnetic alternatives require sufficient ferromagnetic contact.,should,candidate
+REQ_SMALL,Small-part precision,application,The solution should allow accurate handling of small components.,should,candidate
+REQ_LARGE,Large-object opening,application,The solution should provide increased opening for bulky objects.,should,candidate
+REQ_LONG,Long reach,application,A solution should reach recessed objects when needed.,could,candidate
+REQ_REPLACEABLE,Replaceable jaws,maintainability,Wear/contact parts should be independently replaceable.,should,candidate
+REQ_CUSTOM,Customizable contact geometry,design,Contact geometry should be adaptable to workpiece geometry.,should,candidate
+REQ_FRICTION,Sufficient contact friction,function,Contact surfaces should provide sufficient friction without excessive damage.,should,candidate
+REQ_LOW_MASS,Low end-effector mass,performance,End-effector mass should be minimized.,should,candidate
+REQ_DISASSEMBLY,Design for disassembly,sustainability,"Wear parts, structure and actuator should be separable where feasible.",should,candidate
+REQ_REPAIR,Repairability,sustainability,High-wear components should be replaceable.,should,candidate
+REQ_MATERIAL_DIVERSITY,Low material diversity,sustainability,Avoid unnecessary material combinations.,could,candidate
+REQ_RECYCLABLE,Recyclable structural material,sustainability,Provide recyclable material alternatives where functional performance permits.,could,candidate
+REQ_LOCAL_AM,Local additive manufacturing,manufacturing,Custom jaws should permit local/on-demand AM where suitable.,could,candidate
+REQ_REV_JOIN,Reversible joining,sustainability,Prefer reversible fastening for replaceable contact parts.,should,candidate
+REQ_TRACE,Data traceability,information,Assessment-relevant values shall retain source and quality metadata.,must,candidate

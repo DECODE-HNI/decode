@@ -1,0 +1,44 @@
+﻿id,name,resultType,quantity,unit,status
+RES_CUSTOM_CC,Climate result – Custom Gripper,Climate change,,kg CO2-eq,not calculated
+RES_LARGE_CC,Climate result – Large Gripper,Climate change,,kg CO2-eq,not calculated
+RES_ADAPTIVE_CC,Climate result – Adaptive Gripper,Climate change,,kg CO2-eq,not calculated
+RES_VACUUM_CC,Climate result – Vacuum Pump / Suction Tool,Climate change,,kg CO2-eq,not calculated
+RES_MAGNET_CC,Climate result – Electromagnet,Climate change,,kg CO2-eq,not calculated
+RES_FLAT_PA12_CC,Climate result – Custom + Flat jaws / PA12 / MJF,Climate change,,kg CO2-eq,not calculated
+RES_PREC_PA12_CC,Climate result – Custom + Precision jaws / PA12 / MJF,Climate change,,kg CO2-eq,not calculated
+RES_XL_PA12_CC,Climate result – Custom + XL jaws / PA12 / MJF,Climate change,,kg CO2-eq,not calculated
+RES_FLAT_PETG_CC,Climate result – Flat jaws / PETG / FFF,Climate change,,kg CO2-eq,not calculated
+RES_FLAT_AL_CC,Climate result – Flat jaws / Al6061 / CNC,Climate change,,kg CO2-eq,not calculated
+RES_PREC_POM_CC,Climate result – Precision jaws / POM / CNC,Climate change,,kg CO2-eq,not calculated
+RES_PREC_AL7075_CC,Climate result – Precision jaws / Al7075 / CNC,Climate change,,kg CO2-eq,not calculated
+RES_XL_CFPA_CC,Climate result – XL jaws / CF-PA / FFF,Climate change,,kg CO2-eq,not calculated
+RES_V_PA12_CC,Climate result – V-groove jaws / PA12 / MJF,Climate change,,kg CO2-eq,not calculated
+RES_V_PETG_CC,Climate result – V-groove jaws / PETG / FFF,Climate change,,kg CO2-eq,not calculated
+RES_V_POM_CC,Climate result – V-groove jaws / POM / CNC,Climate change,,kg CO2-eq,not calculated
+RES_V_AL_CC,Climate result – V-groove jaws / Al6061 / CNC,Climate change,,kg CO2-eq,not calculated
+RES_CONC_PA12_CC,Climate result – Concave jaws / PA12 / MJF,Climate change,,kg CO2-eq,not calculated
+RES_CONC_POM_CC,Climate result – Concave jaws / POM / CNC,Climate change,,kg CO2-eq,not calculated
+RES_TPU_PAD_CC,Climate result – PA12 jaws + TPU pads,Climate change,,kg CO2-eq,not calculated
+RES_SIL_PAD_CC,Climate result – Aluminum jaws + silicone pads,Climate change,,kg CO2-eq,not calculated
+RES_FINRAY_TPU_CC,Climate result – Fin-Ray fingers / TPU / FFF,Climate change,,kg CO2-eq,not calculated
+RES_FINRAY_TPE_CC,Climate result – Fin-Ray fingers / TPE / FFF,Climate change,,kg CO2-eq,not calculated
+RES_LONG_CFPA_CC,Climate result – Long-reach fingers / CF-PA / FFF,Climate change,,kg CO2-eq,not calculated
+RES_LONG_AL_CC,Climate result – Long-reach fingers / Al6061 / CNC,Climate change,,kg CO2-eq,not calculated
+RES_THIN_POM_CC,Climate result – Thin precision fingers / POM / CNC,Climate change,,kg CO2-eq,not calculated
+RES_THIN_STEEL_CC,Climate result – Thin compliant fingers / spring steel,Climate change,,kg CO2-eq,not calculated
+RES_INTERNAL_PA12_CC,Climate result – Internal-expansion fingers / PA12 / MJF,Climate change,,kg CO2-eq,not calculated
+RES_INTERNAL_AL_CC,Climate result – Internal-expansion fingers / Al6061 / CNC,Climate change,,kg CO2-eq,not calculated
+RES_3FINGER_PA12_CC,Climate result – Three-finger underactuated / PA12,Climate change,,kg CO2-eq,not calculated
+RES_SOFT_SIL_CC,Climate result – Soft pneumatic fingers / silicone,Climate change,,kg CO2-eq,not calculated
+RES_VAC_SMALL_NBR_CC,Climate result – Small suction cup / NBR,Climate change,,kg CO2-eq,not calculated
+RES_VAC_LARGE_SIL_CC,Climate result – Large suction cup / silicone,Climate change,,kg CO2-eq,not calculated
+RES_VAC_ARRAY_CC,Climate result – Four-cup vacuum array,Climate change,,kg CO2-eq,not calculated
+RES_MAG_SMALL_CC,Climate result – Small magnetic pole shoe,Climate change,,kg CO2-eq,not calculated
+RES_MAG_WIDE_CC,Climate result – Wide magnetic pole shoe,Climate change,,kg CO2-eq,not calculated
+RES_HYBRID_CC,Climate result – Rigid-soft hybrid jaw / PA12+TPU,Climate change,,kg CO2-eq,not calculated
+RES_FLAT_ABS_CC,Climate result - Flat jaws / ABS / FFF,Climate change,,kg CO2-eq,not calculated
+RES_FLAT_ASA_CC,Climate result - Flat jaws / ASA / FFF,Climate change,,kg CO2-eq,not calculated
+RES_FLAT_PLA_CC,Climate result - Flat jaws / PLA / FFF,Climate change,,kg CO2-eq,not calculated
+RES_PREC_PA11_CC,Climate result - Precision jaws / PA11 / SLS,Climate change,,kg CO2-eq,not calculated
+RES_PREC_PC_CC,Climate result - Precision jaws / PC / CNC,Climate change,,kg CO2-eq,not calculated
+RES_PU_PAD_CC,Climate result - PA12 jaws + PU pads,Climate change,,kg CO2-eq,not calculated

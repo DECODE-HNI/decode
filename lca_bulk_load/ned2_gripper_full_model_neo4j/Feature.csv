@@ -1,0 +1,15 @@
+﻿id,name,featureType,description
+FEAT_EASY,EasyConnect,interface,Magnetic quick-change interface
+FEAT_PARALLEL,Parallel fingers,kinematics,Parallel contact surfaces
+FEAT_ADAPTIVE,Adaptive linkage,kinematics,Shape-adaptive finger mechanism
+FEAT_INTERNAL,Internal gripping,capability,Internal grasp of hollow workpieces
+FEAT_PRINTABLE,Replaceable printable jaws,modularity,Custom jaw geometries
+FEAT_RUBBER,High-friction pad,contact,Compliant contact pad
+FEAT_SUCTION,Suction cup,contact,Vacuum interface
+FEAT_MAGNET,Magnetic contact face,contact,Ferromagnetic gripping
+FEAT_VGROOVE,V-groove,geometry,Centers cylindrical objects
+FEAT_CONCAVE,Concave contact,geometry,Conformal contact for round objects
+FEAT_FINRAY,Fin-Ray compliance,compliance,Compliant finger structure
+FEAT_LONG,Long-reach finger,geometry,Extended access
+FEAT_PRECISION,Precision finger,geometry,Thin/narrow access
+FEAT_SOFT,Soft contact,contact,Low-pressure compliant contact

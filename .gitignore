@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.pyc
+
+# Reproduzierbare Skript-Ausgaben (jederzeit neu erzeugbar, kein Quellmaterial)
+ea_neo4j_pipeline/ea_extract/
+ea_neo4j_pipeline/ea_extract_merge_test/
+ea_neo4j_pipeline/rflpv2_from_neo4j.xml
+lca_bulk_load/build/
+
+# EA-Backup-Dateien (legt Sparx EA automatisch neben dem Projekt an)
+*.bak
+*.eap.bak
+*.qea.bak

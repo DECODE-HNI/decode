@@ -1,0 +1,27 @@
+﻿from_id,to_id,role
+REQ_PAYLOAD,SPEC_PAYLOAD,quantified
+REQ_OPENING,SPEC_CUSTOM_OPEN,reference custom
+REQ_OPENING,SPEC_LARGE_OPEN,reference large
+REQ_OPENING,SPEC_ADAPT_OPEN,reference adaptive
+REQ_COMPAT,SPEC_TOOL_SUPPLY,electrical interface reference
+REQ_EASYCONNECT,SPEC_EASYCONNECT,documented interface standard
+REQ_CENTERING,SPEC_CENTERING,engineering target (unvalidated)
+REQ_FRAGILE,SPEC_FRAGILE,engineering criterion (unvalidated)
+REQ_IRREGULAR,SPEC_IRREGULAR,engineering target (unvalidated)
+REQ_INTERNAL,SPEC_INTERNAL,engineering target (unvalidated)
+REQ_FLAT,SPEC_FLAT,engineering criterion (unvalidated)
+REQ_FERRO,SPEC_FERRO,engineering criterion (unvalidated)
+REQ_SMALL,SPEC_SMALL,engineering target (unvalidated)
+REQ_LARGE,SPEC_LARGE,engineering target (unvalidated)
+REQ_LONG,SPEC_LONG,engineering target (unvalidated)
+REQ_REPLACEABLE,SPEC_REPLACEABLE,engineering criterion (unvalidated)
+REQ_CUSTOM,SPEC_CUSTOM,engineering criterion (unvalidated)
+REQ_FRICTION,SPEC_FRICTION,engineering target (unvalidated)
+REQ_LOW_MASS,SPEC_LOW_MASS,engineering target (unvalidated)
+REQ_DISASSEMBLY,SPEC_DISASSEMBLY,engineering criterion (unvalidated)
+REQ_REPAIR,SPEC_REPAIR,engineering criterion (unvalidated)
+REQ_MATERIAL_DIVERSITY,SPEC_MATERIAL_DIVERSITY,engineering target (unvalidated)
+REQ_RECYCLABLE,SPEC_RECYCLABLE,engineering criterion (unvalidated)
+REQ_LOCAL_AM,SPEC_LOCAL_AM,engineering criterion (unvalidated)
+REQ_REV_JOIN,SPEC_REV_JOIN,"engineering criterion, cross-checked against PROC_SCREW joining-type judgment"
+REQ_TRACE,SPEC_TRACE,modeling convention (documented)

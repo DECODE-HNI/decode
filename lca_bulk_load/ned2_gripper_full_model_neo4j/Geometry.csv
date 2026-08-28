@@ -1,0 +1,15 @@
+﻿id,name,geometryType,length_mm,width_mm,height_mm,diameter_mm,openingAngle_deg
+GEO_FLAT,Flat jaw geometry,jaw,45.0,20.0,8.0,,
+GEO_PRECISION,Precision jaw geometry,jaw,60.0,8.0,6.0,,
+GEO_XL,XL jaw geometry,jaw,85.0,20.0,10.0,,
+GEO_V,V-groove jaw geometry,jaw,50.0,22.0,12.0,,90.0
+GEO_CONCAVE,Concave jaw geometry,jaw,50.0,24.0,12.0,30.0,
+GEO_FINRAY,Fin-Ray finger envelope,finger,70.0,18.0,16.0,,
+GEO_LONG,Long finger geometry,finger,95.0,14.0,10.0,,
+GEO_INTERNAL,Internal finger geometry,finger,55.0,12.0,10.0,25.0,
+GEO_SOFT,Soft pad geometry,pad,30.0,20.0,5.0,,
+GEO_SUCTION_SMALL,Small suction geometry,cup,,,18.0,20.0,
+GEO_SUCTION_LARGE,Large suction geometry,cup,,,25.0,35.0,
+GEO_SUCTION_ARRAY,Four-cup array geometry,array,60.0,60.0,20.0,20.0,
+GEO_MAG_SMALL,Small magnetic pole,pole,20.0,20.0,8.0,20.0,
+GEO_MAG_WIDE,Wide magnetic pole,pole,45.0,20.0,8.0,,

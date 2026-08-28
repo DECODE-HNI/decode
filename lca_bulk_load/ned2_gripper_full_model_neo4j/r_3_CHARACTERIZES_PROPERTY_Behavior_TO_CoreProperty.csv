@@ -1,0 +1,6 @@
+﻿from_id,to_id,role
+BEH_CLOSE,CP_GRIP_FORCE,behavior-property link
+BEH_CENTER,CP_CONTACT_PRESSURE,behavior-property link
+BEH_ADAPT,CP_COMPLIANCE,behavior-property link
+BEH_VACUUM,CP_GRIP_FORCE,behavior-property link
+BEH_MAGNET,CP_GRIP_FORCE,behavior-property link

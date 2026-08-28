@@ -1,0 +1,9 @@
+﻿id,name,functionType,input,output,constraintText
+FUNC_GRASP,Grasp object,primary,object / command,grasp state,
+FUNC_RELEASE,Release object,primary,object / command,grasp state,
+FUNC_RETAIN,Retain object,primary,object / command,grasp state,
+FUNC_CENTER,Center object,secondary,object / command,grasp state,
+FUNC_ADAPT,Adapt to object geometry,secondary,object / command,grasp state,
+FUNC_PROTECT,Limit object damage,secondary,object / command,grasp state,
+FUNC_TOOLCHANGE,Enable tool change,support,object / command,grasp state,
+FUNC_CUSTOM_CONTACT,Adapt contact geometry,support,object / command,grasp state,

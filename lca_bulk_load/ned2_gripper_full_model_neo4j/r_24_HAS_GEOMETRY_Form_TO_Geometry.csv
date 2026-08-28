@@ -1,0 +1,15 @@
+﻿from_id,to_id,role
+FORM_FLAT,GEO_FLAT,reference geometry
+FORM_PRECISION,GEO_PRECISION,reference geometry
+FORM_XL,GEO_XL,reference geometry
+FORM_V,GEO_V,reference geometry
+FORM_CONCAVE,GEO_CONCAVE,reference geometry
+FORM_FINRAY,GEO_FINRAY,reference geometry
+FORM_LONG,GEO_LONG,reference geometry
+FORM_INTERNAL,GEO_INTERNAL,reference geometry
+FORM_SOFT,GEO_SOFT,reference geometry
+FORM_SUCTION_SMALL,GEO_SUCTION_SMALL,reference geometry
+FORM_SUCTION_LARGE,GEO_SUCTION_LARGE,reference geometry
+FORM_SUCTION_ARRAY,GEO_SUCTION_ARRAY,reference geometry
+FORM_MAG_SMALL,GEO_MAG_SMALL,reference geometry
+FORM_MAG_WIDE,GEO_MAG_WIDE,reference geometry

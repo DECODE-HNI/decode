@@ -1,0 +1,65 @@
+<?xml  version='1.0' encoding='windows-1252' ?>
+<UMLProfile profiletype="uml2">
+	<Documentation id="CA2971E090" name="RFLPV2_Toolbox" version="1.0" alias="RFLPV2" notes="RFLPV&amp;#178"/>
+	<Content>
+		<Stereotypes>
+			<Stereotype name="ProductStrucutre" alias="Product Structure" notes="">
+				<AppliesTo>
+					<Apply type="ToolboxPage"/>
+				</AppliesTo>
+				<TaggedValues>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Function(UML::Class)" type="int" description="" unit="" values="" default="Function"/>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Logical Element(UML::Class)" type="int" description="" unit="" values="" default="Logical Element"/>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Process Element(UML::Class)" type="int" description="" unit="" values="" default="Process Element"/>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Product Element(UML::Class)" type="int" description="" unit="" values="" default="Product Element"/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="Requirements" alias="Requirements" notes="">
+				<AppliesTo>
+					<Apply type="ToolboxPage"/>
+				</AppliesTo>
+				<TaggedValues>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Customer Need(UML::Class)" type="int" description="" unit="" values="" default="Customer Need"/>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Customer Requirement(UML::Class)" type="int" description="" unit="" values="" default="Customer Requirement"/>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::System Requirement(UML::Class)" type="int" description="" unit="" values="" default="System Requirement"/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="Property Assurance" alias="Property Assurance" notes="">
+				<AppliesTo>
+					<Apply type="ToolboxPage"/>
+				</AppliesTo>
+				<TaggedValues>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Analysis(UML::Activity)" type="int" description="" unit="" values="" default="Analysis"/>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Demonstration(UML::Activity)" type="int" description="" unit="" values="" default="Demonstration"/>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Inspection(UML::Activity)" type="int" description="" unit="" values="" default="Inspection"/>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Simulation(UML::Activity)" type="int" description="" unit="" values="" default="Simulation"/>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Test Case Description(UML::Class)" type="int" description="" unit="" values="" default="Test Case Description"/>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Test Case(UML::Activity)" type="int" description="" unit="" values="" default="Test Case"/>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Test Scenario(UML::Activity)" type="int" description="" unit="" values="" default="Test Scenario"/>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Test(UML::Activity)" type="int" description="" unit="" values="" default="Test"/>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Validation(UML::Activity)" type="int" description="" unit="" values="" default="Validation"/>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Verification(UML::Activity)" type="int" description="" unit="" values="" default="Verification"/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="Relationships" alias="Relationships" notes="">
+				<AppliesTo>
+					<Apply type="ToolboxPage"/>
+				</AppliesTo>
+				<TaggedValues>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Affects(UML::Dependency)" type="int" description="" unit="" values="" default="Affects"/>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Derives(UML::Dependency)" type="int" description="" unit="" values="" default="Derives"/>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Realizes(UML::Dependency)" type="int" description="" unit="" values="" default="Realizes"/>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Refines(UML::Dependency)" type="int" description="" unit="" values="" default="Refines"/>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Requires(UML::Dependency)" type="int" description="" unit="" values="" default="Requires"/>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Satisfies(UML::Dependency)" type="int" description="" unit="" values="" default="Satisfies"/>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Specifies(UML::Dependency)" type="int" description="" unit="" values="" default="Specifies"/>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Validates(UML::Dependency)" type="int" description="" unit="" values="" default="Validates"/>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Verifies(UML::Dependency)" type="int" description="" unit="" values="" default="Verifies"/>
+				</TaggedValues>
+			</Stereotype>
+		</Stereotypes>
+		<TaggedValueTypes/>
+		<ViewDefinitions/>
+		<Metamodel/>
+	</Content>
+</UMLProfile>

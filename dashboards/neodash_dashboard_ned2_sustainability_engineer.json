@@ -1,0 +1,259 @@
+{
+    "title":  "Ned2 - Sustainability Engineer",
+    "version":  "2.4",
+    "settings":  {
+                     "pagenumber":  0,
+                     "editable":  true,
+                     "fullscreenEnabled":  false,
+                     "parameters":  {
+
+                                    },
+                     "theme":  "light"
+                 },
+    "pages":  [
+                  {
+                      "title":  "Datenabdeckung",
+                      "reports":  [
+                                      {
+                                          "id":  "ne1-intro",
+                                          "title":  "Zweck dieser Seite",
+                                          "query":  "## Sustainability Engineer - Datenabdeckung\n\nDer ehrliche Ausgangspunkt: von 43 Varianten-Screenings hat aktuell nur eines echte berechnete Werte. Ein zusätzlicher Eintrag stammt aus dem AAS-Import-Testlauf und wird separat ausgewiesen. Diese Seite macht das sichtbar, statt es zu verstecken.",
+                                          "width":  12,
+                                          "height":  3,
+                                          "x":  0,
+                                          "y":  0,
+                                          "type":  "text",
+                                          "selection":  {
+
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      },
+                                      {
+                                          "id":  "ne1-assessments-total",
+                                          "title":  "Varianten-Screenings gesamt",
+                                          "query":  "MATCH (a:Assessment) WHERE a.assessmentType IS NOT NULL RETURN count(a) AS Screening_Assessments_gesamt",
+                                          "width":  6,
+                                          "height":  3,
+                                          "x":  0,
+                                          "y":  3,
+                                          "type":  "value",
+                                          "selection":  {
+                                                            "value":  "Screening_Assessments_gesamt"
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      },
+                                      {
+                                          "id":  "ne1-assessments-real",
+                                          "title":  "Davon mit berechneten Werten",
+                                          "query":  "MATCH (a:Assessment) WHERE a.assessmentType IS NOT NULL OPTIONAL MATCH (a)-[:HAS_RESULT]-\u003e(r:ImpactResult) WHERE r.value IS NOT NULL WITH a, count(r) AS n RETURN sum(CASE WHEN n\u003e0 THEN 1 ELSE 0 END) AS Mit_berechneten_Werten",
+                                          "width":  6,
+                                          "height":  3,
+                                          "x":  6,
+                                          "y":  3,
+                                          "type":  "value",
+                                          "selection":  {
+                                                            "value":  "Mit_berechneten_Werten"
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      },
+                                      {
+                                          "id":  "ne1-assessment-list",
+                                          "title":  "Alle Assessments nach Datenstatus (inkl. AAS-Import-Demo)",
+                                          "query":  "MATCH (a:Assessment) OPTIONAL MATCH (a)-[:HAS_RESULT]-\u003e(r:ImpactResult) WHERE r.value IS NOT NULL WITH a, count(r) AS n RETURN COALESCE(a.name, a.id) AS Bewertung, COALESCE(a.developmentPhase, a.lifeCycleStage) AS Phase, COALESCE(a.methodology, \u0027AAS-Import\u0027) AS Methodik, CASE WHEN n \u003e 0 THEN \u0027berechnet\u0027 WHEN a.assessmentType IS NULL THEN \u0027berechnet (AAS-Import)\u0027 ELSE \u0027ausstehend\u0027 END AS Datenstatus ORDER BY Datenstatus, Bewertung",
+                                          "width":  12,
+                                          "height":  7,
+                                          "x":  0,
+                                          "y":  6,
+                                          "type":  "table",
+                                          "selection":  {
+
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      }
+                                  ]
+                  },
+                  {
+                      "title":  "PREC_AL7075 Realbeispiel",
+                      "reports":  [
+                                      {
+                                          "id":  "ne2-intro",
+                                          "title":  "Zweck dieser Seite",
+                                          "query":  "## PREC_AL7075 - das einzige durchgerechnete Beispiel\n\nNeufertigung vs. Reparatur, die zehn EN15804/EF3.1-Indikatoren aus der Black-Box-AAS und die zugrunde liegenden Stoff-/Energieströme - alles real berechnet, nichts geschätzt.",
+                                          "width":  12,
+                                          "height":  3,
+                                          "x":  0,
+                                          "y":  0,
+                                          "type":  "text",
+                                          "selection":  {
+
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      },
+                                      {
+                                          "id":  "ne2-manuf-vs-repair",
+                                          "title":  "Neufertigung vs. Reparatur (kg CO2-eq)",
+                                          "query":  "MATCH (r:ImpactResult) WHERE r.id IN [\u0027RES_PREC_AL7075_CC\u0027,\u0027RES_PREC_AL7075_REPAIR_CC\u0027] RETURN CASE r.id WHEN \u0027RES_PREC_AL7075_CC\u0027 THEN \u0027Neufertigung (A1-A3)\u0027 ELSE \u0027Reparatur (B4)\u0027 END AS Phase, r.value AS kgCO2eq ORDER BY kgCO2eq DESC",
+                                          "width":  8,
+                                          "height":  4,
+                                          "x":  0,
+                                          "y":  3,
+                                          "type":  "table",
+                                          "selection":  {
+
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      },
+                                      {
+                                          "id":  "ne2-ratio",
+                                          "title":  "Repair-Benefit-Ratio (1 − Reparatur/Neufertigung)",
+                                          "query":  "MATCH (m:ImpactResult {id:\u0027RES_PREC_AL7075_CC\u0027}), (rep:ImpactResult {id:\u0027RES_PREC_AL7075_REPAIR_CC\u0027}) RETURN round(10000.0*(1 - rep.value/m.value))/100 AS Repair_Benefit_Ratio_Prozent",
+                                          "width":  4,
+                                          "height":  4,
+                                          "x":  8,
+                                          "y":  3,
+                                          "type":  "value",
+                                          "selection":  {
+                                                            "value":  "Repair_Benefit_Ratio_Prozent"
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      },
+                                      {
+                                          "id":  "ne2-indicators",
+                                          "title":  "10 EN15804/EF3.1-Indikatoren (Black-Box, DECLARES)",
+                                          "query":  "MATCH (a:Assessment {id:\u0027EXT_BLACK_AAS_PART_PREC_AL7075_CONTACT_BlackBox\u0027})-[d:DECLARES]-\u003e(ic:ImpactCategory) RETURN ic.name AS Indikator, d.value AS Wert, d.unit AS Einheit ORDER BY ic.name",
+                                          "width":  6,
+                                          "height":  6,
+                                          "x":  0,
+                                          "y":  7,
+                                          "type":  "table",
+                                          "selection":  {
+
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      },
+                                      {
+                                          "id":  "ne2-flow-audit",
+                                          "title":  "Stoff-/Energieströme je Prozess (Audit Trail)",
+                                          "query":  "MATCH (p:Process)-[hf:HAS_FLOW]-\u003e(f:Flow) WHERE p.id IN [\u0027PROC_CNC\u0027,\u0027PROC_SCREW\u0027,\u0027PROC_FINISH\u0027] RETURN p.name AS Prozess, f.name AS Flow, hf.direction AS Richtung, hf.amount AS Menge, hf.unit AS Einheit ORDER BY Prozess, Richtung",
+                                          "width":  6,
+                                          "height":  6,
+                                          "x":  6,
+                                          "y":  7,
+                                          "type":  "table",
+                                          "selection":  {
+
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      }
+                                  ]
+                  },
+                  {
+                      "title":  "Datenqualität \u0026 Rückverfolgbarkeit",
+                      "reports":  [
+                                      {
+                                          "id":  "ne3-intro",
+                                          "title":  "Zweck dieser Seite",
+                                          "query":  "## Datenqualität \u0026 Rückverfolgbarkeit\n\nWelche Prozessdaten sind echte ILCD-Datensätze, welche sind deklarierte Annahmen, und wie vertrauenswürdig sind die zugrunde liegenden Spezifikationsdaten?",
+                                          "width":  12,
+                                          "height":  3,
+                                          "x":  0,
+                                          "y":  0,
+                                          "type":  "text",
+                                          "selection":  {
+
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      },
+                                      {
+                                          "id":  "ne3-process-trace",
+                                          "title":  "Herkunft der Input-Flows je Kernprozess",
+                                          "query":  "MATCH (p:Process)-[:HAS_FLOW]-\u003e(f:Flow) WHERE p.id IN [\u0027PROC_CNC\u0027,\u0027PROC_SCREW\u0027,\u0027PROC_FINISH\u0027,\u0027PROC_REPAIR\u0027] RETURN p.name AS Prozess, f.name AS Flow, f.source AS Quelle, f.sourceDatabase AS Datenbank, f.status AS Status ORDER BY Prozess, Flow",
+                                          "width":  12,
+                                          "height":  5,
+                                          "x":  0,
+                                          "y":  3,
+                                          "type":  "table",
+                                          "selection":  {
+
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      },
+                                      {
+                                          "id":  "ne3-data-quality",
+                                          "title":  "Pedigree-Bewertung der Spezifikationsdaten",
+                                          "query":  "MATCH (x)-[:HAS_DATA_QUALITY]-\u003e(dq:DataQuality) RETURN x.id AS Datenpunkt, dq.overallScore AS Score, dq.method AS Methode, dq.comment AS Kommentar ORDER BY dq.overallScore DESC",
+                                          "width":  12,
+                                          "height":  5,
+                                          "x":  0,
+                                          "y":  8,
+                                          "type":  "table",
+                                          "selection":  {
+
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      },
+                                      {
+                                          "id":  "ne3-known-issues",
+                                          "title":  "Behobene Datenqualitätsprobleme (Stand heute)",
+                                          "query":  "### Zwei behobene Datenqualitätsprobleme\n\n1. **Material.recycledContent_pct** trug bei den 5 generischen ILCD/IDEMAT-Hintergrundmaterialien (Blei, Kupfer, Stahl, Zink, Aluminium) Dichtewerte statt Prozentangaben - Ursache war ein unescaped Komma im Namensfeld beim CSV-Import. Quelle und Live-Daten sind jetzt korrigiert (Name korrekt gequotet, recycledContent_pct steht jetzt ehrlich auf unbekannt statt auf einer falschen Zahl).\n2. **ImpactCategory** enthielt 42 Knoten mit erheblicher Redundanz aus uneinheitlichem EF3.1-Import (z. B. IC_EF_CLIMATE_FOSSIL und IC_EF_CLIMATE_CHANGE_FOSSIL waren derselbe Indikator unter zwei IDs). Auf 28 eindeutige Kategorien konsolidiert, alle HAS_CATEGORY-Kanten umgehängt, CHARACTERIZES/DECLARES waren nie betroffen.",
+                                          "width":  12,
+                                          "height":  5,
+                                          "x":  0,
+                                          "y":  13,
+                                          "type":  "text",
+                                          "selection":  {
+
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      }
+                                  ]
+                  },
+                  {
+                      "title":  "Wirkkategorien-Explorer",
+                      "reports":  [
+                                      {
+                                          "id":  "ne4-categories",
+                                          "title":  "Alle Wirkkategorien im Graphen (28, nach Bereinigung)",
+                                          "query":  "MATCH (ic:ImpactCategory) RETURN ic.name AS Kategorie, ic.indicator AS Indikator, ic.unit AS Einheit ORDER BY ic.name",
+                                          "width":  12,
+                                          "height":  10,
+                                          "x":  0,
+                                          "y":  0,
+                                          "type":  "table",
+                                          "selection":  {
+
+                                                        },
+                                          "settings":  {
+
+                                                       }
+                                      }
+                                  ]
+                  }
+              ]
+}

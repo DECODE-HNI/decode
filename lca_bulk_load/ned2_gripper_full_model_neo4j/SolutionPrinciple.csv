@@ -1,0 +1,9 @@
+﻿id,name,solutionType,physicalPrinciple,status
+SP_PARALLEL,Parallel-jaw clamping,gripping principle,mechanical friction,candidate
+SP_ADAPTIVE,Adaptive / underactuated gripping,gripping principle,mechanical adaptation,candidate
+SP_INTERNAL,Internal expansion gripping,gripping principle,mechanical friction,candidate
+SP_VACUUM,Vacuum suction,gripping principle,pressure differential,candidate
+SP_MAGNET,Electromagnetic attraction,gripping principle,magnetic,candidate
+SP_SOFT,Soft/compliant gripping,gripping principle,elastic deformation,candidate
+SP_FINRAY,Fin-Ray compliant gripping,gripping principle,structural compliance,candidate
+SP_THREE,Three-finger enveloping grasp,gripping principle,mechanical adaptation,candidate

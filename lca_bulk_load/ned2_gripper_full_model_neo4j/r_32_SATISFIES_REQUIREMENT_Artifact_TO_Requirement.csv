@@ -1,0 +1,263 @@
+﻿from_id,to_id,verificationStatus
+ART_CUSTOM,REQ_COMPAT,documented
+ART_CUSTOM,REQ_PAYLOAD,documented
+ART_CUSTOM,REQ_TRACE,documented
+ART_LARGE,REQ_COMPAT,documented
+ART_LARGE,REQ_PAYLOAD,documented
+ART_LARGE,REQ_TRACE,documented
+ART_ADAPTIVE,REQ_COMPAT,documented
+ART_ADAPTIVE,REQ_PAYLOAD,documented
+ART_ADAPTIVE,REQ_TRACE,documented
+ART_VACUUM,REQ_COMPAT,documented
+ART_VACUUM,REQ_PAYLOAD,documented
+ART_VACUUM,REQ_TRACE,documented
+ART_MAGNET,REQ_COMPAT,documented
+ART_MAGNET,REQ_PAYLOAD,documented
+ART_MAGNET,REQ_TRACE,documented
+ART_FLAT_PA12,REQ_COMPAT,requires validation
+ART_FLAT_PA12,REQ_PAYLOAD,requires validation
+ART_FLAT_PA12,REQ_TRACE,requires validation
+ART_PREC_PA12,REQ_COMPAT,requires validation
+ART_PREC_PA12,REQ_PAYLOAD,requires validation
+ART_PREC_PA12,REQ_TRACE,requires validation
+ART_XL_PA12,REQ_COMPAT,requires validation
+ART_XL_PA12,REQ_PAYLOAD,requires validation
+ART_XL_PA12,REQ_TRACE,requires validation
+ART_FLAT_PETG,REQ_COMPAT,requires validation
+ART_FLAT_PETG,REQ_PAYLOAD,requires validation
+ART_FLAT_PETG,REQ_TRACE,requires validation
+ART_FLAT_AL,REQ_COMPAT,requires validation
+ART_FLAT_AL,REQ_PAYLOAD,requires validation
+ART_FLAT_AL,REQ_TRACE,requires validation
+ART_PREC_POM,REQ_COMPAT,requires validation
+ART_PREC_POM,REQ_PAYLOAD,requires validation
+ART_PREC_POM,REQ_TRACE,requires validation
+ART_PREC_AL7075,REQ_COMPAT,requires validation
+ART_PREC_AL7075,REQ_PAYLOAD,requires validation
+ART_PREC_AL7075,REQ_TRACE,requires validation
+ART_XL_CFPA,REQ_COMPAT,requires validation
+ART_XL_CFPA,REQ_PAYLOAD,requires validation
+ART_XL_CFPA,REQ_TRACE,requires validation
+ART_V_PA12,REQ_COMPAT,requires validation
+ART_V_PA12,REQ_PAYLOAD,requires validation
+ART_V_PA12,REQ_TRACE,requires validation
+ART_V_PETG,REQ_COMPAT,requires validation
+ART_V_PETG,REQ_PAYLOAD,requires validation
+ART_V_PETG,REQ_TRACE,requires validation
+ART_V_POM,REQ_COMPAT,requires validation
+ART_V_POM,REQ_PAYLOAD,requires validation
+ART_V_POM,REQ_TRACE,requires validation
+ART_V_AL,REQ_COMPAT,requires validation
+ART_V_AL,REQ_PAYLOAD,requires validation
+ART_V_AL,REQ_TRACE,requires validation
+ART_CONC_PA12,REQ_COMPAT,requires validation
+ART_CONC_PA12,REQ_PAYLOAD,requires validation
+ART_CONC_PA12,REQ_TRACE,requires validation
+ART_CONC_POM,REQ_COMPAT,requires validation
+ART_CONC_POM,REQ_PAYLOAD,requires validation
+ART_CONC_POM,REQ_TRACE,requires validation
+ART_TPU_PAD,REQ_COMPAT,requires validation
+ART_TPU_PAD,REQ_PAYLOAD,requires validation
+ART_TPU_PAD,REQ_TRACE,requires validation
+ART_SIL_PAD,REQ_COMPAT,requires validation
+ART_SIL_PAD,REQ_PAYLOAD,requires validation
+ART_SIL_PAD,REQ_TRACE,requires validation
+ART_FINRAY_TPU,REQ_COMPAT,requires validation
+ART_FINRAY_TPU,REQ_PAYLOAD,requires validation
+ART_FINRAY_TPU,REQ_TRACE,requires validation
+ART_FINRAY_TPE,REQ_COMPAT,requires validation
+ART_FINRAY_TPE,REQ_PAYLOAD,requires validation
+ART_FINRAY_TPE,REQ_TRACE,requires validation
+ART_LONG_CFPA,REQ_COMPAT,requires validation
+ART_LONG_CFPA,REQ_PAYLOAD,requires validation
+ART_LONG_CFPA,REQ_TRACE,requires validation
+ART_LONG_AL,REQ_COMPAT,requires validation
+ART_LONG_AL,REQ_PAYLOAD,requires validation
+ART_LONG_AL,REQ_TRACE,requires validation
+ART_THIN_POM,REQ_COMPAT,requires validation
+ART_THIN_POM,REQ_PAYLOAD,requires validation
+ART_THIN_POM,REQ_TRACE,requires validation
+ART_THIN_STEEL,REQ_COMPAT,requires validation
+ART_THIN_STEEL,REQ_PAYLOAD,requires validation
+ART_THIN_STEEL,REQ_TRACE,requires validation
+ART_INTERNAL_PA12,REQ_COMPAT,requires validation
+ART_INTERNAL_PA12,REQ_PAYLOAD,requires validation
+ART_INTERNAL_PA12,REQ_TRACE,requires validation
+ART_INTERNAL_AL,REQ_COMPAT,requires validation
+ART_INTERNAL_AL,REQ_PAYLOAD,requires validation
+ART_INTERNAL_AL,REQ_TRACE,requires validation
+ART_3FINGER_PA12,REQ_COMPAT,requires validation
+ART_3FINGER_PA12,REQ_PAYLOAD,requires validation
+ART_3FINGER_PA12,REQ_TRACE,requires validation
+ART_SOFT_SIL,REQ_COMPAT,requires validation
+ART_SOFT_SIL,REQ_PAYLOAD,requires validation
+ART_SOFT_SIL,REQ_TRACE,requires validation
+ART_VAC_SMALL_NBR,REQ_COMPAT,requires validation
+ART_VAC_SMALL_NBR,REQ_PAYLOAD,requires validation
+ART_VAC_SMALL_NBR,REQ_TRACE,requires validation
+ART_VAC_LARGE_SIL,REQ_COMPAT,requires validation
+ART_VAC_LARGE_SIL,REQ_PAYLOAD,requires validation
+ART_VAC_LARGE_SIL,REQ_TRACE,requires validation
+ART_VAC_ARRAY,REQ_COMPAT,requires validation
+ART_VAC_ARRAY,REQ_PAYLOAD,requires validation
+ART_VAC_ARRAY,REQ_TRACE,requires validation
+ART_MAG_SMALL,REQ_COMPAT,requires validation
+ART_MAG_SMALL,REQ_PAYLOAD,requires validation
+ART_MAG_SMALL,REQ_TRACE,requires validation
+ART_MAG_WIDE,REQ_COMPAT,requires validation
+ART_MAG_WIDE,REQ_PAYLOAD,requires validation
+ART_MAG_WIDE,REQ_TRACE,requires validation
+ART_HYBRID,REQ_COMPAT,requires validation
+ART_HYBRID,REQ_PAYLOAD,requires validation
+ART_HYBRID,REQ_TRACE,requires validation
+ART_CUSTOM,REQ_CUSTOM,documented/application fit
+ART_CUSTOM,REQ_REPLACEABLE,documented/application fit
+ART_CUSTOM,REQ_SMALL,documented/application fit
+ART_CUSTOM,REQ_REV_JOIN,documented/application fit
+ART_LARGE,REQ_LARGE,documented/application fit
+ART_LARGE,REQ_CENTERING,documented/application fit
+ART_ADAPTIVE,REQ_FRAGILE,documented/application fit
+ART_ADAPTIVE,REQ_IRREGULAR,documented/application fit
+ART_ADAPTIVE,REQ_INTERNAL,documented/application fit
+ART_ADAPTIVE,REQ_CENTERING,documented/application fit
+ART_VACUUM,REQ_FLAT,documented/application fit
+ART_VACUUM,REQ_LOW_MASS,documented/application fit
+ART_MAGNET,REQ_FERRO,documented/application fit
+ART_MAGNET,REQ_LOW_MASS,documented/application fit
+ART_FLAT_PA12,REQ_CUSTOM,conceptual
+ART_FLAT_PA12,REQ_REPLACEABLE,conceptual
+ART_FLAT_PA12,REQ_LOCAL_AM,conceptual
+ART_PREC_PA12,REQ_SMALL,conceptual
+ART_PREC_PA12,REQ_CUSTOM,conceptual
+ART_PREC_PA12,REQ_REPLACEABLE,conceptual
+ART_XL_PA12,REQ_LARGE,conceptual
+ART_XL_PA12,REQ_CUSTOM,conceptual
+ART_FLAT_PETG,REQ_CUSTOM,conceptual
+ART_FLAT_PETG,REQ_REPLACEABLE,conceptual
+ART_FLAT_PETG,REQ_LOCAL_AM,conceptual
+ART_FLAT_AL,REQ_CUSTOM,conceptual
+ART_FLAT_AL,REQ_REPLACEABLE,conceptual
+ART_FLAT_AL,REQ_LOCAL_AM,conceptual
+ART_PREC_POM,REQ_SMALL,conceptual
+ART_PREC_POM,REQ_CUSTOM,conceptual
+ART_PREC_POM,REQ_REPLACEABLE,conceptual
+ART_PREC_AL7075,REQ_SMALL,conceptual
+ART_PREC_AL7075,REQ_CUSTOM,conceptual
+ART_PREC_AL7075,REQ_REPLACEABLE,conceptual
+ART_XL_CFPA,REQ_LARGE,conceptual
+ART_XL_CFPA,REQ_CUSTOM,conceptual
+ART_V_PA12,REQ_CENTERING,conceptual
+ART_V_PA12,REQ_CUSTOM,conceptual
+ART_V_PETG,REQ_CENTERING,conceptual
+ART_V_PETG,REQ_CUSTOM,conceptual
+ART_V_POM,REQ_CENTERING,conceptual
+ART_V_POM,REQ_CUSTOM,conceptual
+ART_V_AL,REQ_CENTERING,conceptual
+ART_V_AL,REQ_CUSTOM,conceptual
+ART_CONC_PA12,REQ_CENTERING,conceptual
+ART_CONC_PA12,REQ_IRREGULAR,conceptual
+ART_CONC_POM,REQ_CENTERING,conceptual
+ART_CONC_POM,REQ_IRREGULAR,conceptual
+ART_TPU_PAD,REQ_FRAGILE,conceptual
+ART_TPU_PAD,REQ_FRICTION,conceptual
+ART_TPU_PAD,REQ_REPAIR,conceptual
+ART_SIL_PAD,REQ_FRAGILE,conceptual
+ART_SIL_PAD,REQ_FRICTION,conceptual
+ART_SIL_PAD,REQ_REPAIR,conceptual
+ART_FINRAY_TPU,REQ_FRAGILE,conceptual
+ART_FINRAY_TPU,REQ_IRREGULAR,conceptual
+ART_FINRAY_TPE,REQ_FRAGILE,conceptual
+ART_FINRAY_TPE,REQ_IRREGULAR,conceptual
+ART_LONG_CFPA,REQ_LONG,conceptual
+ART_LONG_CFPA,REQ_LOW_MASS,conceptual
+ART_LONG_AL,REQ_LONG,conceptual
+ART_LONG_AL,REQ_LOW_MASS,conceptual
+ART_THIN_POM,REQ_SMALL,conceptual
+ART_THIN_POM,REQ_LOW_MASS,conceptual
+ART_THIN_STEEL,REQ_SMALL,conceptual
+ART_THIN_STEEL,REQ_FRAGILE,conceptual
+ART_INTERNAL_PA12,REQ_INTERNAL,conceptual
+ART_INTERNAL_PA12,REQ_CENTERING,conceptual
+ART_INTERNAL_AL,REQ_INTERNAL,conceptual
+ART_INTERNAL_AL,REQ_CENTERING,conceptual
+ART_3FINGER_PA12,REQ_IRREGULAR,conceptual
+ART_3FINGER_PA12,REQ_CENTERING,conceptual
+ART_SOFT_SIL,REQ_FRAGILE,conceptual
+ART_SOFT_SIL,REQ_IRREGULAR,conceptual
+ART_VAC_SMALL_NBR,REQ_FLAT,conceptual
+ART_VAC_SMALL_NBR,REQ_SMALL,conceptual
+ART_VAC_LARGE_SIL,REQ_FLAT,conceptual
+ART_VAC_LARGE_SIL,REQ_LARGE,conceptual
+ART_VAC_ARRAY,REQ_FLAT,conceptual
+ART_VAC_ARRAY,REQ_LARGE,conceptual
+ART_MAG_SMALL,REQ_FERRO,conceptual
+ART_MAG_SMALL,REQ_SMALL,conceptual
+ART_MAG_WIDE,REQ_FERRO,conceptual
+ART_MAG_WIDE,REQ_LARGE,conceptual
+ART_HYBRID,REQ_FRAGILE,conceptual
+ART_HYBRID,REQ_FRICTION,conceptual
+ART_HYBRID,REQ_DISASSEMBLY,conceptual
+ART_FLAT_ABS,REQ_COMPAT,requires validation
+ART_FLAT_ABS,REQ_PAYLOAD,requires validation
+ART_FLAT_ABS,REQ_TRACE,requires validation
+ART_FLAT_ABS,REQ_CUSTOM,conceptual
+ART_FLAT_ABS,REQ_REPLACEABLE,conceptual
+ART_FLAT_ABS,REQ_LOCAL_AM,conceptual
+ART_FLAT_ASA,REQ_COMPAT,requires validation
+ART_FLAT_ASA,REQ_PAYLOAD,requires validation
+ART_FLAT_ASA,REQ_TRACE,requires validation
+ART_FLAT_ASA,REQ_CUSTOM,conceptual
+ART_FLAT_ASA,REQ_REPLACEABLE,conceptual
+ART_FLAT_ASA,REQ_LOCAL_AM,conceptual
+ART_FLAT_PLA,REQ_COMPAT,requires validation
+ART_FLAT_PLA,REQ_PAYLOAD,requires validation
+ART_FLAT_PLA,REQ_TRACE,requires validation
+ART_FLAT_PLA,REQ_CUSTOM,conceptual
+ART_FLAT_PLA,REQ_REPLACEABLE,conceptual
+ART_FLAT_PLA,REQ_LOCAL_AM,conceptual
+ART_PREC_PA11,REQ_COMPAT,requires validation
+ART_PREC_PA11,REQ_PAYLOAD,requires validation
+ART_PREC_PA11,REQ_TRACE,requires validation
+ART_PREC_PA11,REQ_SMALL,conceptual
+ART_PREC_PA11,REQ_CUSTOM,conceptual
+ART_PREC_PA11,REQ_REPLACEABLE,conceptual
+ART_PREC_PC,REQ_COMPAT,requires validation
+ART_PREC_PC,REQ_PAYLOAD,requires validation
+ART_PREC_PC,REQ_TRACE,requires validation
+ART_PREC_PC,REQ_SMALL,conceptual
+ART_PREC_PC,REQ_CUSTOM,conceptual
+ART_PREC_PC,REQ_REPLACEABLE,conceptual
+ART_PU_PAD,REQ_COMPAT,requires validation
+ART_PU_PAD,REQ_PAYLOAD,requires validation
+ART_PU_PAD,REQ_TRACE,requires validation
+ART_PU_PAD,REQ_FRAGILE,conceptual
+ART_PU_PAD,REQ_FRICTION,conceptual
+ART_PU_PAD,REQ_REPAIR,conceptual
+ART_CUSTOM,REQ_EASYCONNECT,documented feature
+ART_LARGE,REQ_EASYCONNECT,documented feature
+ART_ADAPTIVE,REQ_EASYCONNECT,documented feature
+ART_VACUUM,REQ_EASYCONNECT,documented feature
+ART_MAGNET,REQ_EASYCONNECT,documented feature
+ART_CUSTOM,REQ_OPENING,documented/specified
+ART_LARGE,REQ_OPENING,documented/specified
+ART_ADAPTIVE,REQ_OPENING,documented/specified
+ART_3FINGER_PA12,REQ_MATERIAL_DIVERSITY,single-material contact+interface
+ART_ADAPTIVE,REQ_MATERIAL_DIVERSITY,single-material contact+interface
+ART_CONC_PA12,REQ_MATERIAL_DIVERSITY,single-material contact+interface
+ART_CUSTOM,REQ_MATERIAL_DIVERSITY,single-material contact+interface
+ART_FLAT_PA12,REQ_MATERIAL_DIVERSITY,single-material contact+interface
+ART_INTERNAL_PA12,REQ_MATERIAL_DIVERSITY,single-material contact+interface
+ART_LARGE,REQ_MATERIAL_DIVERSITY,single-material contact+interface
+ART_PREC_PA12,REQ_MATERIAL_DIVERSITY,single-material contact+interface
+ART_VAC_ARRAY,REQ_MATERIAL_DIVERSITY,single-material contact+interface
+ART_V_PA12,REQ_MATERIAL_DIVERSITY,single-material contact+interface
+ART_XL_PA12,REQ_MATERIAL_DIVERSITY,single-material contact+interface
+ART_MAGNET,REQ_RECYCLABLE,metal contact material (high recyclability)
+ART_FLAT_AL,REQ_RECYCLABLE,metal contact material (high recyclability)
+ART_PREC_AL7075,REQ_RECYCLABLE,metal contact material (high recyclability)
+ART_V_AL,REQ_RECYCLABLE,metal contact material (high recyclability)
+ART_LONG_AL,REQ_RECYCLABLE,metal contact material (high recyclability)
+ART_THIN_STEEL,REQ_RECYCLABLE,metal contact material (high recyclability)
+ART_INTERNAL_AL,REQ_RECYCLABLE,metal contact material (high recyclability)
+ART_MAG_SMALL,REQ_RECYCLABLE,metal contact material (high recyclability)
+ART_MAG_WIDE,REQ_RECYCLABLE,metal contact material (high recyclability)

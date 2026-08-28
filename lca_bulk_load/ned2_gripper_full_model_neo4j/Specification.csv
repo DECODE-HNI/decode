@@ -1,0 +1,27 @@
+﻿id,name,valueNumber,valueText,unit,toleranceMin,toleranceMax
+SPEC_PAYLOAD,Ned2 nominal payload,300.0,,g,0.0,300.0
+SPEC_CUSTOM_OPEN,Custom Gripper opening,43.0,,mm,0.0,43.0
+SPEC_LARGE_OPEN,Large Gripper opening,79.0,,mm,0.0,79.0
+SPEC_ADAPT_OPEN,Adaptive Gripper opening,97.49,,mm,0.0,97.49
+SPEC_TOOL_SUPPLY,Tool supply,,5 V / gripper connector,,,
+SPEC_EASYCONNECT,EasyConnect interface standard,,EasyConnect magnetic quick-change tool interface (Niryo standard),,,
+SPEC_CENTERING,Centering repeatability target,2.0,,mm,0.0,2.0
+SPEC_FRAGILE,Fragile-object contact criterion,,Compliant/soft contact surface (Shore A < 60) or distributed multi-point contact to limit local pressure,,,
+SPEC_IRREGULAR,Surface misalignment tolerance,15,Contact adapts to surface misalignment via compliant/adaptive principle,deg,0,15
+SPEC_INTERNAL,Minimum internal bore for expansion gripping,10.0,,mm,10.0,
+SPEC_FLAT,Vacuum surface criterion,,"Surface flatness within vacuum cup sealing tolerance, non-porous",,,
+SPEC_FERRO,Ferromagnetic contact area criterion,,Ferromagnetic contact area at least equal to magnet pole face area,,,
+SPEC_SMALL,Minimum handled feature size,5.0,,mm,5.0,
+SPEC_LARGE,Minimum opening for bulky objects,120.0,,mm,120.0,
+SPEC_LONG,Minimum finger reach length,150.0,,mm,150.0,
+SPEC_REPLACEABLE,Replaceability criterion,,Contact/wear part removable and replaceable without disassembling interface or actuator,,,
+SPEC_CUSTOM,Customizable contact geometry criterion,,Contact geometry parametrically adjustable / re-printable per workpiece family,,,
+SPEC_FRICTION,Minimum estimated contact friction,0.5,"Estimated static friction coefficient, contact surface to object",coefficient of friction (est.),0.5,
+SPEC_LOW_MASS,Target maximum end-effector mass,100.0,,g,0.0,100.0
+SPEC_DISASSEMBLY,Disassembly step criterion,3,Wear part removable in at most 3 tool-assisted steps without destroying structure or actuator,steps (max),,3
+SPEC_REPAIR,Repairability criterion,,Contact/wear part independently replaceable via a documented Service process (see PROC_REPAIR),,,
+SPEC_MATERIAL_DIVERSITY,Material diversity target,1.0,Target: single material across contact and interface parts where functionally feasible,distinct materials per assembly (target),,1.0
+SPEC_RECYCLABLE,Recyclability criterion,,Structural material recyclable via standard metal or polymer recycling stream,,,
+SPEC_LOCAL_AM,Local AM manufacturability criterion,,"Manufacturable via FFF/SLS/MJF on desktop or regional AM service, no specialized tooling required",,,
+SPEC_REV_JOIN,Reversible joining criterion,,Joining technology reversible without destructive force (e.g. screw or clip - not adhesive or weld),,,
+SPEC_TRACE,Data traceability convention,,Assessment-relevant values carry DataSource and DataQuality provenance per modeling convention,,,

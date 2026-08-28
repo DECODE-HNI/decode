@@ -1,0 +1,44 @@
+﻿id,name,planType,variant,status
+PLAN_CUSTOM,Process plan – Custom Gripper,Manufacturing and lifecycle,official-custom,reference
+PLAN_LARGE,Process plan – Large Gripper,Manufacturing and lifecycle,official-large,reference
+PLAN_ADAPTIVE,Process plan – Adaptive Gripper,Manufacturing and lifecycle,official-adaptive,reference
+PLAN_VACUUM,Process plan – Vacuum Pump / Suction Tool,Manufacturing and lifecycle,official-vacuum,reference
+PLAN_MAGNET,Process plan – Electromagnet,Manufacturing and lifecycle,official-magnetic,reference
+PLAN_FLAT_PA12,Process plan – Custom + Flat jaws / PA12 / MJF,Manufacturing and lifecycle,custom-flat,candidate
+PLAN_PREC_PA12,Process plan – Custom + Precision jaws / PA12 / MJF,Manufacturing and lifecycle,custom-precision,candidate
+PLAN_XL_PA12,Process plan – Custom + XL jaws / PA12 / MJF,Manufacturing and lifecycle,custom-xl,candidate
+PLAN_FLAT_PETG,Process plan – Flat jaws / PETG / FFF,Manufacturing and lifecycle,custom-flat,candidate
+PLAN_FLAT_AL,Process plan – Flat jaws / Al6061 / CNC,Manufacturing and lifecycle,custom-flat,candidate
+PLAN_PREC_POM,Process plan – Precision jaws / POM / CNC,Manufacturing and lifecycle,custom-precision,candidate
+PLAN_PREC_AL7075,Process plan – Precision jaws / Al7075 / CNC,Manufacturing and lifecycle,custom-precision,candidate
+PLAN_XL_CFPA,Process plan – XL jaws / CF-PA / FFF,Manufacturing and lifecycle,custom-xl,candidate
+PLAN_V_PA12,Process plan – V-groove jaws / PA12 / MJF,Manufacturing and lifecycle,v-groove,candidate
+PLAN_V_PETG,Process plan – V-groove jaws / PETG / FFF,Manufacturing and lifecycle,v-groove,candidate
+PLAN_V_POM,Process plan – V-groove jaws / POM / CNC,Manufacturing and lifecycle,v-groove,candidate
+PLAN_V_AL,Process plan – V-groove jaws / Al6061 / CNC,Manufacturing and lifecycle,v-groove,candidate
+PLAN_CONC_PA12,Process plan – Concave jaws / PA12 / MJF,Manufacturing and lifecycle,concave,candidate
+PLAN_CONC_POM,Process plan – Concave jaws / POM / CNC,Manufacturing and lifecycle,concave,candidate
+PLAN_TPU_PAD,Process plan – PA12 jaws + TPU pads,Manufacturing and lifecycle,soft-pad,candidate
+PLAN_SIL_PAD,Process plan – Aluminum jaws + silicone pads,Manufacturing and lifecycle,soft-pad,candidate
+PLAN_FINRAY_TPU,Process plan – Fin-Ray fingers / TPU / FFF,Manufacturing and lifecycle,finray,candidate
+PLAN_FINRAY_TPE,Process plan – Fin-Ray fingers / TPE / FFF,Manufacturing and lifecycle,finray,candidate
+PLAN_LONG_CFPA,Process plan – Long-reach fingers / CF-PA / FFF,Manufacturing and lifecycle,long-reach,candidate
+PLAN_LONG_AL,Process plan – Long-reach fingers / Al6061 / CNC,Manufacturing and lifecycle,long-reach,candidate
+PLAN_THIN_POM,Process plan – Thin precision fingers / POM / CNC,Manufacturing and lifecycle,precision,candidate
+PLAN_THIN_STEEL,Process plan – Thin compliant fingers / spring steel,Manufacturing and lifecycle,precision-compliant,candidate
+PLAN_INTERNAL_PA12,Process plan – Internal-expansion fingers / PA12 / MJF,Manufacturing and lifecycle,internal,candidate
+PLAN_INTERNAL_AL,Process plan – Internal-expansion fingers / Al6061 / CNC,Manufacturing and lifecycle,internal,candidate
+PLAN_3FINGER_PA12,Process plan – Three-finger underactuated / PA12,Manufacturing and lifecycle,three-finger,candidate
+PLAN_SOFT_SIL,Process plan – Soft pneumatic fingers / silicone,Manufacturing and lifecycle,soft-pneumatic,candidate
+PLAN_VAC_SMALL_NBR,Process plan – Small suction cup / NBR,Manufacturing and lifecycle,vacuum-small,candidate
+PLAN_VAC_LARGE_SIL,Process plan – Large suction cup / silicone,Manufacturing and lifecycle,vacuum-large,candidate
+PLAN_VAC_ARRAY,Process plan – Four-cup vacuum array,Manufacturing and lifecycle,vacuum-array,candidate
+PLAN_MAG_SMALL,Process plan – Small magnetic pole shoe,Manufacturing and lifecycle,magnetic-small,candidate
+PLAN_MAG_WIDE,Process plan – Wide magnetic pole shoe,Manufacturing and lifecycle,magnetic-wide,candidate
+PLAN_HYBRID,Process plan – Rigid-soft hybrid jaw / PA12+TPU,Manufacturing and lifecycle,hybrid,candidate
+PLAN_FLAT_ABS,Process plan - Flat jaws / ABS / FFF,Manufacturing and lifecycle,custom-flat,candidate
+PLAN_FLAT_ASA,Process plan - Flat jaws / ASA / FFF,Manufacturing and lifecycle,custom-flat,candidate
+PLAN_FLAT_PLA,Process plan - Flat jaws / PLA / FFF,Manufacturing and lifecycle,custom-flat,candidate
+PLAN_PREC_PA11,Process plan - Precision jaws / PA11 / SLS,Manufacturing and lifecycle,custom-precision,candidate
+PLAN_PREC_PC,Process plan - Precision jaws / PC / CNC,Manufacturing and lifecycle,custom-precision,candidate
+PLAN_PU_PAD,Process plan - PA12 jaws + PU pads,Manufacturing and lifecycle,soft-pad,candidate

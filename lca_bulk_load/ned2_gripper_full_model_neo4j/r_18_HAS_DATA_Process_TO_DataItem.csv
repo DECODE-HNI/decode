@@ -1,0 +1,4 @@
+﻿from_id,to_id,role
+PROC_MJF,DATA_0018,assessment-relevant value
+PROC_ALU_EXTRUSION_EF,DATA_0021,provenance
+PROC_SCREW,DATA_0022,engineering judgment

@@ -1,0 +1,15 @@
+﻿id,name,formType,description
+FORM_FLAT,Flat jaw,flat,Planar contact
+FORM_PRECISION,Precision jaw,precision,Thin contact geometry
+FORM_XL,XL jaw,large,Extended jaw geometry
+FORM_V,V-groove jaw,v-groove,Cylindrical centering
+FORM_CONCAVE,Concave jaw,concave,Round-object contact
+FORM_FINRAY,Fin-Ray finger,compliant,Compliant lattice/finger
+FORM_LONG,Long-reach jaw,long,Extended finger
+FORM_INTERNAL,Internal-expansion finger,internal,Inside gripping
+FORM_SOFT,Soft finger/pad,soft,Compliant contact
+FORM_SUCTION_SMALL,Small suction cup,suction,Single small cup
+FORM_SUCTION_LARGE,Large suction cup,suction,Single large cup
+FORM_SUCTION_ARRAY,Suction array,suction,Multiple cups
+FORM_MAG_SMALL,Small pole shoe,magnetic,Small magnetic contact
+FORM_MAG_WIDE,Wide pole shoe,magnetic,Wide magnetic contact
