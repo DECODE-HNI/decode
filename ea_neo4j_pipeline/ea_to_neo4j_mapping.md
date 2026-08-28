@@ -352,21 +352,40 @@ in ein **neues, leeres EA-Projekt** (mit importiertem RFLPV2-Profil), um den
 Ist-Zustand des Graphen sauber zu spiegeln; `rflpv2.qea` bleibt das separate
 Hand-Testprojekt.
 
-**Diagramm-Erzeugung (28.08.2026, auf ausdrücklichen Wunsch ergänzt).** Der
-Export bringt jetzt zusätzlich ein einziges EA-Diagramm mit — jeder Knoten
-und jede Kante ist darauf platziert, kein Filtern/Kuratieren. Layout: pro
-Stereotyp-Kategorie ein eigenes Zeilen-Raster ("Band"), Bänder untereinander
-gestapelt; bewusst kein Anspruch auf hübsches Layout, nur ein reproduzierbarer
-Ausgangspunkt (in EA per "Layout Diagram" weiter verfeinerbar). Format
-(`<xmi:Extension>`/`<diagrams>`, `DUID`-basierte Verknüpfung von Shape zu
-Kante über `EOID`/`SOID`) wurde Zeichen für Zeichen gegen `rflpv2_package.xml`
-verifiziert, inklusive der Kantenrichtung (`SOID`=Start, `EOID`=Ende — bei
-Komposition zeigt `SOID` auf das Kind, `EOID` auf den Elternteil, exakt
-dieselbe Regel wie beim `aggregation="composite"`-Ende in `<uml:Model>`,
-dort ebenfalls empirisch bestätigt). **Noch offen:** ob der `<diagrams>`-Block
-auch *ohne* die begleitenden, stark redundanten `<elements>`/`<connectors>`-
-Bookkeeping-Blöcke, die EAs eigener Exporter zusätzlich schreibt, beim Import
-genügt — bloße Elementerzeugung ganz ohne `<xmi:Extension>` funktioniert
-nachweislich (`rflpv2_merge_test.xml`), das Diagramm ist der noch ungetestete
-Teil. Abschaltbar über `--no-diagram`, falls der Import mit Diagramm-Block
-Probleme macht.
+**Diagramm-Erzeugung (28.08.2026, auf ausdrücklichen Wunsch ergänzt; live in
+EA importiert und bestätigt).** Format (`<xmi:Extension>`/`<diagrams>`,
+`DUID`-basierte Verknüpfung von Shape zu Kante über `EOID`/`SOID`) wurde
+Zeichen für Zeichen gegen `rflpv2_package.xml` verifiziert, inklusive der
+Kantenrichtung (`SOID`=Start, `EOID`=Ende — bei Komposition zeigt `SOID` auf
+das Kind, `EOID` auf den Elternteil, dieselbe Regel wie beim
+`aggregation="composite"`-Ende in `<uml:Model>`). **Bestätigt:** der bloße
+`<diagrams>`-Block genügt beim Import auch *ohne* die begleitenden, stark
+redundanten `<elements>`/`<connectors>`-Bookkeeping-Blöcke, die EAs eigener
+Exporter zusätzlich schreibt — der erste Importtest (ein einziges Diagramm
+mit allen 730 Elementen/Kanten) hat sichtbar funktioniert.
+
+**Aufgeteilt in 7 Diagramme (28.08.2026, zweite Iteration, nach Skizze des
+Nutzers).** Ein Diagramm mit 730 Shapes/Kanten war zwar technisch korrekt,
+aber wie erwartet unübersichtlich. Neue Struktur: 1 Requirements-Diagramm +
+6 BDD-Diagramme (Functions, Logical Elements, Product Structure, Processes,
+Test Cases, Test Scenarios) — je ein eigenes Zeilen-Raster-Layout,
+`DIAGRAM_SPECS` in `neo4j_to_ea_export.py`. Nur das Product-Structure-
+Diagramm zeichnet Kanten (die `HAS_COMPONENT`-Kompositionskette) — jede
+Dependency-Beziehung in diesem Datenmodell (`Realizes`, `Satisfies`, ...)
+verbindet zwei *verschiedene* Kategorien und kann deshalb auf keinem der
+strikt einkategorigen Diagramme gezeichnet werden; die Kanten existieren
+weiterhin vollständig im Modell, nur nicht als Linie auf einem der 7
+Diagramme. Für die kategorieübergreifenden Bezüge wünscht sich der Nutzer
+stattdessen **Relationstabellen** zwischen den Diagrammen (Skizze: Pfeile
+zwischen den Diagramm-"Boxen", beschriftet "Relations-Table") — vermutlich
+EAs eingebautes Feature *View ▸ Relationship Matrix* (Quell-/Zieltyp +
+Connector-Typ konfigurierbar). Absichtlich NICHT skriptgeneriert: eine
+Relationship-Matrix ist in EA in Sekunden von Hand angelegt, ihr
+XMI-Speicherformat wurde nie an einem echten Export verifiziert — das
+Aufwand/Risiko-Verhältnis spricht hier klar für manuell statt für eine
+weitere ungetestete XML-Struktur zu raten. Offen: ob genau das gemeint ist
+(Rückfrage an Nutzer gestellt), und wie/ob die bislang nicht gemappte
+`APPLIES_TO`-Beziehung (Process→Part, siehe `r_1_APPLIES_TO_Process_TO_Part.csv`
+in `lca_bulk_load/`) — auf der Skizze als Prod.↔Proc.-Pfeil sichtbar — einen
+eigenen RFLPV2-Dependency-Stereotyp bekommen soll; aktuell gibt es dafür
+keine EA-Entsprechung.

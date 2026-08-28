@@ -418,27 +418,39 @@ def _diagram_connector_xml(connector_xid, source_duid, target_duid):
     )
 
 
-def build_diagram_xml(nodes_by_spec, parent_of, deps):
-    """Baut den <xmi:Extension>/<diagrams>-Block mit einem einzigen Diagramm,
-    das JEDEN Knoten und JEDE Kante enthaelt (kein Filtern/Kuratieren -- so
-    gewuenscht). Layout: pro NODE_SPECS-Kategorie ein eigenes Zeilen-Raster-
-    "Band", Baender untereinander gestapelt. Kein Anspruch auf ein
-    uebersichtliches Layout, nur ein reproduzierbarer Ausgangspunkt.
+# Sieben Diagramme statt einem (28.08.2026, auf Wunsch): ein
+# Requirements-Diagramm plus sechs BDD-Diagramme, je eins pro
+# NODE_SPECS-Kategorie (aufgeteilt nach Sparx-Skizze -- Req./Fun./Log./
+# Prod./Proc./TestC./TestScr., durch Relationstabellen statt In-Diagramm-
+# Kanten verbunden, siehe README). "neo4j_labels" waehlt, welche
+# NODE_SPECS-Eintraege (in Emission-Reihenfolge, je ein eigenes Band) auf
+# diesem Diagramm landen; "internal_composition" schaltet fuer das Product-
+# Element-Diagramm die HAS_COMPONENT-Kompositionskanten dazu (die einzigen
+# Kanten in diesem Datenmodell, die vollstaendig INNERHALB einer Kategorie
+# liegen -- alle Dependencies wie Realizes/Satisfies sind kategorieuebergreifend
+# und werden deshalb bewusst NICHT auf eines dieser Diagramme gezeichnet,
+# siehe ea_to_neo4j_mapping.md).
+DIAGRAM_SPECS = [
+    ("EAID_DIAGRAM_REQUIREMENTS", "Requirements", ["Requirement"], False),
+    ("EAID_DIAGRAM_FUNCTIONS", "Functions (BDD)", ["Function"], False),
+    ("EAID_DIAGRAM_LOGICAL", "Logical Elements (BDD)", ["SolutionPrinciple"], False),
+    ("EAID_DIAGRAM_PRODUCT", "Product Structure (BDD)", ["Artifact", "Assembly", "Part"], True),
+    ("EAID_DIAGRAM_PROCESSES", "Processes (BDD)", ["Process"], False),
+    ("EAID_DIAGRAM_TESTCASES", "Test Cases (BDD)", ["TestCase"], False),
+    ("EAID_DIAGRAM_TESTSCENARIOS", "Test Scenarios (BDD)", ["TestScenario"], False),
+]
 
-    Kanten-Richtung (SOID=Start, EOID=Ende, wie in <connectors>/<diagrams>
-    von EA vergeben): fuer Dependencies SOID=Quelle/client, EOID=Ziel/supplier
-    (siehe stereotype_app_xml-Aufrufer); fuer Komposition SOID=Kind (das Ende
-    mit aggregation="composite"), EOID=Elternteil -- exakt dieselbe Regel wie
-    bei den ownedEnd/ownedAttribute-Enden in build_xmi(), empirisch an
-    rflpv2_package.xml verifiziert (dortige Komposition Block5->Block6->Block7:
-    <connectors>-Quelle war jeweils das Kind, nicht der Elternteil)."""
+
+def _one_diagram_xml(xmi_id, name, node_rows_by_label, parent_of, internal_composition):
+    """Elemente + (fuer das Product-Element-Diagramm) Kompositionskanten fuer
+    EIN Diagramm. node_rows_by_label: [(neo4j_label, rows)], je ein Band."""
     used_duids = set()
     duid_by_id = {}
     shape_elements = []
     y = 40
     seqno = 0
 
-    for spec, rows in zip(NODE_SPECS, nodes_by_spec):
+    for _label, rows in node_rows_by_label:
         if not rows:
             continue
         for i, row in enumerate(rows):
@@ -459,25 +471,21 @@ def build_diagram_xml(nodes_by_spec, parent_of, deps):
         y += rows_in_band * DIAGRAM_ROW_PITCH + DIAGRAM_BAND_GAP
 
     connector_elements = []
-    for child_id, parent_id in parent_of.items():
-        aid = assoc_id(parent_id, child_id)
-        connector_elements.append(
-            _diagram_connector_xml(aid, duid_by_id.get(child_id), duid_by_id.get(parent_id))
-        )
-    for stereotype, pairs in deps:
-        for source_id, target_id in pairs:
-            did = dep_id(stereotype, source_id, target_id)
+    if internal_composition:
+        placed = set(duid_by_id.keys())
+        for child_id, parent_id in parent_of.items():
+            if child_id not in placed or parent_id not in placed:
+                continue  # Elternteil/Kind nicht auf diesem Diagramm -- ueberspringen
+            aid = assoc_id(parent_id, child_id)
             connector_elements.append(
-                _diagram_connector_xml(did, duid_by_id.get(source_id), duid_by_id.get(target_id))
+                _diagram_connector_xml(aid, duid_by_id.get(child_id), duid_by_id.get(parent_id))
             )
 
     now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return (
-        '\t<xmi:Extension extender="Enterprise Architect" extenderID="6.5">\n'
-        '\t\t<diagrams>\n'
-        '\t\t\t<diagram xmi:id="EAID_DIAGRAM_NEO4J_IMPORT">\n'
+        f'\t\t\t<diagram xmi:id="{xmi_id}">\n'
         '\t\t\t\t<model package="EAPK_NEO4J_IMPORT" localID="1" owner="EAPK_NEO4J_IMPORT"/>\n'
-        '\t\t\t\t<properties name="Neo4j Import" type="Logical"/>\n'
+        f'\t\t\t\t<properties name={quoteattr(name)} type="Logical"/>\n'
         f'\t\t\t\t<project author="neo4j_to_ea_export" version="1.0" created="{now}" modified="{now}"/>\n'
         f'\t\t\t\t<style1 value="{_DIAGRAM_STYLE1}"/>\n'
         f'\t\t\t\t<style2 value="{_DIAGRAM_STYLE2}"/>\n'
@@ -490,6 +498,46 @@ def build_diagram_xml(nodes_by_spec, parent_of, deps):
         + "".join(shape_elements) + "".join(connector_elements) +
         '\t\t\t\t</elements>\n'
         '\t\t\t</diagram>\n'
+    )
+
+
+def build_diagram_xml(nodes_by_spec, parent_of, deps):
+    """Baut den <xmi:Extension>/<diagrams>-Block mit den 7 Diagrammen aus
+    DIAGRAM_SPECS (siehe dort). Jedes Diagramm bekommt sein eigenes,
+    unabhaengiges Zeilen-Raster-Layout (Baender je NODE_SPECS-Kategorie
+    innerhalb des Diagramms, z.B. Artifact/Assembly/Part als 3 Baender im
+    Product-Element-Diagramm). Kein Anspruch auf ein huebsches Layout, nur
+    ein reproduzierbarer Ausgangspunkt (in EA per "Layout Diagram"
+    weiter verfeinerbar).
+
+    `deps` wird entgegengenommen, aber bewusst NICHT auf eines der 7
+    Diagramme gezeichnet -- alle Dependency-Beziehungen in diesem
+    Datenmodell verbinden zwei verschiedene Kategorien (z.B. Realizes:
+    Logical Element -> Function), koennen also auf keinem der strikt
+    einkategorigen Diagramme ueberhaupt beide Endpunkte haben. Die Kanten
+    existieren weiterhin vollstaendig im Modell (ueber build_xmi()) und sind
+    in EA jederzeit ueber die Relationships eines Elements oder eine
+    Relationship-Matrix sichtbar -- nur eben nicht als Linie auf einem
+    dieser Diagramme.
+
+    Kanten-Richtung fuer die (einzige gezeichnete) Kantenart, Komposition:
+    SOID=Kind (das Ende mit aggregation="composite"), EOID=Elternteil --
+    dieselbe Regel wie bei den ownedEnd/ownedAttribute-Enden in build_xmi(),
+    empirisch an rflpv2_package.xml verifiziert (dortige Komposition
+    Block5->Block6->Block7: <connectors>-Quelle war jeweils das Kind)."""
+    rows_by_label = {spec["neo4j_label"]: rows for spec, rows in zip(NODE_SPECS, nodes_by_spec)}
+
+    diagram_blocks = []
+    for xmi_id, name, labels, internal_composition in DIAGRAM_SPECS:
+        node_rows_by_label = [(label, rows_by_label.get(label, [])) for label in labels]
+        diagram_blocks.append(
+            _one_diagram_xml(xmi_id, name, node_rows_by_label, parent_of, internal_composition)
+        )
+
+    return (
+        '\t<xmi:Extension extender="Enterprise Architect" extenderID="6.5">\n'
+        '\t\t<diagrams>\n'
+        + "".join(diagram_blocks) +
         '\t\t</diagrams>\n'
         '\t</xmi:Extension>\n'
     )
@@ -623,7 +671,8 @@ def main():
     print(f"\nFertig: {args.out}")
     print(f"  {total_nodes} Knoten, {len(parent_of)} Kompositionskanten, {total_deps} Beziehungen")
     if not args.no_diagram:
-        print(f"  + 1 Diagramm mit allen {total_nodes + len(parent_of) + total_deps} Elementen/Kanten "
+        print(f"  + {len(DIAGRAM_SPECS)} Diagramme (Requirements, Functions, Logical Elements, "
+              f"Product Structure inkl. Kompositionskanten, Processes, Test Cases, Test Scenarios) "
               f"(--no-diagram zum Abschalten)")
 
 

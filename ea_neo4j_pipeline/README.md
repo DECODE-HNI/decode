@@ -110,10 +110,19 @@ Then in EA: *Project ▸ Model Exchange ▸ Import Package from XMI* →
 > merges, if you import into it. Use a fresh EA project for the bootstrap
 > import.
 
-The export includes one diagram with every element and every edge, laid out
-in a simple per-stereotype grid — a starting point to clean up with EA's own
-"Layout Diagram", not a finished layout. Pass `--no-diagram` to export bare
-model elements only, if the diagram block turns out to cause import trouble.
+The export includes **7 diagrams**, confirmed working end-to-end against a
+real EA import: one Requirements diagram and six BDD diagrams (Functions,
+Logical Elements, Product Structure, Processes, Test Cases, Test Scenarios)
+— split by stereotype category rather than one large diagram, each laid out
+in a simple grid (a starting point to clean up with EA's own "Layout
+Diagram", not a finished layout). Only the Product Structure diagram draws
+edges (the `HAS_COMPONENT` composition tree) — every dependency relationship
+in this data model (`Realizes`, `Satisfies`, ...) connects two *different*
+categories, so it can't be drawn on any single one of these diagrams; those
+edges still exist fully in the model (visible per-element or via an EA
+Relationship Matrix), just not as a line on one of the 7. Pass `--no-diagram`
+to export bare model elements only, if the diagram blocks turn out to cause
+import trouble.
 
 ## Stereotype → Neo4j label mapping (summary)
 
