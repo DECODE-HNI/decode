@@ -47,6 +47,7 @@
 				</AppliesTo>
 				<TaggedValues>
 					<Tag name="RFLPV2_Sustainability_Process_Extension::Affects(UML::Dependency)" type="int" description="" unit="" values="" default="Affects"/>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Applies(UML::Dependency)" type="int" description="" unit="" values="" default="Applies"/>
 					<Tag name="RFLPV2_Sustainability_Process_Extension::Derives(UML::Dependency)" type="int" description="" unit="" values="" default="Derives"/>
 					<Tag name="RFLPV2_Sustainability_Process_Extension::Realizes(UML::Dependency)" type="int" description="" unit="" values="" default="Realizes"/>
 					<Tag name="RFLPV2_Sustainability_Process_Extension::Refines(UML::Dependency)" type="int" description="" unit="" values="" default="Refines"/>

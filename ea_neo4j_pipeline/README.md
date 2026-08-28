@@ -39,9 +39,9 @@ flowchart LR
 
 | File | Role |
 |---|---|
-| `RFLPV2_Extension_Profile_V009.xml` | The SysML extension profile: 26 stereotypes (requirements, functions, logical elements, product structure, verification/validation) with their tagged values. |
+| `RFLPV2_Extension_Profile_V009.xml` | The SysML extension profile: 27 stereotypes (requirements, functions, logical elements, product structure, verification/validation) with their tagged values. |
 | `RFLPV2_Toolbox_v003.xml` | The EA toolbox (drag-and-drop palette) matching the profile 1:1. |
-| `RFLPV2_MDG_v009.xml` | Profile + toolbox bundled into one importable MDG Technology file. |
+| `RFLPV2_MDG_v010.xml` | Profile + toolbox bundled into one importable MDG Technology file. |
 | `rflpv2.qea` | Reference EA project with the profile/toolbox loaded and a hand-built test model — a starting point to see the stereotypes in use. |
 | `ea_xmi_extract.py` | Parses an EA XMI 2.1 export into per-label/per-relationship CSVs, resolving GUIDs to business keys. |
 | `ea_to_neo4j_load.py` | Loads those CSVs into Neo4j via the Bolt driver (`MERGE`-based, idempotent). |
@@ -53,7 +53,7 @@ flowchart LR
 ## Setup: getting the profile into EA
 
 1. **Import the MDG Technology:** *Settings ▸ MDG Technologies ▸ Manage MDG
-   Technologies ▸ Import Technology* → `RFLPV2_MDG_v009.xml`.
+   Technologies ▸ Import Technology* → `RFLPV2_MDG_v010.xml`.
 2. **Separately reimport the UML Profile:** *Resources ▸ UML Profiles ▸
    RFLPV2_Sustainability_Process_Extension ▸ Import Profile* → the profile
    file directly.
@@ -69,8 +69,8 @@ flowchart LR
    > 2 before debugging anything else.
 3. Open/create a package, drag stereotyped elements from the toolbox, connect
    them with the profile's dependency stereotypes (`Derives`, `Satisfies`,
-   `Realizes`, `Affects`, `Refines`, `Requires`, `Specifies`, `Validates`,
-   `Verifies`) and SysML composition for product structure.
+   `Realizes`, `Applies`, `Affects`, `Refines`, `Requires`, `Specifies`,
+   `Validates`, `Verifies`) and SysML composition for product structure.
 
 ## Workflow: design in EA → Neo4j
 
@@ -141,7 +141,8 @@ import trouble.
 
 Dependency stereotypes map to relationship types (`Satisfies` →
 `:SATISFIES_REQUIREMENT`, `Realizes` → `:REALIZES_FUNCTION` /
-`:REALIZES_PRINCIPLE`, others to their own new type); SysML composition
+`:REALIZES_PRINCIPLE`, `Applies` (Process Element → Product Element) →
+`:APPLIES_TO`, others to their own new type); SysML composition
 between `Product Element`s becomes the `:HAS_COMPONENT` tree that also
 determines the Artifact/Assembly/Part split. Full rules, fallback behaviour,
 and every edge case (materials, process references, verification methods)

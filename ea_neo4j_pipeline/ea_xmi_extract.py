@@ -109,13 +109,14 @@ TAG_RENAME = {
 IGNORE_TAGS = {"id", "text", "isEncapsulated"}
 
 DEPENDENCY_STEREOTYPES = {
-    "Affects", "Derives", "Realizes", "Refines", "Requires",
+    "Affects", "Applies", "Derives", "Realizes", "Refines", "Requires",
     "Satisfies", "Specifies", "Validates", "Verifies",
 }
 
 REL_TARGET_OVERRIDE = {
     ("Realizes", "Logical Element", "Function"): "REALIZES_FUNCTION",
     ("Realizes", "Product Element", "Logical Element"): "REALIZES_PRINCIPLE",
+    ("Applies", "Process Element", "Product Element"): "APPLIES_TO",
 }
 REQUIREMENT_STEREOTYPES = {"Customer Requirement", "System Requirement"}
 

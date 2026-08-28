@@ -202,6 +202,8 @@ DEPENDENCY_SPECS = [
      "RETURN a.id AS source_id, b.id AS target_id ORDER BY a.id, b.id", "Realizes"),
     ("MATCH (a:Artifact)-[:SATISFIES_REQUIREMENT]->(b:Requirement) "
      "RETURN a.id AS source_id, b.id AS target_id ORDER BY a.id, b.id", "Satisfies"),
+    ("MATCH (a:Process)-[:APPLIES_TO]->(b:Part) "
+     "RETURN a.id AS source_id, b.id AS target_id ORDER BY a.id, b.id", "Applies"),
 ]
 
 COMPOSITION_QUERIES = [

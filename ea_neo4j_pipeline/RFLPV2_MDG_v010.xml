@@ -1,5 +1,8 @@
 <?xml  version='1.0' encoding='windows-1252' ?>
-<MDG.Technology version="1.0"><Documentation id="RFLPV2" name="RFLPV2" version="1.8" notes="1.8 - ID-Tags fuer Test Case/Description/Scenario"/><UMLProfiles><UMLProfile profiletype="uml2">
+<MDG.Technology version="1.0">
+	<Documentation id="RFLPV2" name="RFLPV2" version="1.9" notes="v1.9: neuer Dependency-Stereotyp Applies (Process Element -> Product Element, mappt auf Neo4j APPLIES_TO) fuer die EA-&gt;Neo4j-Fachlichkeit."/>
+	<UMLProfiles>
+<UMLProfile profiletype="uml2">
 	<Documentation id="D6051D3DE0" name="RFLPV2_Sustainability_Process_Extension" version="1.0" notes="RFLPV2_Sustainability_Process_Extension"/>
 	<Content>
 		<Stereotypes>
@@ -21,6 +24,13 @@
 						<Property name="isUnique" value=""/>
 						<Property name="lower" value=""/>
 						<Property name="upper" value=""/>
+					</Apply>
+				</AppliesTo>
+			</Stereotype>
+			<Stereotype name="Applies" notes="" generalizes="SysML1.4::allocate" baseStereotypes="SysML1.4::allocate">
+				<AppliesTo>
+					<Apply type="Dependency">
+						<Property name="direction" value="Source -&gt; Destination"/>
 					</Apply>
 				</AppliesTo>
 			</Stereotype>
@@ -339,7 +349,9 @@
 		<ViewDefinitions/>
 		<Metamodel/>
 	</Content>
-</UMLProfile></UMLProfiles><UIToolboxes><UMLProfile profiletype="uml2">
+</UMLProfile>	</UMLProfiles>
+	<UIToolboxes>
+<UMLProfile profiletype="uml2">
 	<Documentation id="CA2971E090" name="RFLPV2_Toolbox" version="1.0" alias="RFLPV2" notes="RFLPV&amp;#178"/>
 	<Content>
 		<Stereotypes>
@@ -387,6 +399,7 @@
 				</AppliesTo>
 				<TaggedValues>
 					<Tag name="RFLPV2_Sustainability_Process_Extension::Affects(UML::Dependency)" type="int" description="" unit="" values="" default="Affects"/>
+					<Tag name="RFLPV2_Sustainability_Process_Extension::Applies(UML::Dependency)" type="int" description="" unit="" values="" default="Applies"/>
 					<Tag name="RFLPV2_Sustainability_Process_Extension::Derives(UML::Dependency)" type="int" description="" unit="" values="" default="Derives"/>
 					<Tag name="RFLPV2_Sustainability_Process_Extension::Realizes(UML::Dependency)" type="int" description="" unit="" values="" default="Realizes"/>
 					<Tag name="RFLPV2_Sustainability_Process_Extension::Refines(UML::Dependency)" type="int" description="" unit="" values="" default="Refines"/>
@@ -402,4 +415,5 @@
 		<ViewDefinitions/>
 		<Metamodel/>
 	</Content>
-</UMLProfile></UIToolboxes></MDG.Technology>
+</UMLProfile>	</UIToolboxes>
+</MDG.Technology>

@@ -24,6 +24,13 @@
 					</Apply>
 				</AppliesTo>
 			</Stereotype>
+			<Stereotype name="Applies" notes="" generalizes="SysML1.4::allocate" baseStereotypes="SysML1.4::allocate">
+				<AppliesTo>
+					<Apply type="Dependency">
+						<Property name="direction" value="Source -&gt; Destination"/>
+					</Apply>
+				</AppliesTo>
+			</Stereotype>
 			<Stereotype name="Customer Need" notes="" generalizes="SysML1.4::requirement" baseStereotypes="SysML1.4::requirement">
 				<AppliesTo>
 					<Apply type="Class">

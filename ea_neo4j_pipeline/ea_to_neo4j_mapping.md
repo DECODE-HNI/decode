@@ -128,6 +128,7 @@ lowerCamelCase-Konvention) wird beim Import auf `mainFeature` normalisiert.
 |---|---|---|
 | `Satisfies` | Ziel-Stereotyp ∈ {`Customer Requirement`, `System Requirement`} → **`:SATISFIES_REQUIREMENT`** (bestehend, Richtung Source→Requirement) | sonst neuer Typ `:SATISFIES`, mit Log-Warnung (unerwartete Stereotyp-Kombination) |
 | `Realizes` | Source=`Logical Element` & Ziel=`Function` → **`:REALIZES_FUNCTION`** (bestehend); Source=`Product Element` & Ziel=`Logical Element` → **`:REALIZES_PRINCIPLE`** (bestehend) | sonst neuer Typ `:REALIZES`, mit Log-Warnung |
+| `Applies` (28.08.2026 ergänzt) | Source=`Process Element` & Ziel=`Product Element` → **`:APPLIES_TO`** (bestehend, Richtung Process→Part) | sonst neuer Typ `:APPLIES` |
 | `Affects` | — | neuer Typ `:AFFECTS` |
 | `Derives` | — | neuer Typ `:DERIVES` |
 | `Refines` | — | neuer Typ `:REFINES` |
@@ -383,9 +384,21 @@ Connector-Typ konfigurierbar). Absichtlich NICHT skriptgeneriert: eine
 Relationship-Matrix ist in EA in Sekunden von Hand angelegt, ihr
 XMI-Speicherformat wurde nie an einem echten Export verifiziert — das
 Aufwand/Risiko-Verhältnis spricht hier klar für manuell statt für eine
-weitere ungetestete XML-Struktur zu raten. Offen: ob genau das gemeint ist
-(Rückfrage an Nutzer gestellt), und wie/ob die bislang nicht gemappte
-`APPLIES_TO`-Beziehung (Process→Part, siehe `r_1_APPLIES_TO_Process_TO_Part.csv`
-in `lca_bulk_load/`) — auf der Skizze als Prod.↔Proc.-Pfeil sichtbar — einen
-eigenen RFLPV2-Dependency-Stereotyp bekommen soll; aktuell gibt es dafür
-keine EA-Entsprechung.
+weitere ungetestete XML-Struktur zu raten. Vom Nutzer bestätigt.
+
+**`Applies` (28.08.2026 ergänzt).** Der Prod.↔Proc.-Pfeil aus der Skizze
+bekommt einen eigenen Dependency-Stereotyp, `generalizes="SysML1.4::allocate"`
+(dasselbe verlässliche Muster wie `Realizes`/`Refines`/`Requires`) — mappt auf
+die bereits bestehende `APPLIES_TO`-Beziehung (Process→Part, siehe
+`r_1_APPLIES_TO_Process_TO_Part.csv` in `lca_bulk_load/`). Nutzer-Begründung:
+"Immerhin soll letzten Endes unser Neo4j Modell aus EA heraus importiert
+werden können (EA→Neo4j). Das ist ja der Anwendungsfall in unserer User
+Story." Profil/Toolbox/MDG (v010), `ea_xmi_extract.py` (Override
+`("Applies", "Process Element", "Product Element") → "APPLIES_TO"`) und
+`neo4j_to_ea_export.py` (neuer `DEPENDENCY_SPECS`-Eintrag) sind angepasst und
+per Offline-Rundreise-Selbsttest verifiziert (generierte Applies-Kante →
+Extraktor → korrekt als `ea_rel_APPLIES_TO.csv` klassifiziert). **Noch nicht
+verifiziert:** ob sich die Applies-Kante auch tatsächlich in EA zwischen
+Process Element und Product Element ziehen lässt (gleiche Vorsicht wie bei
+jedem neuen Dependency-Stereotyp bisher — zwingend zweistufiger Reimport
+nach dem MDG-Update, siehe Abschnitt 1).
