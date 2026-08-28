@@ -397,8 +397,10 @@ Story." Profil/Toolbox/MDG (v010), `ea_xmi_extract.py` (Override
 `("Applies", "Process Element", "Product Element") → "APPLIES_TO"`) und
 `neo4j_to_ea_export.py` (neuer `DEPENDENCY_SPECS`-Eintrag) sind angepasst und
 per Offline-Rundreise-Selbsttest verifiziert (generierte Applies-Kante →
-Extraktor → korrekt als `ea_rel_APPLIES_TO.csv` klassifiziert). **Noch nicht
-verifiziert:** ob sich die Applies-Kante auch tatsächlich in EA zwischen
-Process Element und Product Element ziehen lässt (gleiche Vorsicht wie bei
-jedem neuen Dependency-Stereotyp bisher — zwingend zweistufiger Reimport
-nach dem MDG-Update, siehe Abschnitt 1).
+Extraktor → korrekt als `ea_rel_APPLIES_TO.csv` klassifiziert) **und live in
+EA bestätigt** — lässt sich sowohl aus dem Profil als auch aus der Toolbox
+zwischen Process Element und Product Element ziehen. Der reale
+`neo4j_to_ea_export.py`-Lauf gegen die Produktionsinstanz lieferte 196
+`APPLIES_TO`-Kanten (271 Knoten, 129 Kompositionskanten, 526 Beziehungen
+gesamt = 25+43+262+196), alle 7 Diagramme + `Applies` damit vollständig
+Ende-zu-Ende verifiziert.

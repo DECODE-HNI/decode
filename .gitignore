@@ -12,3 +12,8 @@ lca_bulk_load/build/
 *.bak
 *.eap.bak
 *.qea.bak
+
+# Lokale EA-Testprojekte ausserhalb von ea_neo4j_pipeline/ (nicht fuer den
+# Import gedacht -- die referenzierten .qea-Projekte dort sind bewusst
+# committed, alles andere ist persoenliches Scratch-Material)
+/rflpv2_diagram.qea
