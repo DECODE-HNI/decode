@@ -53,6 +53,23 @@ WICHTIG -- vor dem Import in EA lesen:
   in dieser Pipeline noch nie empirisch geprueft) -- absichtlich ausgelassen
   statt einer ungetesteten XML-Struktur geraten.
 
+Diagramm (28.08.2026 ergaenzt, auf ausdruecklichen Wunsch -- "auch wenn das
+etwas unuebersichtlich erscheint, brauchen wir auch einmal das ganze
+Diagramm in EA"): erzeugt zusaetzlich zu den nackten Modellelementen ein
+einziges Diagramm mit JEDEM Knoten und JEDER Kante, in einem einfachen
+Zeilen-Raster je Stereotyp-Kategorie (Function/Logical Element/Process
+Element/Product Element/System Requirement/...). Kein Anspruch auf huebsches
+Layout -- Ausgangspunkt zum Weiterbearbeiten per EAs eigenem "Layout
+Diagram". Das XML-Format des Diagramm-Blocks (<xmi:Extension>/<diagrams>,
+DUID-basierte Element-zu-Kante-Verknuepfung) wurde Zeichen fuer Zeichen
+gegen einen echten EA-Export (rflpv2_package.xml) verifiziert -- siehe
+build_diagram_xml() fuer die Herleitung. NICHT verifiziert ist bisher, ob
+der <diagrams>-Block *ohne* die begleitenden <elements>/<connectors>-
+Bloecke, die EAs eigener Exporter zusaetzlich schreibt, beim Import genuegt;
+einfache Elementerzeugung ganz ohne <xmi:Extension> funktioniert nachweislich
+(rflpv2_merge_test.xml), das Diagramm ist der noch ungetestete Teil. Mit
+--no-diagram abschaltbar, falls der Import ohne Diagramm sauberer laeuft.
+
 Aufruf:
     pip install neo4j
     $env:NEO4J_URI = "bolt://localhost:7687"
@@ -62,9 +79,11 @@ Aufruf:
 """
 
 import argparse
+import datetime
 import os
 import re
 import sys
+import zlib
 from xml.sax.saxutils import quoteattr
 
 NAMESPACE_PREFIX = "RFLPV2_Sustainability_Process_Extension"
@@ -313,7 +332,170 @@ def fetch_dependencies(session):
     return deps
 
 
-def build_xmi(nodes_by_spec, parent_of, material_ref, deps):
+# --- Diagramm-Layout: einfaches Zeilen-Raster je Stereotyp-Kategorie -------
+# Box-Groesse (90x70) und Spaltenabstand sind exakt aus einem echten
+# EA-Diagramm (rflpv2_package.xml, alle 15 Test-Elemente waren 90x70)
+# uebernommen, nicht erfunden.
+DIAGRAM_BOX_W, DIAGRAM_BOX_H = 90, 70
+DIAGRAM_COL_GAP, DIAGRAM_ROW_GAP = 40, 40
+DIAGRAM_COL_PITCH = DIAGRAM_BOX_W + DIAGRAM_COL_GAP
+DIAGRAM_ROW_PITCH = DIAGRAM_BOX_H + DIAGRAM_ROW_GAP
+DIAGRAM_COLS_PER_BAND = 22
+DIAGRAM_BAND_GAP = 150
+
+# Verbatim aus einem echten EA-XMI-2.1-Export kopierte Diagramm-Stil-Blobs
+# (rflpv2_package.xml, Diagramm "Package1") -- opake, EA-interne
+# Anzeigeeinstellungen ohne Bezug zu konkreten Elementen, deshalb unveraendert
+# fuer jedes selbst erzeugte Diagramm wiederverwendbar.
+_DIAGRAM_STYLE1 = (
+    "ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;"
+    "Border=1;HighlightForeign=1;PackageContents=1;SequenceNotes=0;"
+    "ScalePrintImage=0;PPgs.cx=0;PPgs.cy=0;DocSize.cx=827;DocSize.cy=1169;"
+    "ShowDetails=0;Orientation=P;Zoom=100;ShowTags=0;OpParams=1;"
+    "VisibleAttributeDetail=0;ShowOpRetType=1;ShowIcons=1;CollabNums=0;"
+    "HideProps=0;ShowReqs=0;ShowCons=0;PaperSize=9;HideParents=0;UseAlias=0;"
+    "HideAtts=0;HideOps=0;HideStereo=0;HideElemStereo=0;ShowTests=0;"
+    "ShowMaint=0;ConnectorNotation=UML 2.1;ExplicitNavigability=0;ShowShape=1;"
+    "AllDockable=0;AdvancedElementProps=1;AdvancedFeatureProps=1;"
+    "AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;ShowNotes=0;"
+    "SuppressBrackets=0;SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;"
+)
+_DIAGRAM_STYLE2 = (
+    "ExcludeRTF=0;DocAll=0;HideQuals=0;AttPkg=1;ShowTests=0;ShowMaint=0;"
+    "SuppressFOC=1;MatrixActive=0;SwimlanesActive=1;KanbanActive=0;"
+    "MatrixLineWidth=1;MatrixLineClr=0;MatrixLocked=0;TConnectorNotation=UML 2.1;"
+    "TExplicitNavigability=0;AdvancedElementProps=1;AdvancedFeatureProps=1;"
+    "AdvancedConnectorProps=1;m_bElementClassifier=1;SPT=1;"
+    "MDGDgm=Document Templates::Document Templates;MDGView=Complete;STBLDgm=;"
+    "ShowNotes=0;VisibleAttributeDetail=0;ShowOpRetType=1;SuppressBrackets=0;"
+    "SuppConnectorLabels=0;PrintPageHeadFoot=0;ShowAsList=0;"
+    "SuppressedCompartments=;Theme=:119;"
+)
+_DIAGRAM_SWIMLANE_FONT = (
+    "SwimlaneFont=lfh:-13,lfw:0,lfi:0,lfu:0,lfs:0,lfface:Calibri,lfe:0,lfo:0,"
+    "lfchar:1,lfop:0,lfcp:0,lfq:0,lfpf=0,lfWidth=0;"
+)
+_DIAGRAM_SWIMLANES = (
+    "locked=false;orientation=0;width=0;inbar=false;names=false;color=-1;"
+    "bold=false;fcol=0;tcol=-1;ofCol=-1;ufCol=-1;hl=1;ufh=0;hh=0;cls=0;bw=0;"
+    "hli=0;bro=0;" + _DIAGRAM_SWIMLANE_FONT
+)
+_DIAGRAM_MATRIXITEMS = (
+    "locked=false;matrixactive=false;swimlanesactive=true;kanbanactive=false;"
+    "width=1;clrLine=0;"
+)
+_DIAGRAM_PERSISTENTSTYLE = (
+    "DGS=On=0:CNT=8:W=120:H=40:SG=0:SGH=0:AEB=0:;AR=0;DCL=0;" + _DIAGRAM_SWIMLANES
+    + ";Swimlanes=" + _DIAGRAM_SWIMLANES + ";"
+)
+
+
+def duid_for(business_key, used):
+    """8-Hex-Zeichen 'Display Unit ID', wie EA sie diagrammintern vergibt, um
+    Kanten mit ihren beiden Endpunkt-Shapes zu verknuepfen (siehe style=
+    "DUID=..." auf Shapes bzw. "EOID=...;SOID=..." auf Kanten in
+    rflpv2_package.xml). Muss nur innerhalb des Diagramms eindeutig sein,
+    nicht mit der echten xmi:id uebereinstimmen -- deterministisch aus dem
+    Business-Key abgeleitet (CRC32), mit Kollisions-Fallback."""
+    base = zlib.crc32(business_key.encode("utf-8")) & 0xFFFFFFFF
+    bump = 0
+    while True:
+        candidate = f"{(base + bump) & 0xFFFFFFFF:08X}"
+        if candidate not in used:
+            used.add(candidate)
+            return candidate
+        bump += 1
+
+
+def _diagram_connector_xml(connector_xid, source_duid, target_duid):
+    if source_duid is None or target_duid is None:
+        return ""  # Endpunkt nicht auf dem Diagramm platziert -- sollte nicht vorkommen
+    return (
+        '\t\t\t\t\t<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=4;$LLB=;LLT=;LMT=;'
+        'LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" '
+        f'subject="{connector_xid}" '
+        f'style="Mode=3;EOID={target_duid};SOID={source_duid};Color=-1;LWidth=0;Hidden=0;"/>\n'
+    )
+
+
+def build_diagram_xml(nodes_by_spec, parent_of, deps):
+    """Baut den <xmi:Extension>/<diagrams>-Block mit einem einzigen Diagramm,
+    das JEDEN Knoten und JEDE Kante enthaelt (kein Filtern/Kuratieren -- so
+    gewuenscht). Layout: pro NODE_SPECS-Kategorie ein eigenes Zeilen-Raster-
+    "Band", Baender untereinander gestapelt. Kein Anspruch auf ein
+    uebersichtliches Layout, nur ein reproduzierbarer Ausgangspunkt.
+
+    Kanten-Richtung (SOID=Start, EOID=Ende, wie in <connectors>/<diagrams>
+    von EA vergeben): fuer Dependencies SOID=Quelle/client, EOID=Ziel/supplier
+    (siehe stereotype_app_xml-Aufrufer); fuer Komposition SOID=Kind (das Ende
+    mit aggregation="composite"), EOID=Elternteil -- exakt dieselbe Regel wie
+    bei den ownedEnd/ownedAttribute-Enden in build_xmi(), empirisch an
+    rflpv2_package.xml verifiziert (dortige Komposition Block5->Block6->Block7:
+    <connectors>-Quelle war jeweils das Kind, nicht der Elternteil)."""
+    used_duids = set()
+    duid_by_id = {}
+    shape_elements = []
+    y = 40
+    seqno = 0
+
+    for spec, rows in zip(NODE_SPECS, nodes_by_spec):
+        if not rows:
+            continue
+        for i, row in enumerate(rows):
+            bid = row["id"]
+            col = i % DIAGRAM_COLS_PER_BAND
+            r = i // DIAGRAM_COLS_PER_BAND
+            x = 40 + col * DIAGRAM_COL_PITCH
+            top = y + r * DIAGRAM_ROW_PITCH
+            duid = duid_for(bid, used_duids)
+            duid_by_id[bid] = duid
+            seqno += 1
+            shape_elements.append(
+                f'\t\t\t\t\t<element geometry="Left={x};Top={top};Right={x + DIAGRAM_BOX_W};'
+                f'Bottom={top + DIAGRAM_BOX_H};" subject="{eaid_for(bid)}" seqno="{seqno}" '
+                f'style="DUID={duid};HideIcon=0;"/>\n'
+            )
+        rows_in_band = -(-len(rows) // DIAGRAM_COLS_PER_BAND)  # ceil
+        y += rows_in_band * DIAGRAM_ROW_PITCH + DIAGRAM_BAND_GAP
+
+    connector_elements = []
+    for child_id, parent_id in parent_of.items():
+        aid = assoc_id(parent_id, child_id)
+        connector_elements.append(
+            _diagram_connector_xml(aid, duid_by_id.get(child_id), duid_by_id.get(parent_id))
+        )
+    for stereotype, pairs in deps:
+        for source_id, target_id in pairs:
+            did = dep_id(stereotype, source_id, target_id)
+            connector_elements.append(
+                _diagram_connector_xml(did, duid_by_id.get(source_id), duid_by_id.get(target_id))
+            )
+
+    now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    return (
+        '\t<xmi:Extension extender="Enterprise Architect" extenderID="6.5">\n'
+        '\t\t<diagrams>\n'
+        '\t\t\t<diagram xmi:id="EAID_DIAGRAM_NEO4J_IMPORT">\n'
+        '\t\t\t\t<model package="EAPK_NEO4J_IMPORT" localID="1" owner="EAPK_NEO4J_IMPORT"/>\n'
+        '\t\t\t\t<properties name="Neo4j Import" type="Logical"/>\n'
+        f'\t\t\t\t<project author="neo4j_to_ea_export" version="1.0" created="{now}" modified="{now}"/>\n'
+        f'\t\t\t\t<style1 value="{_DIAGRAM_STYLE1}"/>\n'
+        f'\t\t\t\t<style2 value="{_DIAGRAM_STYLE2}"/>\n'
+        f'\t\t\t\t<swimlanes value="{_DIAGRAM_SWIMLANES}"/>\n'
+        f'\t\t\t\t<matrixitems value="{_DIAGRAM_MATRIXITEMS}"/>\n'
+        '\t\t\t\t<extendedProperties/>\n'
+        f'\t\t\t\t<persistentstyle value="{_DIAGRAM_PERSISTENTSTYLE}"/>\n'
+        '\t\t\t\t<xrefs/>\n'
+        '\t\t\t\t<elements>\n'
+        + "".join(shape_elements) + "".join(connector_elements) +
+        '\t\t\t\t</elements>\n'
+        '\t\t\t</diagram>\n'
+        '\t\t</diagrams>\n'
+        '\t</xmi:Extension>\n'
+    )
+
+
+def build_xmi(nodes_by_spec, parent_of, material_ref, deps, with_diagram=True):
     child_ids = set(parent_of.keys())
 
     class_lines = []
@@ -395,11 +577,14 @@ def build_xmi(nodes_by_spec, parent_of, material_ref, deps):
         '\t\t<packagedElement xmi:type="uml:Package" xmi:id="EAPK_NEO4J_IMPORT" '
         'name="Neo4jImport" visibility="public">\n'
     )
+    diagram_xml = build_diagram_xml(nodes_by_spec, parent_of, deps) if with_diagram else ""
+
     footer = (
         "\t\t</packagedElement>\n"
         + "".join(stereo_lines)
         + "\t</uml:Model>\n"
-        "</xmi:XMI>\n"
+        + diagram_xml
+        + "</xmi:XMI>\n"
     )
 
     body = "".join(class_lines) + "".join(assoc_lines) + "".join(dep_lines)
@@ -410,6 +595,9 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--out", default="rflpv2_from_neo4j.xml", help="Ausgabedatei (XMI 2.1)")
     ap.add_argument("--database", default="neo4j")
+    ap.add_argument("--no-diagram", action="store_true",
+                     help="Kein EA-Diagramm erzeugen, nur die nackten Modellelemente "
+                          "(z.B. falls der Import mit Diagramm-Block Probleme macht)")
     args = ap.parse_args()
 
     driver = get_driver()
@@ -426,7 +614,7 @@ def main():
 
     driver.close()
 
-    xmi = build_xmi(nodes_by_spec, parent_of, material_ref, deps)
+    xmi = build_xmi(nodes_by_spec, parent_of, material_ref, deps, with_diagram=not args.no_diagram)
     with open(args.out, "w", encoding="cp1252", errors="xmlcharrefreplace") as f:
         f.write(xmi)
 
@@ -434,6 +622,9 @@ def main():
     total_deps = sum(len(pairs) for _, pairs in deps)
     print(f"\nFertig: {args.out}")
     print(f"  {total_nodes} Knoten, {len(parent_of)} Kompositionskanten, {total_deps} Beziehungen")
+    if not args.no_diagram:
+        print(f"  + 1 Diagramm mit allen {total_nodes + len(parent_of) + total_deps} Elementen/Kanten "
+              f"(--no-diagram zum Abschalten)")
 
 
 if __name__ == "__main__":

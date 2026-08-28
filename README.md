@@ -1,6 +1,6 @@
 # DECODE
 
-**D**ata ecosystems for **E**cological and **CO**llaborative **DE**cisions in Engineering.
+**D**ata **E**cosystems for **ECO**logical and **CO**llaborative **D**ecisions in **E**ngineering.
 
 DECODE connects the tools engineers already use — SysML models in Enterprise
 Architect, LCA data from ILCD/Sphera exports, Asset Administration Shells for
