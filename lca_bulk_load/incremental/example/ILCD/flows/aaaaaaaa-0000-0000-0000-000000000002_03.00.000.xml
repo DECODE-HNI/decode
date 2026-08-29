@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flowDataSet xmlns="http://lca.jrc.it/ILCD/Flow" xmlns:common="http://lca.jrc.it/ILCD/Common">
+  <flowInformation><dataSetInformation>
+    <common:UUID>aaaaaaaa-0000-0000-0000-000000000002</common:UUID>
+    <name><baseName xml:lang="en">carbon dioxide</baseName></name>
+    <CASNumber>000124-38-9</CASNumber>
+  </dataSetInformation></flowInformation>
+  <modellingAndValidation><LCIMethod><typeOfDataSet>Elementary flow</typeOfDataSet></LCIMethod></modellingAndValidation>
+</flowDataSet>
