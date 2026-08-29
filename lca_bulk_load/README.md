@@ -83,6 +83,15 @@ flowchart TB
 `full_init.cypher` / `reset_to_blank.cypher` cover a clean rebuild from
 scratch against an empty database.
 
+### Adding one more package later
+
+[`incremental/`](incremental/) has a Python importer for attaching a **single**
+extra ILCD process package (one polymer, one metal, one grid mix) to a material
+after the bulk seed is in place, without re-running this whole pipeline. It
+harmonises the new package's flow nomenclature onto the graph's existing
+`CHARACTERIZES` factors by CAS number. No ILCD packages are committed — see that
+folder's README.
+
 ## Data-quality fixes worth knowing about
 
 These are one-off corrections already applied to the current dataset, kept

@@ -1,0 +1,4696 @@
+{
+  "APPLIES_APPROACH": {
+    "count": 203,
+    "type": "relationship",
+    "properties": {}
+  },
+  "ModelScenario": {
+    "relationships": {
+      "SETS": {
+        "count": 1,
+        "properties": {},
+        "direction": "out",
+        "labels": [
+          "ParameterValue"
+        ]
+      },
+      "UNDER_SCENARIO": {
+        "count": 187,
+        "properties": {},
+        "direction": "in",
+        "labels": [
+          "Assessment"
+        ]
+      }
+    },
+    "count": 2,
+    "type": "node",
+    "properties": {
+      "horizonYear": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "INTEGER"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "description": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "type": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "DataItem": {
+    "relationships": {
+      "HAS_DATA_QUALITY": {
+        "count": 21,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "DataQuality"
+        ]
+      },
+      "HAS_DATA": {
+        "count": 16,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Artifact",
+          "Material",
+          "Process",
+          "Flow"
+        ]
+      },
+      "FROM_SOURCE": {
+        "count": 22,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "DataSource"
+        ]
+      }
+    },
+    "count": 22,
+    "type": "node",
+    "properties": {
+      "note": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "unit": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "valueText": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "valueNumber": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "propertyName": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "maturity": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "validFrom": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "DataQualityCriterion": {
+    "relationships": {
+      "EVALUATES_CRITERION": {
+        "count": 23,
+        "properties": {
+          "score": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          },
+          "rating": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "DataQuality"
+        ]
+      }
+    },
+    "count": 8,
+    "type": "node",
+    "properties": {
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "weight": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "definition": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "category": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "direction": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "HAS_BEHAVIOR": {
+    "count": 116,
+    "type": "relationship",
+    "properties": {
+      "role": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "REALIZES_PRINCIPLE": {
+    "count": 43,
+    "type": "relationship",
+    "properties": {
+      "role": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "Product": {
+    "relationships": {
+      "HAS_ARTIFACT": {
+        "count": 43,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "Artifact"
+        ]
+      }
+    },
+    "count": 1,
+    "type": "node",
+    "properties": {
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "productNumber": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "version": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "manufacturer": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "status": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "HAS_DATA": {
+    "count": 22,
+    "type": "relationship",
+    "properties": {
+      "role": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "Process": {
+    "relationships": {
+      "CONTAINS_PROCESS": {
+        "count": 215,
+        "properties": {
+          "sequence": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "INTEGER"
+          },
+          "share": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "ProcessPlan"
+        ]
+      },
+      "HAS_FLOW": {
+        "count": 52272,
+        "properties": {
+          "amount": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          },
+          "referenceYear": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "uncertaintyDistribution": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "dataMaturity": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "source": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "uncertainty": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          },
+          "ratioToReference": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          },
+          "exchangeId": {
+            "array": false,
+            "indexed": true,
+            "existence": false,
+            "type": "STRING"
+          },
+          "unit": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "amountBasis": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "compartment": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "uncertaintyBasis": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "comment": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "location": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "quantitativeReference": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "BOOLEAN"
+          },
+          "direction": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "Flow"
+        ]
+      },
+      "HAS_DATA": {
+        "count": 3,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "DataItem"
+        ]
+      },
+      "APPLIES_TO": {
+        "count": 219,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "Part",
+          "Material"
+        ]
+      },
+      "MODELED_BY": {
+        "count": 9,
+        "properties": {
+          "lifecycleModule": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "proxy": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "BOOLEAN"
+          },
+          "addedBy": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "proxyRationale": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "dataVariant": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "datasetUuid": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Material"
+        ]
+      }
+    },
+    "count": 59,
+    "type": "node",
+    "properties": {
+      "lifecycleModule": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "geographicalLocation": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "referenceUnit": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "energyIntensity_kWh_per_kg": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "referenceYear": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "ghgScopeCategory": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "source": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "provenance": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "dataSetVersion": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "sourceDatabase": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "processType": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "datasetUuid": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "dataSetOwner": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "ghgScopeBasis": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "importedAt": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "materialFactor": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "ghgScope": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "technology": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "energyBasis": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "dataAcquisition": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "dataSetValidUntil": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "INTEGER"
+      },
+      "dataSetType": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "lifecycleModuleBasis": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "status": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "referenceFlowUuid": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "SPECIFIED_BY": {
+    "count": 26,
+    "type": "relationship",
+    "properties": {
+      "role": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "Feature": {
+    "relationships": {
+      "HAS_FEATURE": {
+        "count": 66,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Artifact"
+        ]
+      },
+      "BASED_ON": {
+        "count": 21,
+        "properties": {},
+        "direction": "in",
+        "labels": [
+          "ImpactResult"
+        ]
+      },
+      "INFLUENCES": {
+        "count": 12,
+        "properties": {
+          "strength": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "INTEGER"
+          },
+          "module": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "sign": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "source": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "mechanism": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "evidenceLevel": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "ImpactCategory"
+        ]
+      }
+    },
+    "count": 14,
+    "type": "node",
+    "properties": {
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "featureType": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "description": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "UNDER_SCENARIO": {
+    "count": 187,
+    "type": "relationship",
+    "properties": {}
+  },
+  "CONTAINS_PROCESS": {
+    "count": 215,
+    "type": "relationship",
+    "properties": {
+      "sequence": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "INTEGER"
+      },
+      "share": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "FLOAT"
+      }
+    }
+  },
+  "PARAM_OF": {
+    "count": 1,
+    "type": "relationship",
+    "properties": {}
+  },
+  "ImpactResult": {
+    "relationships": {
+      "REPORTS": {
+        "count": 16,
+        "properties": {},
+        "direction": "in",
+        "labels": [
+          "Declaration"
+        ]
+      },
+      "HAS_RESULT": {
+        "count": 1231,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Assessment"
+        ]
+      },
+      "DERIVED_FROM": {
+        "count": 54,
+        "properties": {
+          "exchangeId": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "Flow"
+        ]
+      },
+      "BASED_ON": {
+        "count": 21,
+        "properties": {},
+        "direction": "out",
+        "labels": [
+          "Feature",
+          "CoreProperty"
+        ]
+      },
+      "FOR_CATEGORY": {
+        "count": 410,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "ImpactCategory"
+        ]
+      }
+    },
+    "count": 1231,
+    "type": "node",
+    "properties": {
+      "coverage": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "computedAt": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "scenarioRef": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "confidence": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "dataVariant": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "ghgScope": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "unit": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "provenance": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "resultType": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "value": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "datasetRef": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "status": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "EndOfLifeRoute": {
+    "relationships": {
+      "HAS_EOL_ROUTE": {
+        "count": 60,
+        "properties": {
+          "basis": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "fraction": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Material"
+        ]
+      }
+    },
+    "count": 4,
+    "type": "node",
+    "properties": {
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "type": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "EVALUATES_CRITERION": {
+    "count": 23,
+    "type": "relationship",
+    "properties": {
+      "score": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "rating": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "HAS_FLOW": {
+    "count": 52272,
+    "type": "relationship",
+    "properties": {
+      "amount": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "referenceYear": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "uncertaintyDistribution": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "dataMaturity": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "source": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "uncertainty": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "ratioToReference": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "exchangeId": {
+        "array": false,
+        "indexed": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "unit": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "amountBasis": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "compartment": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "uncertaintyBasis": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "comment": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "location": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "quantitativeReference": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "BOOLEAN"
+      },
+      "direction": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "REPORTS": {
+    "count": 16,
+    "type": "relationship",
+    "properties": {}
+  },
+  "BASED_ON": {
+    "count": 57,
+    "type": "relationship",
+    "properties": {}
+  },
+  "Behavior": {
+    "relationships": {
+      "CHARACTERIZES_PROPERTY": {
+        "count": 5,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "CoreProperty"
+        ]
+      },
+      "HAS_BEHAVIOR": {
+        "count": 116,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Artifact"
+        ]
+      }
+    },
+    "count": 7,
+    "type": "node",
+    "properties": {
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "state": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "behaviorType": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "FlowProperty": {
+    "relationships": {
+      "HAS_FLOW_PROPERTY": {
+        "count": 1,
+        "properties": {
+          "referenceProperty": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "BOOLEAN"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Flow"
+        ]
+      }
+    },
+    "count": 3,
+    "type": "node",
+    "properties": {
+      "referenceUnit": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "propertyType": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "description": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "HAS_SCENARIO": {
+    "count": 43,
+    "type": "relationship",
+    "properties": {
+      "role": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "Assembly": {
+    "relationships": {
+      "HAS_COMPONENT": {
+        "count": 86,
+        "properties": {
+          "unit": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "quantity": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          },
+          "evidenceRef": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "reversible": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "BOOLEAN"
+          },
+          "toolless": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "BOOLEAN"
+          },
+          "connectionType": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "evidenceLevel": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "Part"
+        ]
+      }
+    },
+    "count": 43,
+    "type": "node",
+    "properties": {
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "variant": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "assemblyType": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "status": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "ParameterValue": {
+    "relationships": {
+      "SETS": {
+        "count": 1,
+        "properties": {},
+        "direction": "in",
+        "labels": [
+          "ModelScenario"
+        ]
+      },
+      "FOR": {
+        "count": 1,
+        "properties": {},
+        "direction": "out",
+        "labels": [
+          "Parameter"
+        ]
+      }
+    },
+    "count": 1,
+    "type": "node",
+    "properties": {
+      "unit": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "value": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      }
+    },
+    "labels": []
+  },
+  "DataQuality": {
+    "relationships": {
+      "EVALUATES_CRITERION": {
+        "count": 23,
+        "properties": {
+          "score": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          },
+          "rating": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "DataQualityCriterion"
+        ]
+      },
+      "HAS_DATA_QUALITY": {
+        "count": 21,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "DataItem"
+        ]
+      }
+    },
+    "count": 5,
+    "type": "node",
+    "properties": {
+      "method": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "overallScore": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "scale": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "comment": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "CostItem": {
+    "relationships": {
+      "HAS_COST": {
+        "count": 5,
+        "properties": {},
+        "direction": "in",
+        "labels": [
+          "Part"
+        ]
+      }
+    },
+    "count": 5,
+    "type": "node",
+    "properties": {
+      "amount": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "perUnit": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "currency": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "category": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "basis": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "FOR": {
+    "count": 1,
+    "type": "relationship",
+    "properties": {}
+  },
+  "ImpactCategory": {
+    "relationships": {
+      "HAS_CATEGORY": {
+        "count": 43,
+        "properties": {
+          "order": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "INTEGER"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "ImpactAssessmentMethod"
+        ]
+      },
+      "INFLUENCES": {
+        "count": 4,
+        "properties": {
+          "strength": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "INTEGER"
+          },
+          "module": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "sign": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "source": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "mechanism": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "evidenceLevel": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "ImpactCategory"
+        ]
+      },
+      "FOR_CATEGORY": {
+        "count": 410,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "ImpactResult"
+        ]
+      },
+      "CHARACTERIZES": {
+        "count": 4183,
+        "properties": {
+          "characterizesId": {
+            "array": false,
+            "indexed": true,
+            "existence": false,
+            "type": "STRING"
+          },
+          "location": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "source": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "factor": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          },
+          "derived": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "BOOLEAN"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Flow"
+        ]
+      }
+    },
+    "count": 47,
+    "type": "node",
+    "properties": {
+      "indicator": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "unit": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "referenceUnit": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "method": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "hygiene": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "FROM_SOURCE": {
+    "count": 22,
+    "type": "relationship",
+    "properties": {
+      "role": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "INFLUENCES": {
+    "count": 60,
+    "type": "relationship",
+    "properties": {
+      "strength": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "INTEGER"
+      },
+      "module": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "sign": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "source": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "mechanism": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "evidenceLevel": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "HAS_FORM": {
+    "count": 43,
+    "type": "relationship",
+    "properties": {
+      "role": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "Scenario": {
+    "relationships": {
+      "HAS_SCENARIO": {
+        "count": 43,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "ProcessPlan"
+        ]
+      },
+      "SUITABLE_FOR": {
+        "count": 106,
+        "properties": {
+          "suitability": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "rationale": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Artifact"
+        ]
+      }
+    },
+    "count": 17,
+    "type": "node",
+    "properties": {
+      "scenarioType": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "objectMaterial": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "ferromagnetic": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "BOOLEAN"
+      },
+      "objectGeometry": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "porosity": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "description": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "fragility": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "DataSource": {
+    "relationships": {
+      "FROM_SOURCE": {
+        "count": 22,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "DataItem"
+        ]
+      }
+    },
+    "count": 15,
+    "type": "node",
+    "properties": {
+      "accessedAt": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "sourceType": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "provider": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "uri": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "evidenceLevel": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "CoreProperty": {
+    "relationships": {
+      "CHARACTERIZES_PROPERTY": {
+        "count": 5,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Behavior"
+        ]
+      },
+      "HAS_PROPERTY": {
+        "count": 264,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Artifact"
+        ]
+      },
+      "BASED_ON": {
+        "count": 21,
+        "properties": {},
+        "direction": "in",
+        "labels": [
+          "ImpactResult"
+        ]
+      },
+      "INFLUENCES": {
+        "count": 2,
+        "properties": {
+          "strength": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "INTEGER"
+          },
+          "module": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "sign": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "source": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "mechanism": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "evidenceLevel": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "ImpactCategory"
+        ]
+      }
+    },
+    "count": 10,
+    "type": "node",
+    "properties": {
+      "unit": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "propertyType": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "status": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "Requirement": {
+    "relationships": {
+      "SATISFIES_REQUIREMENT": {
+        "count": 262,
+        "properties": {
+          "verificationStatus": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Artifact"
+        ]
+      },
+      "SPECIFIED_BY": {
+        "count": 26,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "Specification"
+        ]
+      }
+    },
+    "count": 24,
+    "type": "node",
+    "properties": {
+      "sustainabilityIndicatorRef": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "sustainabilityOperator": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "sustainabilityScope": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "statement": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "sustainabilityThreshold": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "sustainabilityUnit": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "priority": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "requirementType": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "status": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "sustainabilityBasis": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "ImpactAssessmentMethod": {
+    "relationships": {
+      "APPLIES_APPROACH": {
+        "count": 4,
+        "properties": {},
+        "direction": "out",
+        "labels": [
+          "AssessmentApproach"
+        ]
+      },
+      "HAS_CATEGORY": {
+        "count": 43,
+        "properties": {
+          "order": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "INTEGER"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "ImpactCategory"
+        ]
+      },
+      "USES_METHOD": {
+        "count": 187,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Assessment"
+        ]
+      }
+    },
+    "count": 6,
+    "type": "node",
+    "properties": {
+      "note": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "methodFamily": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "source": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "methodStandard": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "version": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "HAS_FEATURE": {
+    "count": 66,
+    "type": "relationship",
+    "properties": {
+      "role": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "HAS_COST": {
+    "count": 5,
+    "type": "relationship",
+    "properties": {}
+  },
+  "Part": {
+    "relationships": {
+      "HAS_COST": {
+        "count": 5,
+        "properties": {},
+        "direction": "out",
+        "labels": [
+          "CostItem"
+        ]
+      },
+      "USES_MATERIAL": {
+        "count": 86,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "fraction": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "Material"
+        ]
+      },
+      "HAS_COMPONENT": {
+        "count": 86,
+        "properties": {
+          "unit": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "quantity": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          },
+          "evidenceRef": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "reversible": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "BOOLEAN"
+          },
+          "toolless": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "BOOLEAN"
+          },
+          "connectionType": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "evidenceLevel": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Assembly"
+        ]
+      },
+      "APPLIES_TO": {
+        "count": 219,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Process"
+        ]
+      },
+      "HAS_FORM": {
+        "count": 43,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "Form"
+        ]
+      }
+    },
+    "count": 86,
+    "type": "node",
+    "properties": {
+      "mass_g": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "massBasis": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "variant": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "partType": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "status": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "MODELED_BY": {
+    "count": 9,
+    "type": "relationship",
+    "properties": {
+      "lifecycleModule": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "proxy": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "BOOLEAN"
+      },
+      "addedBy": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "proxyRationale": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "dataVariant": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "datasetUuid": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "CHARACTERIZES": {
+    "count": 27671,
+    "type": "relationship",
+    "properties": {
+      "characterizesId": {
+        "array": false,
+        "indexed": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "location": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "source": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "factor": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "derived": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "BOOLEAN"
+      }
+    }
+  },
+  "Form": {
+    "relationships": {
+      "HAS_GEOMETRY": {
+        "count": 14,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "Geometry"
+        ]
+      },
+      "HAS_FORM": {
+        "count": 43,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Part"
+        ]
+      }
+    },
+    "count": 14,
+    "type": "node",
+    "properties": {
+      "formType": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "description": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "HAS_DATA_QUALITY": {
+    "count": 21,
+    "type": "relationship",
+    "properties": {
+      "role": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "HAS_CATEGORY": {
+    "count": 43,
+    "type": "relationship",
+    "properties": {
+      "order": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "INTEGER"
+      }
+    }
+  },
+  "SolutionPrinciple": {
+    "relationships": {
+      "REALIZES_PRINCIPLE": {
+        "count": 43,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Artifact"
+        ]
+      },
+      "REALIZES_FUNCTION": {
+        "count": 25,
+        "properties": {
+          "degreeOfFulfilment": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "Function"
+        ]
+      }
+    },
+    "count": 8,
+    "type": "node",
+    "properties": {
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "physicalPrinciple": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "solutionType": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "status": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "Assessment": {
+    "relationships": {
+      "APPLIES_APPROACH": {
+        "count": 199,
+        "properties": {},
+        "direction": "out",
+        "labels": [
+          "AssessmentApproach"
+        ]
+      },
+      "ASSESSES": {
+        "count": 199,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "Artifact"
+        ]
+      },
+      "HAS_RESULT": {
+        "count": 1231,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "ImpactResult"
+        ]
+      },
+      "UNDER_SCENARIO": {
+        "count": 187,
+        "properties": {},
+        "direction": "out",
+        "labels": [
+          "ModelScenario"
+        ]
+      },
+      "USES_METHOD": {
+        "count": 187,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "ImpactAssessmentMethod"
+        ]
+      }
+    },
+    "count": 199,
+    "type": "node",
+    "properties": {
+      "characterizationLocationRule": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "assessmentType": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "referenceUnit": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "developmentPhase": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "productSystemValue": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "scenarioRef": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "productSystemValueUnit": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "functionalUnit": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "dataVariant": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "referenceQuantity": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "systemBoundaryNote": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "productSystemValueBasis": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "systemBoundary": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "methodology": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "status": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "referenceFlow": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "DECLARES": {
+    "count": 2,
+    "type": "relationship",
+    "properties": {}
+  },
+  "HAS_PROCESS_PLAN": {
+    "count": 43,
+    "type": "relationship",
+    "properties": {
+      "role": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "HAS_PROPERTY": {
+    "count": 264,
+    "type": "relationship",
+    "properties": {
+      "role": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "SUITABLE_FOR": {
+    "count": 106,
+    "type": "relationship",
+    "properties": {
+      "suitability": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "rationale": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "USES_METHOD": {
+    "count": 187,
+    "type": "relationship",
+    "properties": {
+      "role": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "BROADER": {
+    "count": 38,
+    "type": "relationship",
+    "properties": {}
+  },
+  "Function": {
+    "relationships": {
+      "REALIZES_FUNCTION": {
+        "count": 25,
+        "properties": {
+          "degreeOfFulfilment": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "SolutionPrinciple"
+        ]
+      }
+    },
+    "count": 8,
+    "type": "node",
+    "properties": {
+      "output": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "input": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "functionType": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "HAS_ARTIFACT": {
+    "count": 43,
+    "type": "relationship",
+    "properties": {
+      "role": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "CHARACTERIZES_PROPERTY": {
+    "count": 5,
+    "type": "relationship",
+    "properties": {
+      "role": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "USES_MATERIAL": {
+    "count": 86,
+    "type": "relationship",
+    "properties": {
+      "role": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "fraction": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "FLOAT"
+      }
+    }
+  },
+  "HAS_RESULT": {
+    "count": 1231,
+    "type": "relationship",
+    "properties": {
+      "role": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "HAS_COMPONENT": {
+    "count": 129,
+    "type": "relationship",
+    "properties": {
+      "unit": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "role": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "quantity": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "evidenceRef": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "reversible": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "BOOLEAN"
+      },
+      "toolless": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "BOOLEAN"
+      },
+      "connectionType": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "evidenceLevel": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "DERIVED_FROM": {
+    "count": 166,
+    "type": "relationship",
+    "properties": {
+      "exchangeId": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "Declaration": {
+    "relationships": {
+      "REPORTS": {
+        "count": 16,
+        "properties": {},
+        "direction": "out",
+        "labels": [
+          "ImpactResult"
+        ]
+      },
+      "DECLARES": {
+        "count": 2,
+        "properties": {},
+        "direction": "out",
+        "labels": [
+          "Artifact"
+        ]
+      }
+    },
+    "count": 2,
+    "type": "node",
+    "properties": {
+      "standard": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "note": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "scope": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "functionalUnit": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "validUntil": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "validFrom": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "type": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "ProcessPlan": {
+    "relationships": {
+      "CONTAINS_PROCESS": {
+        "count": 215,
+        "properties": {
+          "sequence": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "INTEGER"
+          },
+          "share": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "Process"
+        ]
+      },
+      "HAS_PROCESS_PLAN": {
+        "count": 43,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Artifact"
+        ]
+      },
+      "HAS_SCENARIO": {
+        "count": 43,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "Scenario"
+        ]
+      }
+    },
+    "count": 43,
+    "type": "node",
+    "properties": {
+      "planType": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "variant": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "status": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "HAS_HAZARD": {
+    "count": 446,
+    "type": "relationship",
+    "properties": {
+      "basis": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "SATISFIES_REQUIREMENT": {
+    "count": 262,
+    "type": "relationship",
+    "properties": {
+      "verificationStatus": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "Material": {
+    "relationships": {
+      "PARAM_OF": {
+        "count": 1,
+        "properties": {},
+        "direction": "in",
+        "labels": [
+          "Parameter"
+        ]
+      },
+      "USES_MATERIAL": {
+        "count": 86,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "fraction": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Part"
+        ]
+      },
+      "HAS_DATA": {
+        "count": 1,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "DataItem"
+        ]
+      },
+      "APPLIES_TO": {
+        "count": 219,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Process"
+        ]
+      },
+      "INFLUENCES": {
+        "count": 42,
+        "properties": {
+          "strength": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "INTEGER"
+          },
+          "module": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "sign": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "source": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "mechanism": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "evidenceLevel": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "ImpactCategory"
+        ]
+      },
+      "MODELED_BY": {
+        "count": 9,
+        "properties": {
+          "lifecycleModule": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "proxy": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "BOOLEAN"
+          },
+          "addedBy": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "proxyRationale": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "dataVariant": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "datasetUuid": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "Process"
+        ]
+      },
+      "HAS_EOL_ROUTE": {
+        "count": 60,
+        "properties": {
+          "basis": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "fraction": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "EndOfLifeRoute"
+        ]
+      }
+    },
+    "count": 23,
+    "type": "node",
+    "properties": {
+      "costUnit": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "recycledContentAssumed": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "mciMethod": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "materialType": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "circularityBasis": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "description": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "reusability": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "ef31_factors_A1": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "LIST"
+      },
+      "density_kg_m3": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "dataQualityNote": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "recyclingRate": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "mci": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "gwpBasis": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "ef31_categories": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "LIST"
+      },
+      "unitCost": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "costBasis": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "ef31Basis": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "status": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "gwp_A1_kgCO2e_per_kg": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      }
+    },
+    "labels": []
+  },
+  "Specification": {
+    "relationships": {
+      "SPECIFIED_BY": {
+        "count": 26,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Requirement"
+        ]
+      }
+    },
+    "count": 26,
+    "type": "node",
+    "properties": {
+      "unit": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "valueText": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "valueNumber": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "toleranceMin": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "toleranceMax": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "APPLIES_TO": {
+    "count": 219,
+    "type": "relationship",
+    "properties": {
+      "role": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "HazardStatement": {
+    "relationships": {
+      "HAS_HAZARD": {
+        "count": 79,
+        "properties": {
+          "basis": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Flow"
+        ]
+      }
+    },
+    "count": 12,
+    "type": "node",
+    "properties": {
+      "code": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "scheme": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "text": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "hazardClass": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "Artifact": {
+    "relationships": {
+      "HAS_ARTIFACT": {
+        "count": 43,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Product"
+        ]
+      },
+      "HAS_FEATURE": {
+        "count": 66,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "Feature"
+        ]
+      },
+      "ASSESSES": {
+        "count": 199,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Assessment"
+        ]
+      },
+      "HAS_BEHAVIOR": {
+        "count": 116,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "Behavior"
+        ]
+      },
+      "REALIZES_PRINCIPLE": {
+        "count": 43,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "SolutionPrinciple"
+        ]
+      },
+      "SATISFIES_REQUIREMENT": {
+        "count": 262,
+        "properties": {
+          "verificationStatus": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "Requirement"
+        ]
+      },
+      "HAS_DATA": {
+        "count": 16,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "DataItem"
+        ]
+      },
+      "DECLARES": {
+        "count": 2,
+        "properties": {},
+        "direction": "in",
+        "labels": [
+          "Declaration"
+        ]
+      },
+      "HAS_COMPONENT": {
+        "count": 43,
+        "properties": {
+          "unit": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "quantity": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          },
+          "evidenceRef": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "reversible": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "BOOLEAN"
+          },
+          "toolless": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "BOOLEAN"
+          },
+          "connectionType": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "evidenceLevel": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "Assembly"
+        ]
+      },
+      "HAS_PROCESS_PLAN": {
+        "count": 43,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "ProcessPlan"
+        ]
+      },
+      "HAS_PROPERTY": {
+        "count": 264,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "CoreProperty"
+        ]
+      },
+      "SUITABLE_FOR": {
+        "count": 106,
+        "properties": {
+          "suitability": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "rationale": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "Scenario"
+        ]
+      }
+    },
+    "count": 43,
+    "type": "node",
+    "properties": {
+      "distinctMaterialCount": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "INTEGER"
+      },
+      "referenceLifetime": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "artifactType": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "variantFamily": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "replaceableContactElement": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "BOOLEAN"
+      },
+      "tcp_mm": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "description": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "manufacturer": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "opening_mm": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "mass_g": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "componentCount": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "INTEGER"
+      },
+      "repairabilityMethod": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "toollessRobotInterface": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "BOOLEAN"
+      },
+      "disassemblyReversibility": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "designLifetime": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "validationRequired": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "BOOLEAN"
+      },
+      "evidenceLevel": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "repairabilityClass": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "status": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "lifetimeBasis": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "FOR_CATEGORY": {
+    "count": 1231,
+    "type": "relationship",
+    "properties": {
+      "role": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "HAS_EOL_ROUTE": {
+    "count": 60,
+    "type": "relationship",
+    "properties": {
+      "basis": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "fraction": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "FLOAT"
+      }
+    }
+  },
+  "Flow": {
+    "relationships": {
+      "HAS_FLOW_PROPERTY": {
+        "count": 1,
+        "properties": {
+          "referenceProperty": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "BOOLEAN"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "FlowProperty"
+        ]
+      },
+      "HAS_HAZARD": {
+        "count": 79,
+        "properties": {
+          "basis": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "HazardStatement"
+        ]
+      },
+      "HAS_FLOW": {
+        "count": 52272,
+        "properties": {
+          "amount": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          },
+          "referenceYear": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "uncertaintyDistribution": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "dataMaturity": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "source": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "uncertainty": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          },
+          "ratioToReference": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          },
+          "exchangeId": {
+            "array": false,
+            "indexed": true,
+            "existence": false,
+            "type": "STRING"
+          },
+          "unit": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "amountBasis": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "compartment": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "uncertaintyBasis": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "comment": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "location": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "quantitativeReference": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "BOOLEAN"
+          },
+          "direction": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Process"
+        ]
+      },
+      "HAS_DATA": {
+        "count": 1,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "DataItem"
+        ]
+      },
+      "DERIVED_FROM": {
+        "count": 54,
+        "properties": {
+          "exchangeId": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "ImpactResult"
+        ]
+      },
+      "CHARACTERIZES": {
+        "count": 4183,
+        "properties": {
+          "characterizesId": {
+            "array": false,
+            "indexed": true,
+            "existence": false,
+            "type": "STRING"
+          },
+          "location": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "source": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "factor": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          },
+          "derived": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "BOOLEAN"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "ImpactCategory"
+        ]
+      }
+    },
+    "count": 2612,
+    "type": "node",
+    "properties": {
+      "gwp_kgCO2e_per_kWh_CN": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "gwp_kgCO2e_per_kWh_DE_green": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "ghgSpecies": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "referenceUnit": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "description": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "source": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "casNumber": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "gwp_kgCO2e_per_kWh_EU": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "provenance": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "electricityFactorBasis": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "sourceDatabase": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "category": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "gwp_kgCO2e_per_kWh_DE": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "status": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "flowType": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "hazardClass": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "Geometry": {
+    "relationships": {
+      "HAS_GEOMETRY": {
+        "count": 14,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Form"
+        ]
+      }
+    },
+    "count": 14,
+    "type": "node",
+    "properties": {
+      "length_mm": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "openingAngle_deg": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "width_mm": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "height_mm": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "diameter_mm": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "geometryType": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "HAS_FLOW_PROPERTY": {
+    "count": 10,
+    "type": "relationship",
+    "properties": {
+      "referenceProperty": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "BOOLEAN"
+      }
+    }
+  },
+  "ASSESSES": {
+    "count": 199,
+    "type": "relationship",
+    "properties": {
+      "role": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "AssessmentApproach": {
+    "relationships": {
+      "APPLIES_APPROACH": {
+        "count": 199,
+        "properties": {},
+        "direction": "in",
+        "labels": [
+          "Assessment",
+          "ImpactAssessmentMethod"
+        ]
+      },
+      "BROADER": {
+        "count": 38,
+        "properties": {},
+        "direction": "out",
+        "labels": [
+          "AssessmentApproach"
+        ]
+      }
+    },
+    "count": 41,
+    "type": "node",
+    "properties": {
+      "code": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "level": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "SETS": {
+    "count": 1,
+    "type": "relationship",
+    "properties": {}
+  },
+  "Parameter": {
+    "relationships": {
+      "PARAM_OF": {
+        "count": 1,
+        "properties": {},
+        "direction": "out",
+        "labels": [
+          "Material"
+        ]
+      },
+      "FOR": {
+        "count": 1,
+        "properties": {},
+        "direction": "in",
+        "labels": [
+          "ParameterValue"
+        ]
+      }
+    },
+    "count": 1,
+    "type": "node",
+    "properties": {
+      "unit": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "baseValue": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "HAS_GEOMETRY": {
+    "count": 14,
+    "type": "relationship",
+    "properties": {
+      "role": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
+  "REALIZES_FUNCTION": {
+    "count": 25,
+    "type": "relationship",
+    "properties": {
+      "degreeOfFulfilment": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "FLOAT"
+      }
+    }
+  }
+}

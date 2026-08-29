@@ -55,6 +55,19 @@ Each folder has its own `README.md` with the concepts, the concrete data
 shapes involved, and step-by-step reproduction instructions for that
 interface specifically.
 
+## Beyond the demonstrator
+
+Two further folders build on the same graph but are about *methods* rather
+than *interfaces*:
+
+| Folder | What it does |
+|---|---|
+| [`model_extension/`](model_extension/) | A sequence of strictly additive, non-breaking Cypher migrations that grow the schema from a single hardwired impact assessment (black box) to a method-exchangeable one (white box) plus orthogonal method-family modules — LCA, carbon/water/GHG-by-scope, circularity, cost, scenario and cross-impact analysis. The "never breaks what came before" property is the flexibility argument. |
+| [`methods/`](methods/) | The 29-method sustainability-assessment catalogue: one spec per method, plus tested read-only base queries. |
+
+[`lca_bulk_load/incremental/`](lca_bulk_load/incremental/) adds a per-package
+ILCD importer for attaching one extra dataset at a time after the bulk seed.
+
 ## Requirements
 
 - Neo4j (Desktop or Aura), reachable via Bolt
