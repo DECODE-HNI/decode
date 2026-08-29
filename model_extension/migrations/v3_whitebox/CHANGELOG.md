@@ -1,60 +1,62 @@
-# v3 (white box) — Änderungsprotokoll
+# v3 (white box) — change log
 
-## 2026-08-27 — ILCD interpretierbar & methodenaustauschbar (v3-minimal, erste Scheibe)
+## 2026-08-27 — ILCD made interpretable & method-exchangeable (v3-minimal, first slice)
 
-Migration: `migration_v3.cypher` · Basisquery: `lca_generic.cypher`
-(ersetzt das fest verdrahtete `lca_computed_ef31.cypher` aus v2)
+Migration: `migration_v3.cypher` · base query: `lca_generic.cypher`
+(replaces the hardwired `lca_computed_ef31.cypher` from v2)
 
-### Umfang dieser Scheibe
+### Scope of this slice
 
-| Baustein | Inhalt |
+| Building block | Content |
 |---|---|
-| **PRE‑2** | `Process.lifecycleModule` (EN 15804) auf allen 55 Prozessen + Casing-Normalisierung `processType` |
-| **PRE‑3** | funktionale Einheit / Referenzfluss / Systemgrenze auf allen 48 `Assessment` formalisiert |
-| **PRE‑4** | `AssessmentApproach`-Taxonomie: 3 Paradigmen / 9 Gruppen / 29 Verfahren + `BROADER` + `APPLIES_APPROACH` |
-| **`lca_generic($methodId)`** | methodenparametrisierte Basisquery — neue Methode = reine Daten, null Schemaänderung |
+| **PRE-2** | `Process.lifecycleModule` (EN 15804) on all 55 processes + casing normalisation of `processType` |
+| **PRE-3** | functional unit / reference flow / system boundary formalised on all 48 `Assessment` |
+| **PRE-4** | `AssessmentApproach` taxonomy: 3 paradigms / 9 groups / 29 methods + `BROADER` + `APPLIES_APPROACH` *(later reduced to 7 groups / 23 methods by the KI/ML removal — see `../consistency/`)* |
+| **`lca_generic($methodId)`** | method-parameterised base query — a new method is pure data, zero schema change |
 
-### Aufgeschoben auf v3-Folgescheibe
+### Deferred to a v3 follow-up slice
 
-- **PRE‑5** ImpactCategory-Hygiene (~20 Waisen / Near-Duplikate, Kanten-Remapping) — blockiert die aktuelle Rechnung nicht (die 7 berechneten Kategorien sind sauber verlinkt), aber riskanteste Änderung → separat.
-- **Zweite volle LCIA-Methode** (ReCiPe/CML) — keine Charakterisierungsdaten vorhanden. Methodenaustausch stattdessen mit den bestehenden `IAM_EF31` ↔ `IAM_PCF` über `lca_generic` nachgewiesen.
+- **PRE-5** ImpactCategory hygiene (~20 orphans / near-duplicates, edge remapping) — does not block the current computation (the 7 computed categories are cleanly linked) but is the riskiest change → done separately.
+- **Second full LCIA method** (ReCiPe/CML) — no characterisation data available. Method exchange demonstrated instead with the existing `IAM_EF31` ↔ `IAM_PCF` via `lca_generic`.
 
-### Berührte / neue Artefakte
+### Artifacts touched / new
 
-| Artefakt | Änderung | Umfang |
+| Artifact | Change | Scope |
 |---|---|---|
-| `Process` (Knoten) | `lifecycleModule` + `lifecycleModuleBasis` | 55: A1=32, A1-A3=4, A3=13, B1=1, B4=1, C3=4 |
-| `Process.processType` | `~` „End of Life" → „EndOfLife" (Casing) | 2 Knoten |
-| `Assessment` (5 EF3.1) | `systemBoundary` → Vokabelwert `cradle-to-gate`, Freitext nach `systemBoundaryNote`; + `referenceFlow`, `referenceQuantity`, `referenceUnit` | 5 |
-| `Assessment` (43 PCF) | `functionalUnit`, `systemBoundary`, `referenceFlow`, `referenceQuantity`, `referenceUnit` (Intentsdeklaration) | 43 |
-| **`AssessmentApproach`** (Label) | **neu** — 41 Knoten (3+9+29), `{id,name,level,code}` | 41 |
-| **`BROADER`** (Beziehungstyp) | **neu** — Methode→Gruppe→Paradigma | 38 |
-| **`APPLIES_APPROACH`** (Beziehungstyp) | **neu** — Assessment→Verfahren | 48 (5→„Ökobilanzierung", 43→„Umweltfußabdruck CO2") |
+| `Process` (node) | `lifecycleModule` + `lifecycleModuleBasis` | 55: A1=32, A1-A3=4, A3=13, B1=1, B4=1, C3=4 |
+| `Process.processType` | `~` "End of Life" → "EndOfLife" (casing) | 2 nodes |
+| `Assessment` (5 EF3.1) | `systemBoundary` → vocabulary value `cradle-to-gate`, free text moved to `systemBoundaryNote`; + `referenceFlow`, `referenceQuantity`, `referenceUnit` | 5 |
+| `Assessment` (43 PCF) | `functionalUnit`, `systemBoundary`, `referenceFlow`, `referenceQuantity`, `referenceUnit` (intent declaration) | 43 |
+| **`AssessmentApproach`** (label) | **new** — 41 nodes (3+9+29), `{id,name,level,code}` | 41 |
+| **`BROADER`** (relationship type) | **new** — method→group→paradigm | 38 |
+| **`APPLIES_APPROACH`** (relationship type) | **new** — assessment→method | 48 (5→"life-cycle assessment", 43→"carbon footprint CO2") |
 
-**Live-DB:** 2 802 Knoten (+41) / 79 815 Beziehungen (+86).
+**Live DB:** 2 802 nodes (+41) / 79 815 relationships (+86).
 
-### Nachweis: Methodenaustausch (White-box-Kern)
+### Evidence: method exchange (white-box core)
 
-Gleiches Aluminium-A1-Inventar, `$methodId` als Parameter:
+Same aluminium A1 inventory, `$methodId` as a parameter:
 
-| `lca_generic($methodId)` | Ergebnis |
+| `lca_generic($methodId)` | Result |
 |---|---|
-| `'IAM_EF31'` | 35 Zeilen (5 Gripper × 7 Kategorien), Klimawerte identisch zu den in v2 gespeicherten `ImpactResult.value` |
-| `'IAM_PCF'` | 5 Zeilen (nur Klimawandel), Werte identisch — **null Schemaänderung** beim Methodenwechsel |
+| `'IAM_EF31'` | 35 rows (5 grippers × 7 categories), climate values identical to the `ImpactResult.value` stored in v2 |
+| `'IAM_PCF'` | 5 rows (climate change only), values identical — **zero schema change** on the method switch |
 
-Beispiel V-groove jaws / Al6061: Klima 0,345 · Versauerung 1,86·10⁻³ · Eutroph. marin 3,69·10⁻⁴ · Landnutzung 0,307 · Photochem. Ozon 1,09·10⁻³ (Ozonabbau, Feinstaub ≈ 0).
-*Landnutzung bleibt mit Vorsicht zu genießen (regionalisierte Faktoren gemittelt).*
+Example V-groove jaws / Al6061: climate 0.345 · acidification 1.86e-3 ·
+marine eutrophication 3.69e-4 · land use 0.307 · photochemical ozone 1.09e-3
+(ozone depletion, particulate matter ≈ 0).
+*Land use should still be treated with caution (regionalised factors averaged).*
 
-### Betroffene Methoden (Änderungs-→-Methoden-Matrix)
+### Affected methods (change-→-method matrix)
 
-| Änderung | benötigt von | genutzt von |
+| Change | needed by | used by |
 |---|---|---|
-| `Process.lifecycleModule` | EPD/EN 15804, THG-Bilanz (Modulgliederung), MFA | konsequenzielle LCA (Stufenzuordnung), Digitaler Produktpass |
-| `Assessment.functionalUnit` / `systemBoundary` | LCA, CF, alle bilanzierenden; EPD | Vergleichbarkeitsprüfung zwischen Assessments; Ökoeffizienz (Bezugsgröße) |
-| `AssessmentApproach`-Taxonomie + `APPLIES_APPROACH` | **alle 29 Verfahren** (macht jedes explizit im Graphen adressierbar) | Reporting/Navigation, automatisierte Designempfehlung |
-| `lca_generic($methodId)` | LCA, CF, H₂O, THG, CED (alle über Methoden-Filter) | Hotspot, Szenario-/Sensitivitätsanalyse (rechnen auf derselben Query) |
+| `Process.lifecycleModule` | EPD/EN 15804, GHG inventory (module breakdown), MFA | consequential LCA (stage assignment), Digital Product Passport |
+| `Assessment.functionalUnit` / `systemBoundary` | LCA, CF, all inventory methods; EPD | comparability check between assessments; eco-efficiency (reference quantity) |
+| `AssessmentApproach` taxonomy + `APPLIES_APPROACH` | every method in the diagram (makes each explicitly addressable in the graph) | reporting/navigation |
+| `lca_generic($methodId)` | LCA, CF, H₂O, GHG, CED (all via a method filter) | hotspot, scenario/sensitivity analysis (compute on the same query) |
 
 ### Rollback
 
-Kommentarblock am Ende von `migration_v3.cypher`. Additiv bis auf die
-`processType`-Casing-Normalisierung (2 Knoten, teil-reversibel).
+Comment block at the end of `migration_v3.cypher`. Additive apart from the
+`processType` casing normalisation (2 nodes, partly reversible).

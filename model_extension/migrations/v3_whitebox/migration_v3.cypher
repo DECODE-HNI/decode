@@ -5,7 +5,10 @@
 // Contents:
 //   PRE-2  Process.lifecycleModule (EN 15804) + vocab + backfill + processType normalize
 //   PRE-3  Assessment functional-unit / system-boundary formalization
-//   PRE-4  AssessmentApproach taxonomy (3 paradigms / 9 groups / 29 methods) + links
+//   PRE-4  AssessmentApproach taxonomy (3 paradigms / 7 groups / 23 methods) + links
+//          (the "lernende Ansätze" AI/ML branch -- 2 groups + 6 methods -- was
+//           removed 2026-08-29, see model_versions/consistency/remove_ki_stubs.cypher;
+//           APG_MODEL_TRANSPARENCY / APM_DPP / APM_ENV_KG under AP_LERNEND stay)
 //   (base query lca_generic.cypher replaces the hardwired lca_computed_ef31)
 //
 // Deferred to a v3 follow-up slice:
@@ -82,9 +85,7 @@ UNWIND [
   {id:'APG_PROSPECTIVE_LCA',    name:'prospektive lebenszyklusbasierte Umweltbewertung',  level:'group', code:'2.1', parent:'AP_DATENBASIERT'},
   {id:'APG_SCENARIO_BASED',     name:'szenariobasierte Umweltbewertung',                  level:'group', code:'2.2', parent:'AP_DATENBASIERT'},
   {id:'APG_IMPACT_UNCERTAINTY', name:'Wirkungs- und Unsicherheitsanalysen',               level:'group', code:'2.3', parent:'AP_DATENBASIERT'},
-  {id:'APG_AI_FORECAST',        name:'KI-gestützte Umweltwirkungsprognose',               level:'group', code:'3.1', parent:'AP_LERNEND'},
   {id:'APG_MODEL_TRANSPARENCY', name:'modellbasierte Produkt- und Lebenszyklustransparenz', level:'group', code:'3.2', parent:'AP_LERNEND'},
-  {id:'APG_ADAPTIVE_DECISION',  name:'adaptive Szenarien- & Entscheidungsunterstützung',  level:'group', code:'3.3', parent:'AP_LERNEND'},
   // methods
   {id:'APM_LCA',                     name:'Ökobilanzierung',                       level:'method', code:'1.1.1', parent:'APG_LCA_BASED'},
   {id:'APM_CF_CO2',                  name:'Umweltfußabdruck CO2',                   level:'method', code:'1.1.2', parent:'APG_LCA_BASED'},
@@ -107,14 +108,8 @@ UNWIND [
   {id:'APM_IMPACT_CHAIN',          name:'Wirkkettenanalyse',                     level:'method', code:'2.3.1', parent:'APG_IMPACT_UNCERTAINTY'},
   {id:'APM_UNCERTAINTY_SENSITIVITY', name:'Unsicherheits- und Sensitivitätsanalyse', level:'method', code:'2.3.2', parent:'APG_IMPACT_UNCERTAINTY'},
   {id:'APM_HOTSPOT',               name:'Hotspot-Analyse',                       level:'method', code:'2.3.3', parent:'APG_IMPACT_UNCERTAINTY'},
-  {id:'APM_IMPACT_FORECAST',       name:'Umweltwirkungsprognosen',               level:'method', code:'3.1.1', parent:'APG_AI_FORECAST'},
-  {id:'APM_AI_LCA_MODELING',       name:'KI-Lebenszyklusmodellierung',           level:'method', code:'3.1.2', parent:'APG_AI_FORECAST'},
-  {id:'APM_SURROGATE',             name:'Ersatz- und Näherungsmodelle',          level:'method', code:'3.1.3', parent:'APG_AI_FORECAST'},
   {id:'APM_DPP',                    name:'Digitaler Produktpass',                 level:'method', code:'3.2.1', parent:'APG_MODEL_TRANSPARENCY'},
-  {id:'APM_ENV_KG',                name:'Umwelt-Wissensgraph',                   level:'method', code:'3.2.2', parent:'APG_MODEL_TRANSPARENCY'},
-  {id:'APM_LEARNING_SCENARIO',     name:'lernende Szenario Modelle',             level:'method', code:'3.3.1', parent:'APG_ADAPTIVE_DECISION'},
-  {id:'APM_PREDICTIVE_ASSESSMENT', name:'prädiktive Umweltfolgeabschätzungen',   level:'method', code:'3.3.2', parent:'APG_ADAPTIVE_DECISION'},
-  {id:'APM_AUTO_DESIGN',           name:'automatisierte Designempfehlung',       level:'method', code:'3.3.3', parent:'APG_ADAPTIVE_DECISION'}
+  {id:'APM_ENV_KG',                name:'Umwelt-Wissensgraph',                   level:'method', code:'3.2.2', parent:'APG_MODEL_TRANSPARENCY'}
 ] AS row
 MERGE (ap:AssessmentApproach {id: row.id})
   SET ap.name = row.name, ap.level = row.level, ap.code = row.code

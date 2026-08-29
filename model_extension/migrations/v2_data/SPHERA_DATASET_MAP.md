@@ -1,125 +1,127 @@
-# Datensatz-Landkarte: fehlende ILCD-/Sphera-Datensätze je Modellwerkstoff
+# Dataset map: missing ILCD / Sphera datasets per model material
 
-Stand 2026-08-28. Zweck: für jeden Werkstoff/Prozess im Greifermodell, der noch
-**keinen realen Datensatz** hat (aktuell nur Literatur-Literal in Variante B),
-die **Bezeichnung** benennen, unter der er in der **Sphera-Basis-Datenbank**
-(*Managed LCA Content* / früher *GaBi Professional* + *Extension DB VII: Plastics*)
-bzw. in einem frei zugänglichen **ILCD-Knoten** zu finden ist.
+As of 2026-08-28. Purpose: for every material/process in the gripper model that
+still has **no real dataset** (currently only a literature literal in Variant B),
+name the **designation** under which it can be found in the **Sphera base
+database** (*Managed LCA Content* / formerly *GaBi Professional* + *Extension
+DB VII: Plastics*) or on a freely accessible **ILCD node**.
 
-## Zwei vom Nutzer entschiedene Festlegungen (2026-08-28)
+## Two user decisions (2026-08-28)
 
-1. **Datenvariante ab v3:** Standard ist die **ILCD-nahe Repräsentation auf realen
-   Datensätzen** (`dataVariant='A-realdataset'`), gestützt auf Sphera MLC. Die
-   Literal-Variante (`dataVariant='B-literal'`) bleibt nur als **Grundlage/Fallback**,
-   damit jede Methode dort rechnen kann, wo (noch) kein realer Datensatz vorliegt.
-2. **Kostendimension bleibt schlank:** nur `Material.unitCost`-Platzhalter, **kein**
-   `CostItem`/`HAS_COST`-Knotenmodell (v3.b-Variante B wird nicht weiterverfolgt).
+1. **Data variant from v3 on:** the standard is the **ILCD-style representation
+   on real datasets** (`dataVariant='A-realdataset'`), backed by Sphera MLC. The
+   literal variant (`dataVariant='B-literal'`) stays only as a **base/fallback**
+   so every method can compute where no real dataset exists (yet).
+2. **Cost dimension stays lean:** only `Material.unitCost` placeholders, **no**
+   `CostItem`/`HAS_COST` node model (v3.b variant B is not pursued).
 
-## Erledigt (2026-08-28): 4 reale PlasticsEurope-Datensätze eingespielt
+## Done (2026-08-28): 4 real PlasticsEurope datasets loaded
 
-Über die freien PlasticsEurope-ILCD-Pakete + die Pipeline `ilcd_import/`:
+Via the free PlasticsEurope ILCD packages + the `ilcd_import/` pipeline:
 
-| Material | Prozessknoten | GWP A1-A3 real | war Literal |
+| Material | process node | GWP A1-A3 real | was literal |
 |---|---|---:|---:|
-| `MAT_ABS` | `PROC_ABS_PLASTICSEUROPE_EF` (EU-27, 2010) | 3,14 kg CO₂e/kg | 4,0 |
-| `MAT_PC` | `PROC_PC_PLASTICSEUROPE_EF` (EU-25, 2007) | 4,19 | 5,5 |
-| `MAT_POM` | `PROC_POM_PLASTICSEUROPE_EF` (EU-27, 2010) | 3,26 | 3,6 |
-| `MAT_PA12`/`MAT_PA11` (Proxy) | `PROC_PA66_PLASTICSEUROPE_EF` (EU-27, 2011) | 6,48 | 9,0 / 5,5 |
+| `MAT_ABS` | `PROC_ABS_PLASTICSEUROPE_EF` (EU-27, 2010) | 3.14 kg CO₂e/kg | 4.0 |
+| `MAT_PC` | `PROC_PC_PLASTICSEUROPE_EF` (EU-25, 2007) | 4.19 | 5.5 |
+| `MAT_POM` | `PROC_POM_PLASTICSEUROPE_EF` (EU-27, 2010) | 3.26 | 3.6 |
+| `MAT_PA12`/`MAT_PA11` (proxy) | `PROC_PA66_PLASTICSEUROPE_EF` (EU-27, 2011) | 6.48 | 9.0 / 5.5 |
 
-Details: `ilcd_import/CHANGELOG.md`. Rest der Tabelle unten weiterhin offen.
+Details: `ilcd_import/CHANGELOG.md`. The rest of the table below is still open.
 
-## Randbedingung (2026-08-28): nur Sphera-**Basisversion**
+## Constraint (2026-08-28): Sphera **base version** only
 
-Der Nutzer hat **nur die Professional-/Basis-Datenbank** (kein *Extension DB VII:
-Plastics*, keine *Premium Plastics*). Folgen:
+The user has **only the Professional / base database** (no *Extension DB VII:
+Plastics*, no *Premium Plastics*). Consequences:
 
-- **In der Basis vorhanden** (Produktionsdaten, da sie viele Produktsysteme speisen):
-  PE (LD/LLD/HD), PP, PS (GPPS/HIPS/EPS), PVC, **PET**, **ABS**, **PC**,
-  **PA 6**, **PA 6.6** (ggf. PA 6.12), PMMA, PUR (Hart-/Weichschaum) + Vorprodukte
-  (Polyol, MDI, TDI), SBR; dazu alle **Metalle**, **Strom**, **Transport**,
-  **Zerspanung/Spritzguss** (Manufacturing).
-- **Nicht in der Basis** (bräuchte Extension VII / XII / Fibre-reinforced):
-  **POM, PA 11, PA 12, PLA, PETG-spezifisch, ASA-spezifisch, TPU, TPE-Varianten,
-  Silikonkautschuk, NBR, Kohlefaser/CFK**.
+- **Present in the base** (production data, since they feed many product
+  systems): PE (LD/LLD/HD), PP, PS (GPPS/HIPS/EPS), PVC, **PET**, **ABS**,
+  **PC**, **PA 6**, **PA 6.6** (possibly PA 6.12), PMMA, PUR (rigid/flexible
+  foam) + precursors (polyol, MDI, TDI), SBR; plus all **metals**,
+  **electricity**, **transport**, **machining/injection moulding**
+  (manufacturing).
+- **Not in the base** (would need Extension VII / XII / fibre-reinforced):
+  **POM, PA 11, PA 12, PLA, PETG-specific, ASA-specific, TPU, TPE variants,
+  silicone rubber, NBR, carbon fibre / CFRP**.
 
-**Ausweg für die fehlenden:** die **PlasticsEurope Eco-profiles** sind
-**lizenzunabhängig frei** (EPLCA-/soda4LCA-Knoten, openLCA-Import), ILCD-Format —
-also genau die v3-Zielform. Darüber sind u. a. **POM, PC, ABS, PA 6, PA 6.6, PET,
-PS, PVC, PP** direkt beziehbar, auch ohne Sphera-Plastics-Extension. Der Rest
-(PLA, PA 11/12, ASA, PETG, TPU, TPE, Silikon, NBR, CF-PA) bleibt **dokumentierter
-Proxy** in Variante A (`proxy:true` + `proxyRationale`) **oder** auf Variante-B-Literal.
+**Way out for the missing ones:** the **PlasticsEurope Eco-profiles** are
+**licence-independent and free** (EPLCA / soda4LCA node, openLCA import), ILCD
+format — exactly the v3 target form. Through them **POM, PC, ABS, PA 6, PA 6.6,
+PET, PS, PVC, PP** and others are directly obtainable, even without the Sphera
+Plastics extension. The rest (PLA, PA 11/12, ASA, PETG, TPU, TPE, silicone, NBR,
+CF-PA) stays a **documented proxy** in Variant A (`proxy:true` +
+`proxyRationale`) **or** on the Variant-B literal.
 
-## Namenskonventionen
+## Naming conventions
 
-**ILCD / PlasticsEurope Eco-profiles** (frei über EPLCA-/soda4LCA-Knoten,
-z. B. `plasticseurope.lca-data.com`, `eplca.jrc.ec.europa.eu`) — das ist die
-Form, die Sphera aggregiert übernimmt:
-> `<Polymer> granulate (<Abk.>); <Technologie>; production mix, at plant | at producer` · Location `EU-25/EU-27/EU-28/RER`
+**ILCD / PlasticsEurope Eco-profiles** (free via EPLCA / soda4LCA node, e.g.
+`plasticseurope.lca-data.com`, `eplca.jrc.ec.europa.eu`) — this is the form
+Sphera takes over in aggregated shape:
+> `<polymer> granulate (<abbr>); <technology>; production mix, at plant | at producer` · Location `EU-25/EU-27/EU-28/RER`
 
-**Sphera MLC / GaBi** (lizenzpflichtig, im Sphera-Client suchen):
-> `<Region>: <Werkstoff> Granulate (<Abk.>) <Provider>`  ·  Provider historisch `PlasticsEurope` → `ts` → **`Sphera`**
-> Region meist `EU-28` (Polymere), `DE` (Strom/Verarbeitung), `GLO` (Metalle).
+**Sphera MLC / GaBi** (licensed, search in the Sphera client):
+> `<region>: <material> Granulate (<abbr>) <provider>`  ·  provider historically `PlasticsEurope` → `ts` → **`Sphera`**
+> region usually `EU-28` (polymers), `DE` (electricity/processing), `GLO` (metals).
 
-Im Sphera-Client nach dem **Kurzzeichen in Klammern** (`(PC)`, `(POM)`, `(ABS)`)
-oder dem Klartext suchen und auf **jüngstes Referenzjahr** + **`Sphera`-Provider**
-filtern.
+In the Sphera client, search for the **abbreviation in brackets** (`(PC)`,
+`(POM)`, `(ABS)`) or the plain text and filter for the **most recent reference
+year** + the **`Sphera` provider**.
 
 ---
 
-## Polymere / Elastomere — mit Basis-Randbedingung
+## Polymers / elastomers — with the base-version constraint
 
-Spalte **Bezug**: `Basis` = in Sphera-Professional erwartbar · `PE-frei` = über die
-freien PlasticsEurope-Eco-profiles (EPLCA/soda4LCA) · `Proxy` = kein realer
-Datensatz, Näherung nötig · `Literal` = auf Variante-B-Literal belassen.
+Column **Source**: `Base` = expected in Sphera Professional · `PE-free` = via the
+free PlasticsEurope Eco-profiles (EPLCA/soda4LCA) · `Proxy` = no real dataset,
+approximation needed · `Literal` = leave on the Variant-B literal.
 
-| Modell-id | akt. GWP-Literal | Bezug | Datensatz / Suchname | Anmerkung |
+| Model id | current GWP literal | Source | Dataset / search name | Note |
 |---|---:|---|---|---|
-| `MAT_ABS` | 4,0 | Basis **oder** PE-frei | Sphera: `EU-28: Acrylonitrile-Butadiene-Styrene Granulate (ABS) Sphera` · PE-frei: `Acrylonitrile butadiene styrene (ABS); … production mix, at producer` — EU-27, 2010 | direkter Datensatz |
-| `MAT_PC` | 5,5 | Basis **oder** PE-frei | Sphera: `EU-28: Polycarbonate Granulate (PC) Sphera` · PE-frei: `Polycarbonate granulate (PC); technology mix; production mix, at plant` — EU-25 (UUID `c4161063-3fde-4540-ad1c-f2da1828bf7b`) | direkter Datensatz |
-| `MAT_POM` | 3,6 | **PE-frei** (nicht in Basis) | `Polyoxymethylene (POM); 1 kg primary POM "at gate" … Europe-27` (UUID `e3b65970-3420-43e6-8265-131ef3485c27`) | POM nur über PlasticsEurope, nicht in Sphera-Basis |
-| `MAT_PA12` | 9,0 | **Proxy** / Literal | Proxy: `PA 6` (Basis/PE-frei) × 1,15–1,25 Aufschlag; oder EPD Evonik VESTAMID | PA 12 nicht in Basis, kein freies Eco-profile |
-| `MAT_PA11` | 5,5 | **Proxy** / Literal | Proxy: bio-PA (`PA 4.10` castor, GLAD) oder `PA 6`; sonst Literal 5,5 | biobasiert, keine freie Quelle |
-| `MAT_PETG` | 4,0 | **Proxy** | `PET amorphous` / `PET bottle grade` (Basis/PE-frei) als Näherung | kein dediziertes PETG in Basis |
-| `MAT_PLA` | 2,7 | Literal / freie Sonderquelle | NatureWorks Ingeo LCI (frei, US) oder Literal 2,7 | fossiler Proxy sinnlos; bio-Datensatz oder Literal |
-| `MAT_ASA` | 4,5 | **Proxy** | `ABS` (Basis) + kleiner Acrylat-Aufschlag | ASA standardmäßig als ABS-Proxy |
-| `MAT_CFPA` | 24,0 | **teil-Proxy** | Matrix: `PA 6` (Basis/PE-frei); Faser: Kohlefaser **nicht in Basis** → Literal ~22–25 kg CO₂e/kg Faser; Massenmix ~30/70 | GWP faserdominiert; Faseranteil bleibt Literal |
-| `MAT_NBR` | 3,5 | **Proxy** / Literal | Proxy: `SBR` (falls in Basis) + Acrylnitril-Aufschlag; sonst Literal 3,5 | NBR nicht in Basis |
-| `MAT_SILICONE` | 7,0 | prüfen / Literal | in Basis ggf. `Polydimethylsiloxane (PDMS)` / `Silicone` — sonst Literal 7,0 | Basis-Bestand unsicher, im Client prüfen |
-| `MAT_TPU` | 5,2 | **Proxy** | `PUR flexible foam` / `PU elastomer` (falls in Basis) als Näherung; sonst Literal | TPU-spezifisch nicht in Basis |
-| `MAT_TPE` | 4,2 | **Proxy** / Literal | `PS`/`SBS` (Basis) als Näherung; sonst Literal 4,2 | |
-| `MAT_PU` (Guss-Elastomer) | 4,5 | **Basis** (Näherung) | `Polyurethane flexible foam` bzw. `Polyol` + `MDI/TDI` + Verarbeitung (alle Basis) | PUR-Kette in Basis vorhanden |
+| `MAT_ABS` | 4.0 | Base **or** PE-free | Sphera: `EU-28: Acrylonitrile-Butadiene-Styrene Granulate (ABS) Sphera` · PE-free: `Acrylonitrile butadiene styrene (ABS); … production mix, at producer` — EU-27, 2010 | direct dataset |
+| `MAT_PC` | 5.5 | Base **or** PE-free | Sphera: `EU-28: Polycarbonate Granulate (PC) Sphera` · PE-free: `Polycarbonate granulate (PC); technology mix; production mix, at plant` — EU-25 (UUID `c4161063-3fde-4540-ad1c-f2da1828bf7b`) | direct dataset |
+| `MAT_POM` | 3.6 | **PE-free** (not in base) | `Polyoxymethylene (POM); 1 kg primary POM "at gate" … Europe-27` (UUID `e3b65970-3420-43e6-8265-131ef3485c27`) | POM only via PlasticsEurope, not in the Sphera base |
+| `MAT_PA12` | 9.0 | **Proxy** / literal | proxy: `PA 6` (base/PE-free) × 1.15–1.25 uplift; or EPD Evonik VESTAMID | PA 12 not in base, no free eco-profile |
+| `MAT_PA11` | 5.5 | **Proxy** / literal | proxy: bio-PA (`PA 4.10` castor, GLAD) or `PA 6`; else literal 5.5 | bio-based, no free source |
+| `MAT_PETG` | 4.0 | **Proxy** | `PET amorphous` / `PET bottle grade` (base/PE-free) as an approximation | no dedicated PETG in the base |
+| `MAT_PLA` | 2.7 | Literal / free special source | NatureWorks Ingeo LCI (free, US) or literal 2.7 | fossil proxy pointless; bio dataset or literal |
+| `MAT_ASA` | 4.5 | **Proxy** | `ABS` (base) + small acrylate uplift | ASA proxied as ABS by default |
+| `MAT_CFPA` | 24.0 | **partial proxy** | matrix: `PA 6` (base/PE-free); fibre: carbon fibre **not in base** → literal ~22–25 kg CO₂e/kg fibre; mass mix ~30/70 | GWP fibre-dominated; fibre share stays a literal |
+| `MAT_NBR` | 3.5 | **Proxy** / literal | proxy: `SBR` (if in base) + acrylonitrile uplift; else literal 3.5 | NBR not in base |
+| `MAT_SILICONE` | 7.0 | check / literal | in the base possibly `Polydimethylsiloxane (PDMS)` / `Silicone` — else literal 7.0 | base coverage uncertain, check in the client |
+| `MAT_TPU` | 5.2 | **Proxy** | `PUR flexible foam` / `PU elastomer` (if in base) as an approximation; else literal | TPU-specific not in base |
+| `MAT_TPE` | 4.2 | **Proxy** / literal | `PS`/`SBS` (base) as an approximation; else literal 4.2 | |
+| `MAT_PU` (cast elastomer) | 4.5 | **Base** (approximation) | `Polyurethane flexible foam` or `Polyol` + `MDI/TDI` + processing (all base) | PUR chain present in the base |
 
-## Metalle, Strom, Fertigung — **alle in der Basis**
+## Metals, electricity, manufacturing — **all in the base**
 
-Diese Bereiche deckt die Sphera-Professional-Basis gut ab; hier ist **keine
-Extension nötig**.
+The Sphera Professional base covers these areas well; **no extension needed**.
 
-| Modell-Element | Basis-Suchname | Anmerkung |
+| Model element | base search name | Note |
 |---|---|---|
-| `MAT_STEEL`, `MAT_SPRING` | `GLO: Steel sections (worldsteel) Sphera` / `EU-28: Steel low-alloyed Sphera` | bereits `MODELED_BY PROC_STEEL_SECTIONS_ILCD` — Konsistenz prüfen |
-| `MAT_AL6061/7075` | `GLO: Aluminium ingot mix Sphera` + `Aluminium extrusion profile Sphera` | bereits `MODELED_BY PROC_ALU_EXTRUSION_EF` |
-| `MAT_*_GENERIC` Kupfer / Zink / Blei | `GLO: Copper mix (99,999 %) Sphera` · `GLO: Zinc slab (SHG) Sphera` · `GLO: Lead (99,995 %) Sphera` | Metalle sind in der Basis vollständig |
-| NdFeB-Magnet (aus v3.g Cross-Impact) | ggf. *Data-on-Demand*; sonst Proxy Nd + Fe + B + Sinterstrom | Magnetdatensatz evtl. nicht in Basis |
-| `PROC_CNC` (Zerspanen) | `DE: Aluminium / steel cutting (milling) Sphera` **oder** `DE: Electricity grid mix` + Schneidöl + Spanverlust | Modellansatz (energyIntensity) ist bereits gleichwertig |
-| Spritzguss (falls modelliert) | `DE: Plastic injection moulding Sphera` | pro kg Formteil |
-| `PROC_FFF`, `PROC_SLS`, `PROC_MJF` | **kein Datensatz — auch nicht in Extensions** | additive Fertigung: Modellansatz `energyIntensity_kWh_per_kg` + Strom beibehalten (Faludi/Kellens) |
-| `PROC_RUBBER`, `PROC_SILCAST`, `PROC_OVERMOLD` | Strom + Vulkanisation selbst modelliert | |
-| Strom DE (`FLOW_ELECTRICITY`, CF 0,38) | `DE: Electricity grid mix Sphera` (1kV–60kV) | ersetzt den 0,38-Literal |
-| Strom „grün" (CF 0,04) | `DE: Electricity from wind power Sphera` / `… hydro power Sphera` | für das `DE_green`-Szenario |
+| `MAT_STEEL`, `MAT_SPRING` | `GLO: Steel sections (worldsteel) Sphera` / `EU-28: Steel low-alloyed Sphera` | already `MODELED_BY PROC_STEEL_SECTIONS_ILCD` — check consistency |
+| `MAT_AL6061/7075` | `GLO: Aluminium ingot mix Sphera` + `Aluminium extrusion profile Sphera` | already `MODELED_BY PROC_ALU_EXTRUSION_EF` |
+| `MAT_*_GENERIC` copper / zinc / lead | `GLO: Copper mix (99.999 %) Sphera` · `GLO: Zinc slab (SHG) Sphera` · `GLO: Lead (99.995 %) Sphera` | metals are fully covered in the base |
+| NdFeB magnet (from v3.g cross-impact) | possibly *data on demand*; else proxy Nd + Fe + B + sintering electricity | magnet dataset possibly not in the base |
+| `PROC_CNC` (machining) | `DE: Aluminium / steel cutting (milling) Sphera` **or** `DE: Electricity grid mix` + cutting oil + chip loss | the model approach (energyIntensity) is already equivalent |
+| Injection moulding (if modelled) | `DE: Plastic injection moulding Sphera` | per kg of moulded part |
+| `PROC_FFF`, `PROC_SLS`, `PROC_MJF` | **no dataset — not in the extensions either** | additive manufacturing: keep the `energyIntensity_kWh_per_kg` + electricity approach (Faludi/Kellens) |
+| `PROC_RUBBER`, `PROC_SILCAST`, `PROC_OVERMOLD` | electricity + vulcanisation modelled directly | |
+| electricity DE (`FLOW_ELECTRICITY`, CF 0.38) | `DE: Electricity grid mix Sphera` (1kV–60kV) | replaces the 0.38 literal |
+| electricity "green" (CF 0.04) | `DE: Electricity from wind power Sphera` / `… hydro power Sphera` | for the `DE_green` scenario |
 
 ---
 
-## Wie einspielen (v3-Standard)
+## How to load (v3 standard)
 
-Zwei Quellen für Variante A: (a) **Sphera-Basis** — Metalle, Strom, Fertigung,
-ABS, PC, PA 6/6.6, PET, PE/PP/PS/PVC, PUR-Kette; (b) **PlasticsEurope Eco-profiles**
-(frei) — u. a. **POM**, sowie PC/ABS/PA 6/PA 6.6/PET falls in der Basis unpassend.
-Der Rest bleibt Proxy (`proxy:true`) oder Variante-B-Literal.
+Two sources for Variant A: (a) **Sphera base** — metals, electricity,
+manufacturing, ABS, PC, PA 6/6.6, PET, PE/PP/PS/PVC, PUR chain; (b)
+**PlasticsEurope Eco-profiles** (free) — including **POM**, and PC/ABS/PA 6/PA
+6.6/PET where the base version does not fit. The rest stays a proxy
+(`proxy:true`) or a Variant-B literal.
 
-Je realem Datensatz einen `Process`-Knoten mit **ILCD-Metadaten** anlegen bzw.
-ergänzen: `uuid`, `dataSetVersion`, `referenceYear`, `geographicalLocation`,
+Per real dataset, create or extend a `Process` node with **ILCD metadata**:
+`uuid`, `dataSetVersion`, `referenceYear`, `geographicalLocation`,
 `technologyDescription`, `dataSetOwner` (`PlasticsEurope`/`Sphera`),
-`referenceUnit='kg'`, `lifecycleModule='A1-A3'`. Dann in **Variante A**:
+`referenceUnit='kg'`, `lifecycleModule='A1-A3'`. Then in **Variant A**:
 
 ```cypher
 MATCH (m:Material {id:'MAT_PC'}), (p:Process {id:'PROC_PC_GRANULATE_SPHERA'})
@@ -127,18 +129,18 @@ MERGE (m)-[:MODELED_BY {proxy:false, lifecycleModule:'A1-A3',
         proxyRationale:'PlasticsEurope PC granulate, EU, via Sphera MLC'}]->(p);
 ```
 
-Die `ASSESS_EF31A_*` / `IR_EF31A_*`-Ergebnisse (Variante A) rechnen dann über
-`lca_generic('IAM_EF31', $artifactId)` automatisch mit; Variante B bleibt als
-Fallback bestehen. Konfidenz **niedrig** (ASA, PETG, TPE) heißt: Proxy sichtbar
-als `proxy:true` + `proxyRationale` markieren.
+The `ASSESS_EF31A_*` / `IR_EF31A_*` results (Variant A) then compute
+automatically via `lca_generic('IAM_EF31', $artifactId)`; Variant B stays as a
+fallback. Confidence **low** (ASA, PETG, TPE) means: mark the proxy visibly as
+`proxy:true` + `proxyRationale`.
 
-## Quellen
+## Sources
 
 - [PlasticsEurope Eco-profiles set](https://plasticseurope.org/sustainability/circularity/life-cycle-thinking/eco-profiles-set/)
 - [PlasticsEurope Public LCI Database — PC granulate (PC)](https://plasticseurope.lca-data.com/datasetdetail/process.xhtml?uuid=c4161063-3fde-4540-ad1c-f2da1828bf7b&version=00.00.000)
 - [PlasticsEurope Public LCI Database — Polyoxymethylene (POM)](https://plasticseurope.lca-data.com/datasetdetail/process.xhtml?lang=en&uuid=e3b65970-3420-43e6-8265-131ef3485c27&version=01.00.000)
-- [Sphera Managed LCA Content — Übersicht](https://sphera.com/solutions/product-stewardship/life-cycle-assessment-software-and-data/managed-lca-content/)
-- [Sphera LCA-Datenbank-Browser](https://lcadatabase.sphera.com/)
-- [Sphera MLC 2025.1 Update](https://sphera.com/resources/blog/spheras-mlc-database-update-2025-1-explained/)
-- [GaBi Extension database VII: Plastics (LCI-Doku)](https://gabi.sphera.com/support/gabi/gabi-database-2020-lci-documentation/extension-database-vii-plastics/)
+- [Sphera Managed LCA Content — overview](https://sphera.com/solutions/product-stewardship/life-cycle-assessment-software-and-data/managed-lca-content/)
+- [Sphera LCA database browser](https://lcadatabase.sphera.com/)
+- [Sphera MLC 2025.1 update](https://sphera.com/resources/blog/spheras-mlc-database-update-2025-1-explained/)
+- [GaBi Extension database VII: Plastics (LCI documentation)](https://gabi.sphera.com/support/gabi/gabi-database-2020-lci-documentation/extension-database-vii-plastics/)
 - [openLCA Nexus — GaBi](https://nexus.openlca.org/database/GaBi)

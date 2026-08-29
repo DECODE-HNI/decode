@@ -1,4 +1,4 @@
-# PRE-5 — ImpactCategory-Hygiene · Änderungsprotokoll
+# PRE-5 — ImpactCategory hygiene · change log
 
 ## 2026-08-27
 
@@ -6,43 +6,47 @@
 
 ### Problem
 
-Der Graph führte **zwei parallele EF3.1-Kategoriesätze**:
-- **Methoden-Slot-Knoten** (`HAS_CATEGORY` von `IAM_EF31`, aber 0 `CHARACTERIZES`-Faktoren,
-  zerrissene `indicator`/`unit`-Felder) — z. B. `IC_EF_ECOTOX_FRESHWATER`, `IC_EF_HUMANTOX_CANCER`,
-  `IC_EF_CLIMATE_FOSSIL`, `IC_EF_RESOURCE_FOSSILS`.
-- **Faktor-tragende Knoten** (die echten Charakterisierungsfaktoren, **nicht** an die Methode
-  gehängt) — `IC_EF_ECOTOXICITY_FRESHWATER` (863), `IC_EF_HUMAN_TOXICITY_CANCER` (291),
-  `IC_EF_CLIMATE_CHANGE_FOSSIL` (33) …
+The graph carried **two parallel EF3.1 category sets**:
+- **method-slot nodes** (`HAS_CATEGORY` from `IAM_EF31`, but 0 `CHARACTERIZES`
+  factors, torn `indicator`/`unit` fields) — e.g. `IC_EF_ECOTOX_FRESHWATER`,
+  `IC_EF_HUMANTOX_CANCER`, `IC_EF_CLIMATE_FOSSIL`, `IC_EF_RESOURCE_FOSSILS`.
+- **factor-bearing nodes** (the real characterisation factors, **not** attached
+  to the method) — `IC_EF_ECOTOXICITY_FRESHWATER` (863),
+  `IC_EF_HUMAN_TOXICITY_CANCER` (291), `IC_EF_CLIMATE_CHANGE_FOSSIL` (33) …
 
-Deshalb rechnete `lca_generic` nur 7 Kategorien (jene, die Methodenlink **und** Faktoren
-auf demselben Knoten hatten).
+So `lca_generic` computed only 7 categories (those with both the method link
+**and** factors on the same node).
 
 ### Fix
 
-12 Merge-Gruppen: je den faktor-tragenden Knoten behalten, die Slot-Knoten mit
-`apoc.refactor.mergeNodes({properties:'discard', mergeRels:true})` hineinführen
-(überträgt `HAS_CATEGORY` + `FOR_CATEGORY`, dedupliziert). Danach `name`/`indicator`/`unit`
-auf 19 kanonischen Knoten normalisiert; `IAM_EF31` an den vollen kanonischen
-Midpoint-Satz gehängt.
+12 merge groups: keep the factor-bearing node, fold the slot node into it with
+`apoc.refactor.mergeNodes({properties:'discard', mergeRels:true})` (carries
+`HAS_CATEGORY` + `FOR_CATEGORY`, deduplicates). Then normalise
+`name`/`indicator`/`unit` on 19 canonical nodes; attach `IAM_EF31` to the full
+canonical midpoint set.
 
-### Ergebnis
+### Result
 
-| | vorher | nachher |
+| | before | after |
 |---|---:|---:|
-| `ImpactCategory` (ohne ReCiPe) | 44 | **29** (15 Slots absorbiert) |
-| EF3.1-Kategorien mit Faktoren | 7 | **19** |
-| `CHARACTERIZES` gesamt | 27 769 | 27 589 (−180 = Dedup auf den zusammengeführten Toxizitäts-/Ressourcen-Knoten, 0,6 %) |
+| `ImpactCategory` (excl. ReCiPe) | 44 | **29** (15 slots absorbed) |
+| EF3.1 categories with factors | 7 | **19** |
+| `CHARACTERIZES` total | 27 769 | 27 589 (−180 = dedup on the merged toxicity/resource nodes, 0.6 %) |
 
-**Die 7 rechnenden Kernkategorien** (Klima, Versauerung, Eutroph. marin, Landnutzung,
-Ozonabbau, Feinstaub, Photochem. Ozon) sind **unverändert** — kein Faktorverlust dort.
-`lca_generic('IAM_EF31')` liefert nun 19 Kategorien je Gripper.
+**The 7 computing core categories** (climate, acidification, marine
+eutrophication, land use, ozone depletion, particulate matter, photochemical
+ozone) are **unchanged** — no factor loss there. `lca_generic('IAM_EF31')` now
+returns 19 categories per gripper.
 
-### Betroffene Methoden
+*(A later LCI-hygiene cleanup, C1/C2, removes 8 further orphan categories → 21;
+see `../v2_data/lci_hygiene/`.)*
 
-Alle mehrkategoriellen LCIA-Verfahren (LCA, ReCiPe/CML-Load). Voraussetzung für die
-volle EF3.1-Kategorienabdeckung. Kein Einfluss auf CF (nur Klima), MCI, Reparierbarkeit.
+### Affected methods
+
+All multi-category LCIA methods (LCA, ReCiPe/CML load). Prerequisite for full
+EF3.1 category coverage. No effect on CF (climate only), MCI, repairability.
 
 ### Rollback
 
-Nicht automatisch (Merge ist destruktiv) — aus Snapshot wiederherstellen. Die
-Kernkategorien-Faktoren sind nachweislich unangetastet.
+Not automatic (the merge is destructive) — restore from a snapshot. The
+core-category factors are demonstrably untouched.

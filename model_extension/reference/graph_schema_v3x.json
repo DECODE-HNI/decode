@@ -1,6 +1,6 @@
 {
   "APPLIES_APPROACH": {
-    "count": 203,
+    "count": 268,
     "type": "relationship",
     "properties": {}
   },
@@ -15,7 +15,7 @@
         ]
       },
       "UNDER_SCENARIO": {
-        "count": 187,
+        "count": 264,
         "properties": {},
         "direction": "in",
         "labels": [
@@ -23,14 +23,26 @@
         ]
       }
     },
-    "count": 2,
+    "count": 3,
     "type": "node",
     "properties": {
+      "note": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
       "horizonYear": {
         "indexed": false,
         "unique": false,
         "existence": false,
         "type": "INTEGER"
+      },
+      "module": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
       },
       "name": {
         "indexed": false,
@@ -90,8 +102,7 @@
         "labels": [
           "Artifact",
           "Material",
-          "Process",
-          "Flow"
+          "Process"
         ]
       },
       "FROM_SOURCE": {
@@ -173,15 +184,60 @@
   "DataQualityCriterion": {
     "relationships": {
       "EVALUATES_CRITERION": {
-        "count": 23,
+        "count": 1001,
         "properties": {
           "score": {
             "array": false,
             "indexed": false,
             "existence": false,
-            "type": "FLOAT"
+            "type": "INTEGER"
+          },
+          "computedAt": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
           },
           "rating": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "derivedFrom": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "derivation": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "rescaled04": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "BOOLEAN"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "DataQuality"
+        ]
+      },
+      "TARGETS": {
+        "count": 24,
+        "properties": {
+          "minScore": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "INTEGER"
+          },
+          "basis": {
             "array": false,
             "indexed": false,
             "existence": false,
@@ -190,14 +246,14 @@
         },
         "direction": "in",
         "labels": [
-          "DataQuality"
+          "DQPhase"
         ]
       }
     },
     "count": 8,
     "type": "node",
     "properties": {
-      "name": {
+      "scale": {
         "indexed": false,
         "unique": false,
         "existence": false,
@@ -209,7 +265,31 @@
         "existence": false,
         "type": "FLOAT"
       },
+      "scaleSemantics": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "aggregation": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
       "definition": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "derivation": {
         "indexed": false,
         "unique": false,
         "existence": false,
@@ -221,7 +301,25 @@
         "existence": false,
         "type": "STRING"
       },
+      "isoRef": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
       "category": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "class": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "pedigreeIndicator": {
         "indexed": false,
         "unique": false,
         "existence": false,
@@ -275,6 +373,21 @@
         "direction": "out",
         "labels": [
           "Artifact"
+        ]
+      },
+      "ASSESSES": {
+        "count": 264,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Assessment"
         ]
       }
     },
@@ -356,7 +469,7 @@
         ]
       },
       "HAS_FLOW": {
-        "count": 52272,
+        "count": 49544,
         "properties": {
           "amount": {
             "array": false,
@@ -424,6 +537,12 @@
             "existence": false,
             "type": "STRING"
           },
+          "compartmentSource": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
           "uncertaintyBasis": {
             "array": false,
             "indexed": false,
@@ -460,6 +579,66 @@
           "Flow"
         ]
       },
+      "HAS_DATA_QUALITY": {
+        "count": 6,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "DataQuality"
+        ]
+      },
+      "AVOIDS": {
+        "count": 1,
+        "properties": {
+          "avoidedProcess": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "avoidedGwp_kgCO2e_per_kg": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          },
+          "module": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "module_v": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "basis": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "ratio": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "EndOfLifeRoute"
+        ]
+      },
       "HAS_DATA": {
         "count": 3,
         "properties": {
@@ -475,8 +654,35 @@
           "DataItem"
         ]
       },
+      "SUBSTITUTES": {
+        "count": 1,
+        "properties": {
+          "module": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "basis": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "ratio": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "Process"
+        ]
+      },
       "APPLIES_TO": {
-        "count": 219,
+        "count": 177,
         "properties": {
           "role": {
             "array": false,
@@ -537,7 +743,7 @@
         ]
       }
     },
-    "count": 59,
+    "count": 58,
     "type": "node",
     "properties": {
       "lifecycleModule": {
@@ -570,6 +776,12 @@
         "existence": false,
         "type": "STRING"
       },
+      "timeValidUntil": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "INTEGER"
+      },
       "ghgScopeCategory": {
         "indexed": false,
         "unique": false,
@@ -577,6 +789,12 @@
         "type": "STRING"
       },
       "source": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "marketType": {
         "indexed": false,
         "unique": false,
         "existence": false,
@@ -595,6 +813,12 @@
         "type": "STRING"
       },
       "sourceDatabase": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "marketPeriod": {
         "indexed": false,
         "unique": false,
         "existence": false,
@@ -654,6 +878,12 @@
         "existence": false,
         "type": "STRING"
       },
+      "timeValidFrom": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "INTEGER"
+      },
       "energyBasis": {
         "indexed": false,
         "unique": false,
@@ -701,6 +931,12 @@
         "unique": false,
         "existence": false,
         "type": "STRING"
+      },
+      "gwp_A1_kgCO2e_per_kg": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
       }
     },
     "labels": []
@@ -735,7 +971,7 @@
         ]
       },
       "BASED_ON": {
-        "count": 21,
+        "count": 14,
         "properties": {},
         "direction": "in",
         "labels": [
@@ -819,7 +1055,7 @@
     "labels": []
   },
   "UNDER_SCENARIO": {
-    "count": 187,
+    "count": 264,
     "type": "relationship",
     "properties": {}
   },
@@ -846,10 +1082,15 @@
     "type": "relationship",
     "properties": {}
   },
+  "VERIFIES": {
+    "count": 24,
+    "type": "relationship",
+    "properties": {}
+  },
   "ImpactResult": {
     "relationships": {
       "REPORTS": {
-        "count": 16,
+        "count": 140,
         "properties": {},
         "direction": "in",
         "labels": [
@@ -857,7 +1098,7 @@
         ]
       },
       "HAS_RESULT": {
-        "count": 1231,
+        "count": 1826,
         "properties": {
           "role": {
             "array": false,
@@ -872,7 +1113,7 @@
         ]
       },
       "DERIVED_FROM": {
-        "count": 54,
+        "count": 31,
         "properties": {
           "exchangeId": {
             "array": false,
@@ -887,7 +1128,7 @@
         ]
       },
       "BASED_ON": {
-        "count": 21,
+        "count": 14,
         "properties": {},
         "direction": "out",
         "labels": [
@@ -896,7 +1137,7 @@
         ]
       },
       "FOR_CATEGORY": {
-        "count": 410,
+        "count": 365,
         "properties": {
           "role": {
             "array": false,
@@ -911,7 +1152,7 @@
         ]
       }
     },
-    "count": 1231,
+    "count": 1826,
     "type": "node",
     "properties": {
       "coverage": {
@@ -1003,6 +1244,51 @@
   },
   "EndOfLifeRoute": {
     "relationships": {
+      "AVOIDS": {
+        "count": 1,
+        "properties": {
+          "avoidedProcess": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "avoidedGwp_kgCO2e_per_kg": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          },
+          "module": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "module_v": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "basis": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "ratio": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "Process"
+        ]
+      },
       "HAS_EOL_ROUTE": {
         "count": 60,
         "properties": {
@@ -1049,26 +1335,134 @@
     },
     "labels": []
   },
+  "EEIOSector": {
+    "relationships": {
+      "COVERED_BY_EEIO": {
+        "count": 5,
+        "properties": {
+          "note": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "module": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "monetaryValue": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          },
+          "currency": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "CostItem"
+        ]
+      }
+    },
+    "count": 4,
+    "type": "node",
+    "properties": {
+      "module": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "isicCode": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "gwpIntensity_kgCO2e_per_EUR": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "id": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "source": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "priceYear": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "INTEGER"
+      }
+    },
+    "labels": []
+  },
   "EVALUATES_CRITERION": {
-    "count": 23,
+    "count": 1001,
     "type": "relationship",
     "properties": {
       "score": {
         "array": false,
         "indexed": false,
         "existence": false,
-        "type": "FLOAT"
+        "type": "INTEGER"
+      },
+      "computedAt": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
       },
       "rating": {
         "array": false,
         "indexed": false,
         "existence": false,
         "type": "STRING"
+      },
+      "derivedFrom": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "derivation": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "rescaled04": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "BOOLEAN"
       }
     }
   },
   "HAS_FLOW": {
-    "count": 52272,
+    "count": 49544,
     "type": "relationship",
     "properties": {
       "amount": {
@@ -1137,6 +1531,12 @@
         "existence": false,
         "type": "STRING"
       },
+      "compartmentSource": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
       "uncertaintyBasis": {
         "array": false,
         "indexed": false,
@@ -1169,8 +1569,74 @@
       }
     }
   },
+  "DQPhase": {
+    "relationships": {
+      "TARGETS": {
+        "count": 24,
+        "properties": {
+          "minScore": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "INTEGER"
+          },
+          "basis": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "DataQualityCriterion"
+        ]
+      }
+    },
+    "count": 3,
+    "type": "node",
+    "properties": {
+      "boxStage": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "description": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "gate": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "order": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "INTEGER"
+      }
+    },
+    "labels": []
+  },
   "REPORTS": {
-    "count": 16,
+    "count": 140,
     "type": "relationship",
     "properties": {}
   },
@@ -1178,6 +1644,24 @@
     "count": 57,
     "type": "relationship",
     "properties": {}
+  },
+  "MAPS_TO": {
+    "count": 14,
+    "type": "relationship",
+    "properties": {
+      "module": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "element": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
   },
   "Behavior": {
     "relationships": {
@@ -1450,19 +1934,43 @@
   "DataQuality": {
     "relationships": {
       "EVALUATES_CRITERION": {
-        "count": 23,
+        "count": 1001,
         "properties": {
           "score": {
             "array": false,
             "indexed": false,
             "existence": false,
-            "type": "FLOAT"
+            "type": "INTEGER"
+          },
+          "computedAt": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
           },
           "rating": {
             "array": false,
             "indexed": false,
             "existence": false,
             "type": "STRING"
+          },
+          "derivedFrom": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "derivation": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "rescaled04": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "BOOLEAN"
           }
         },
         "direction": "out",
@@ -1471,7 +1979,7 @@
         ]
       },
       "HAS_DATA_QUALITY": {
-        "count": 21,
+        "count": 6,
         "properties": {
           "role": {
             "array": false,
@@ -1482,14 +1990,34 @@
         },
         "direction": "in",
         "labels": [
+          "Process",
+          "Assessment",
           "DataItem"
         ]
       }
     },
-    "count": 5,
+    "count": 166,
     "type": "node",
     "properties": {
+      "worstScore": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "INTEGER"
+      },
       "method": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "computedAt": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "subject": {
         "indexed": false,
         "unique": false,
         "existence": false,
@@ -1501,13 +2029,31 @@
         "existence": false,
         "type": "FLOAT"
       },
+      "scale": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "scaleNote": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "meanScoreInfo": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
       "name": {
         "indexed": false,
         "unique": false,
         "existence": false,
         "type": "STRING"
       },
-      "scale": {
+      "derivation": {
         "indexed": false,
         "unique": false,
         "existence": false,
@@ -1524,6 +2070,12 @@
         "unique": true,
         "existence": false,
         "type": "STRING"
+      },
+      "summaryNote": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
       }
     },
     "labels": []
@@ -1536,6 +2088,39 @@
         "direction": "in",
         "labels": [
           "Part"
+        ]
+      },
+      "COVERED_BY_EEIO": {
+        "count": 5,
+        "properties": {
+          "note": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "module": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "monetaryValue": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "FLOAT"
+          },
+          "currency": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "EEIOSector"
         ]
       }
     },
@@ -1586,10 +2171,15 @@
     "type": "relationship",
     "properties": {}
   },
+  "CHARACTERIZES_DYNAMIC": {
+    "count": 6,
+    "type": "relationship",
+    "properties": {}
+  },
   "ImpactCategory": {
     "relationships": {
       "HAS_CATEGORY": {
-        "count": 43,
+        "count": 41,
         "properties": {
           "order": {
             "array": false,
@@ -1649,7 +2239,7 @@
         ]
       },
       "FOR_CATEGORY": {
-        "count": 410,
+        "count": 365,
         "properties": {
           "role": {
             "array": false,
@@ -1664,8 +2254,14 @@
         ]
       },
       "CHARACTERIZES": {
-        "count": 4183,
+        "count": 2380,
         "properties": {
+          "method": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
           "characterizesId": {
             "array": false,
             "indexed": true,
@@ -1679,6 +2275,12 @@
             "type": "STRING"
           },
           "source": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "matchedBy": {
             "array": false,
             "indexed": false,
             "existence": false,
@@ -1703,7 +2305,7 @@
         ]
       }
     },
-    "count": 47,
+    "count": 39,
     "type": "node",
     "properties": {
       "indicator": {
@@ -2015,7 +2617,7 @@
         ]
       },
       "BASED_ON": {
-        "count": 21,
+        "count": 14,
         "properties": {},
         "direction": "in",
         "labels": [
@@ -2106,10 +2708,24 @@
   },
   "Requirement": {
     "relationships": {
+      "VERIFIES": {
+        "count": 24,
+        "properties": {},
+        "direction": "in",
+        "labels": [
+          "TestCase"
+        ]
+      },
       "SATISFIES_REQUIREMENT": {
-        "count": 262,
+        "count": 286,
         "properties": {
           "verificationStatus": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "verifiedByTestCase": {
             "array": false,
             "indexed": false,
             "existence": false,
@@ -2137,7 +2753,7 @@
         ]
       }
     },
-    "count": 24,
+    "count": 27,
     "type": "node",
     "properties": {
       "sustainabilityIndicatorRef": {
@@ -2226,7 +2842,7 @@
         ]
       },
       "HAS_CATEGORY": {
-        "count": 43,
+        "count": 41,
         "properties": {
           "order": {
             "array": false,
@@ -2240,8 +2856,29 @@
           "ImpactCategory"
         ]
       },
+      "MAPS_TO": {
+        "count": 6,
+        "properties": {
+          "module": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "element": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "ExternalFramework"
+        ]
+      },
       "USES_METHOD": {
-        "count": 187,
+        "count": 257,
         "properties": {
           "role": {
             "array": false,
@@ -2296,6 +2933,68 @@
         "type": "STRING"
       },
       "version": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
+  "ExternalFramework": {
+    "relationships": {
+      "MAPS_TO": {
+        "count": 6,
+        "properties": {
+          "module": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "element": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "ImpactAssessmentMethod",
+          "AssessmentApproach",
+          "Declaration"
+        ]
+      }
+    },
+    "count": 12,
+    "type": "node",
+    "properties": {
+      "standard": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "module": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "domain": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
         "indexed": false,
         "unique": false,
         "existence": false,
@@ -2410,7 +3109,7 @@
         ]
       },
       "APPLIES_TO": {
-        "count": 219,
+        "count": 177,
         "properties": {
           "role": {
             "array": false,
@@ -2531,9 +3230,15 @@
     }
   },
   "CHARACTERIZES": {
-    "count": 27671,
+    "count": 28263,
     "type": "relationship",
     "properties": {
+      "method": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
       "characterizesId": {
         "array": false,
         "indexed": true,
@@ -2552,6 +3257,12 @@
         "existence": false,
         "type": "STRING"
       },
+      "matchedBy": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
       "factor": {
         "array": false,
         "indexed": false,
@@ -2565,6 +3276,11 @@
         "type": "BOOLEAN"
       }
     }
+  },
+  "TESTS": {
+    "count": 24,
+    "type": "relationship",
+    "properties": {}
   },
   "Form": {
     "relationships": {
@@ -2630,7 +3346,7 @@
     "labels": []
   },
   "HAS_DATA_QUALITY": {
-    "count": 21,
+    "count": 182,
     "type": "relationship",
     "properties": {
       "role": {
@@ -2642,7 +3358,7 @@
     }
   },
   "HAS_CATEGORY": {
-    "count": 43,
+    "count": 41,
     "type": "relationship",
     "properties": {
       "order": {
@@ -2650,6 +3366,36 @@
         "indexed": false,
         "existence": false,
         "type": "INTEGER"
+      }
+    }
+  },
+  "COVERED_BY_EEIO": {
+    "count": 5,
+    "type": "relationship",
+    "properties": {
+      "note": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "module": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "monetaryValue": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "currency": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
       }
     }
   },
@@ -2725,7 +3471,7 @@
   "Assessment": {
     "relationships": {
       "APPLIES_APPROACH": {
-        "count": 199,
+        "count": 264,
         "properties": {},
         "direction": "out",
         "labels": [
@@ -2733,7 +3479,7 @@
         ]
       },
       "ASSESSES": {
-        "count": 199,
+        "count": 264,
         "properties": {
           "role": {
             "array": false,
@@ -2744,11 +3490,27 @@
         },
         "direction": "out",
         "labels": [
-          "Artifact"
+          "Artifact",
+          "Product"
+        ]
+      },
+      "HAS_DATA_QUALITY": {
+        "count": 155,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "DataQuality"
         ]
       },
       "HAS_RESULT": {
-        "count": 1231,
+        "count": 1826,
         "properties": {
           "role": {
             "array": false,
@@ -2763,15 +3525,23 @@
         ]
       },
       "UNDER_SCENARIO": {
-        "count": 187,
+        "count": 264,
         "properties": {},
         "direction": "out",
         "labels": [
           "ModelScenario"
         ]
       },
+      "HAS_ASSESSMENT": {
+        "count": 24,
+        "properties": {},
+        "direction": "in",
+        "labels": [
+          "TestCase"
+        ]
+      },
       "USES_METHOD": {
-        "count": 187,
+        "count": 257,
         "properties": {
           "role": {
             "array": false,
@@ -2786,7 +3556,7 @@
         ]
       }
     },
-    "count": 199,
+    "count": 264,
     "type": "node",
     "properties": {
       "characterizationLocationRule": {
@@ -2901,7 +3671,7 @@
     "labels": []
   },
   "DECLARES": {
-    "count": 2,
+    "count": 16,
     "type": "relationship",
     "properties": {}
   },
@@ -2948,7 +3718,7 @@
     }
   },
   "USES_METHOD": {
-    "count": 187,
+    "count": 257,
     "type": "relationship",
     "properties": {
       "role": {
@@ -2960,7 +3730,7 @@
     }
   },
   "BROADER": {
-    "count": 38,
+    "count": 30,
     "type": "relationship",
     "properties": {}
   },
@@ -3042,6 +3812,48 @@
       }
     }
   },
+  "AVOIDS": {
+    "count": 1,
+    "type": "relationship",
+    "properties": {
+      "avoidedProcess": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "avoidedGwp_kgCO2e_per_kg": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "module": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "module_v": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "basis": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "ratio": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "FLOAT"
+      }
+    }
+  },
   "USES_MATERIAL": {
     "count": 86,
     "type": "relationship",
@@ -3061,7 +3873,7 @@
     }
   },
   "HAS_RESULT": {
-    "count": 1231,
+    "count": 1826,
     "type": "relationship",
     "properties": {
       "role": {
@@ -3141,7 +3953,7 @@
   "Declaration": {
     "relationships": {
       "REPORTS": {
-        "count": 16,
+        "count": 140,
         "properties": {},
         "direction": "out",
         "labels": [
@@ -3149,15 +3961,36 @@
         ]
       },
       "DECLARES": {
-        "count": 2,
+        "count": 16,
         "properties": {},
         "direction": "out",
         "labels": [
           "Artifact"
         ]
+      },
+      "MAPS_TO": {
+        "count": 2,
+        "properties": {
+          "module": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "element": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "ExternalFramework"
+        ]
       }
     },
-    "count": 2,
+    "count": 16,
     "type": "node",
     "properties": {
       "standard": {
@@ -3202,7 +4035,31 @@
         "existence": false,
         "type": "STRING"
       },
+      "issuedAt": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
       "type": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "verifiedBy": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "expiresAt": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "status": {
         "indexed": false,
         "unique": false,
         "existence": false,
@@ -3314,10 +4171,16 @@
     }
   },
   "SATISFIES_REQUIREMENT": {
-    "count": 262,
+    "count": 286,
     "type": "relationship",
     "properties": {
       "verificationStatus": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "verifiedByTestCase": {
         "array": false,
         "indexed": false,
         "existence": false,
@@ -3372,7 +4235,7 @@
         ]
       },
       "APPLIES_TO": {
-        "count": 219,
+        "count": 177,
         "properties": {
           "role": {
             "array": false,
@@ -3696,8 +4559,32 @@
     },
     "labels": []
   },
+  "SUBSTITUTES": {
+    "count": 1,
+    "type": "relationship",
+    "properties": {
+      "module": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "basis": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "ratio": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "FLOAT"
+      }
+    }
+  },
   "APPLIES_TO": {
-    "count": 219,
+    "count": 177,
     "type": "relationship",
     "properties": {
       "role": {
@@ -3711,7 +4598,7 @@
   "HazardStatement": {
     "relationships": {
       "HAS_HAZARD": {
-        "count": 79,
+        "count": 47,
         "properties": {
           "basis": {
             "array": false,
@@ -3758,49 +4645,12 @@
   },
   "Artifact": {
     "relationships": {
-      "HAS_ARTIFACT": {
-        "count": 43,
-        "properties": {
-          "role": {
-            "array": false,
-            "indexed": false,
-            "existence": false,
-            "type": "STRING"
-          }
-        },
+      "TESTS": {
+        "count": 24,
+        "properties": {},
         "direction": "in",
         "labels": [
-          "Product"
-        ]
-      },
-      "HAS_FEATURE": {
-        "count": 66,
-        "properties": {
-          "role": {
-            "array": false,
-            "indexed": false,
-            "existence": false,
-            "type": "STRING"
-          }
-        },
-        "direction": "out",
-        "labels": [
-          "Feature"
-        ]
-      },
-      "ASSESSES": {
-        "count": 199,
-        "properties": {
-          "role": {
-            "array": false,
-            "indexed": false,
-            "existence": false,
-            "type": "STRING"
-          }
-        },
-        "direction": "in",
-        "labels": [
-          "Assessment"
+          "TestCase"
         ]
       },
       "HAS_BEHAVIOR": {
@@ -3834,9 +4684,15 @@
         ]
       },
       "SATISFIES_REQUIREMENT": {
-        "count": 262,
+        "count": 286,
         "properties": {
           "verificationStatus": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "verifiedByTestCase": {
             "array": false,
             "indexed": false,
             "existence": false,
@@ -3864,11 +4720,107 @@
         ]
       },
       "DECLARES": {
-        "count": 2,
+        "count": 16,
         "properties": {},
         "direction": "in",
         "labels": [
           "Declaration"
+        ]
+      },
+      "HAS_PROCESS_PLAN": {
+        "count": 43,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "ProcessPlan"
+        ]
+      },
+      "HAS_PROPERTY": {
+        "count": 264,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "CoreProperty"
+        ]
+      },
+      "SUITABLE_FOR": {
+        "count": 106,
+        "properties": {
+          "suitability": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "rationale": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "Scenario"
+        ]
+      },
+      "HAS_ARTIFACT": {
+        "count": 43,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Product"
+        ]
+      },
+      "HAS_FEATURE": {
+        "count": 66,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "Feature"
+        ]
+      },
+      "ASSESSES": {
+        "count": 264,
+        "properties": {
+          "role": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "in",
+        "labels": [
+          "Assessment"
         ]
       },
       "HAS_COMPONENT": {
@@ -3926,57 +4878,6 @@
         "direction": "out",
         "labels": [
           "Assembly"
-        ]
-      },
-      "HAS_PROCESS_PLAN": {
-        "count": 43,
-        "properties": {
-          "role": {
-            "array": false,
-            "indexed": false,
-            "existence": false,
-            "type": "STRING"
-          }
-        },
-        "direction": "out",
-        "labels": [
-          "ProcessPlan"
-        ]
-      },
-      "HAS_PROPERTY": {
-        "count": 264,
-        "properties": {
-          "role": {
-            "array": false,
-            "indexed": false,
-            "existence": false,
-            "type": "STRING"
-          }
-        },
-        "direction": "out",
-        "labels": [
-          "CoreProperty"
-        ]
-      },
-      "SUITABLE_FOR": {
-        "count": 106,
-        "properties": {
-          "suitability": {
-            "array": false,
-            "indexed": false,
-            "existence": false,
-            "type": "STRING"
-          },
-          "rationale": {
-            "array": false,
-            "indexed": false,
-            "existence": false,
-            "type": "STRING"
-          }
-        },
-        "direction": "out",
-        "labels": [
-          "Scenario"
         ]
       }
     },
@@ -4119,7 +5020,7 @@
     "labels": []
   },
   "FOR_CATEGORY": {
-    "count": 1231,
+    "count": 1826,
     "type": "relationship",
     "properties": {
       "role": {
@@ -4166,7 +5067,7 @@
         ]
       },
       "HAS_HAZARD": {
-        "count": 79,
+        "count": 47,
         "properties": {
           "basis": {
             "array": false,
@@ -4181,7 +5082,7 @@
         ]
       },
       "HAS_FLOW": {
-        "count": 52272,
+        "count": 49544,
         "properties": {
           "amount": {
             "array": false,
@@ -4249,6 +5150,12 @@
             "existence": false,
             "type": "STRING"
           },
+          "compartmentSource": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
           "uncertaintyBasis": {
             "array": false,
             "indexed": false,
@@ -4285,23 +5192,8 @@
           "Process"
         ]
       },
-      "HAS_DATA": {
-        "count": 1,
-        "properties": {
-          "role": {
-            "array": false,
-            "indexed": false,
-            "existence": false,
-            "type": "STRING"
-          }
-        },
-        "direction": "out",
-        "labels": [
-          "DataItem"
-        ]
-      },
       "DERIVED_FROM": {
-        "count": 54,
+        "count": 31,
         "properties": {
           "exchangeId": {
             "array": false,
@@ -4316,8 +5208,14 @@
         ]
       },
       "CHARACTERIZES": {
-        "count": 4183,
+        "count": 2380,
         "properties": {
+          "method": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
           "characterizesId": {
             "array": false,
             "indexed": true,
@@ -4331,6 +5229,12 @@
             "type": "STRING"
           },
           "source": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "matchedBy": {
             "array": false,
             "indexed": false,
             "existence": false,
@@ -4355,21 +5259,9 @@
         ]
       }
     },
-    "count": 2612,
+    "count": 2711,
     "type": "node",
     "properties": {
-      "gwp_kgCO2e_per_kWh_CN": {
-        "indexed": false,
-        "unique": false,
-        "existence": false,
-        "type": "FLOAT"
-      },
-      "gwp_kgCO2e_per_kWh_DE_green": {
-        "indexed": false,
-        "unique": false,
-        "existence": false,
-        "type": "FLOAT"
-      },
       "ghgSpecies": {
         "indexed": false,
         "unique": false,
@@ -4382,7 +5274,25 @@
         "existence": false,
         "type": "STRING"
       },
+      "excludeFromCalc": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "BOOLEAN"
+      },
+      "casNumberRaw": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
       "description": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "dataFlag": {
         "indexed": false,
         "unique": false,
         "existence": false,
@@ -4394,17 +5304,17 @@
         "existence": false,
         "type": "STRING"
       },
-      "casNumber": {
+      "mfcaClass": {
         "indexed": false,
         "unique": false,
         "existence": false,
         "type": "STRING"
       },
-      "gwp_kgCO2e_per_kWh_EU": {
+      "casNumber": {
         "indexed": false,
         "unique": false,
         "existence": false,
-        "type": "FLOAT"
+        "type": "STRING"
       },
       "provenance": {
         "indexed": false,
@@ -4412,13 +5322,19 @@
         "existence": false,
         "type": "STRING"
       },
-      "electricityFactorBasis": {
+      "sourceDatabase": {
         "indexed": false,
         "unique": false,
         "existence": false,
         "type": "STRING"
       },
-      "sourceDatabase": {
+      "unitContext": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "splitFrom": {
         "indexed": false,
         "unique": false,
         "existence": false,
@@ -4442,11 +5358,17 @@
         "existence": false,
         "type": "STRING"
       },
-      "gwp_kgCO2e_per_kWh_DE": {
+      "casNumberNorm": {
+        "indexed": true,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "_removedCharacterizes": {
         "indexed": false,
         "unique": false,
         "existence": false,
-        "type": "FLOAT"
+        "type": "INTEGER"
       },
       "status": {
         "indexed": false,
@@ -4455,6 +5377,12 @@
         "type": "STRING"
       },
       "flowType": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "nameRaw": {
         "indexed": false,
         "unique": false,
         "existence": false,
@@ -4553,8 +5481,107 @@
       }
     }
   },
+  "TestCase": {
+    "relationships": {
+      "VERIFIES": {
+        "count": 24,
+        "properties": {},
+        "direction": "out",
+        "labels": [
+          "Requirement"
+        ]
+      },
+      "TESTS": {
+        "count": 24,
+        "properties": {},
+        "direction": "out",
+        "labels": [
+          "Artifact"
+        ]
+      },
+      "HAS_ASSESSMENT": {
+        "count": 24,
+        "properties": {},
+        "direction": "out",
+        "labels": [
+          "Assessment"
+        ]
+      }
+    },
+    "count": 24,
+    "type": "node",
+    "properties": {
+      "note": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "sustainabilityResult": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "FLOAT"
+      },
+      "name": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "systemLevel": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "testMethod": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "sustainabilityStatus": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "dataAnalysisType": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "id": {
+        "indexed": true,
+        "unique": true,
+        "existence": false,
+        "type": "STRING"
+      },
+      "testCaseOwner": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "evaluatedAt": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      },
+      "verificationID": {
+        "indexed": false,
+        "unique": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    },
+    "labels": []
+  },
   "ASSESSES": {
-    "count": 199,
+    "count": 264,
     "type": "relationship",
     "properties": {
       "role": {
@@ -4568,7 +5595,7 @@
   "AssessmentApproach": {
     "relationships": {
       "APPLIES_APPROACH": {
-        "count": 199,
+        "count": 264,
         "properties": {},
         "direction": "in",
         "labels": [
@@ -4576,8 +5603,29 @@
           "ImpactAssessmentMethod"
         ]
       },
+      "MAPS_TO": {
+        "count": 6,
+        "properties": {
+          "module": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          },
+          "element": {
+            "array": false,
+            "indexed": false,
+            "existence": false,
+            "type": "STRING"
+          }
+        },
+        "direction": "out",
+        "labels": [
+          "ExternalFramework"
+        ]
+      },
       "BROADER": {
-        "count": 38,
+        "count": 30,
         "properties": {},
         "direction": "out",
         "labels": [
@@ -4585,7 +5633,7 @@
         ]
       }
     },
-    "count": 41,
+    "count": 33,
     "type": "node",
     "properties": {
       "code": {
@@ -4669,6 +5717,24 @@
     },
     "labels": []
   },
+  "TARGETS": {
+    "count": 24,
+    "type": "relationship",
+    "properties": {
+      "minScore": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "INTEGER"
+      },
+      "basis": {
+        "array": false,
+        "indexed": false,
+        "existence": false,
+        "type": "STRING"
+      }
+    }
+  },
   "HAS_GEOMETRY": {
     "count": 14,
     "type": "relationship",
@@ -4692,5 +5758,10 @@
         "type": "FLOAT"
       }
     }
+  },
+  "HAS_ASSESSMENT": {
+    "count": 24,
+    "type": "relationship",
+    "properties": {}
   }
 }

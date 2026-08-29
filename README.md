@@ -11,11 +11,14 @@ Niryo Ned2 robot gripper: 43 design variants, their components, materials,
 manufacturing processes, requirements, and life-cycle assessment results, all
 in one graph.
 
-> **Status:** the demonstrator graph currently holds **2,721 nodes** across
-> **30 relationship types** (~79,600 relationships). All four interfaces
-> below are built and verified end-to-end against real data — none of the
-> numbers in this repository's documentation are estimates; every reproducibility
-> claim was checked against a running Neo4j instance.
+> **Status:** the bulk-load seed graph holds **2,721 nodes** across
+> **30 relationship types** (~79,600 relationships). With the staged
+> [`model_extension/`](model_extension/) migrations applied on top, the
+> reference instance reaches **5,620 nodes / 86,635 relationships / 39 node
+> labels / 54 relationship types / 39 constraints** (2026-08-29). All four
+> interfaces below are built and verified end-to-end against real data — none of
+> the numbers in this repository's documentation are estimates; every
+> reproducibility claim was checked against a running Neo4j instance.
 
 ## Why a graph, and why these four interfaces
 
@@ -63,7 +66,7 @@ than *interfaces*:
 | Folder | What it does |
 |---|---|
 | [`model_extension/`](model_extension/) | A sequence of strictly additive, non-breaking Cypher migrations that grow the schema from a single hardwired impact assessment (black box) to a method-exchangeable one (white box) plus orthogonal method-family modules — LCA, carbon/water/GHG-by-scope, circularity, cost, scenario and cross-impact analysis. The "never breaks what came before" property is the flexibility argument. |
-| [`methods/`](methods/) | The 29-method sustainability-assessment catalogue: one spec per method, plus tested read-only base queries. |
+| [`methods/`](methods/) | The sustainability-assessment method catalogue (23 methods in 3 paradigms / 7 groups, after the AI/ML paradigm was dropped as out of scope): one spec per method, plus tested read-only base queries. |
 
 [`lca_bulk_load/incremental/`](lca_bulk_load/incremental/) adds a per-package
 ILCD importer for attaching one extra dataset at a time after the bulk seed.

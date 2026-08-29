@@ -1,7 +1,9 @@
 // ============================================================================
-// migration_v3d.cypher  --  Module v3.d: provenance / prediction hooks +
-//   EPD/DPP Declaration + sustainability thresholds. AI methods are only
-//   PREPARED (node types defined, no ML instances). Additive. Date: 2026-08-27
+// migration_v3d.cypher  --  Module v3.d: provenance (ImpactResult.confidence,
+//   BASED_ON) + repairability as a result + EPD/DPP Declaration +
+//   sustainability thresholds. Additive. Date: 2026-08-27
+//   (The AI/ML prediction-hook sketch that was in sections 3 & 5 is dropped --
+//    out of scope, 2026-08-29, see consistency/remove_ki_stubs.cypher.)
 // ============================================================================
 
 // --- 1. Provenance property + BASED_ON edge -----------------------------
@@ -48,10 +50,10 @@ MATCH (as:Assessment)-[:HAS_RESULT]->(ir), (as)-[:ASSESSES]->(art)
 MATCH (art)-[:HAS_FEATURE]->(f:Feature) WHERE f.id IN ['FEAT_EASY','FEAT_PRINTABLE']
 MERGE (ir)-[:BASED_ON]->(f);
 
-// --- 3. Prediction-model type (defined, no instances) ------------------
-//   PredictionModel {id,name,algorithm,trainingData,version,metrics}
-//   (:ImpactResult)-[:PREDICTED_BY]->(:PredictionModel)
-//   (:DataSource.sourceType) gains vocabulary values 'ml-model','surrogate-model'
+// --- 3. (was: prediction-model type sketch) --------------------------
+//   The AI/ML docking-point design (PredictionModel / PREDICTED_BY /
+//   ml-model vocabulary) is out of the case-study scope and was dropped
+//   2026-08-29 -- see model_versions/consistency/remove_ki_stubs.cypher.
 
 // --- 4. EPD / DPP Declaration for a wired gripper ---------------------
 MATCH (art:Artifact {id:'ART_V_AL'})
@@ -75,8 +77,9 @@ MATCH (as:Assessment)-[:ASSESSES]->(art), (as)-[:HAS_RESULT]->(ir:ImpactResult)
 WHERE as.id IN ['ASSESS_EF31_ART_V_AL','ASSESS_MCI_ART_V_AL','ASSESS_REPAIR_ART_V_AL']
 MERGE (dpp)-[:REPORTS]->(ir);
 
-// --- 5. Recommendation type (defined, no instances) ------------------
-//   Recommendation {id,rationale,rank} ; (:Recommendation)-[:RECOMMENDS]->(:Artifact)
+// --- 5. (was: recommendation type sketch) ---------------------------
+//   Dropped 2026-08-29 with the rest of the AI/ML branch --
+//   see model_versions/consistency/remove_ki_stubs.cypher.
 
 // --- 6. Sustainability threshold on a Requirement (demonstrator) -----
 MATCH (r:Requirement)

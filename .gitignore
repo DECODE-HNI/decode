@@ -17,3 +17,17 @@ lca_bulk_load/build/
 # Import gedacht -- die referenzierten .qea-Projekte dort sind bewusst
 # committed, alles andere ist persoenliches Scratch-Material)
 /rflpv2_diagram.qea
+
+# --- model_extension: locally generated, licensed-derived or reproducible ---
+# ILCD dataset content re-expressed as import Cypher (PlasticsEurope / Sphera):
+model_extension/migrations/v2_data/ilcd_import/import_MAT_*.cypher
+# ReCiPe 2016 CF table re-expressed as Cypher (from the openLCA "LCIA Methods" pack):
+model_extension/migrations/v3x_e_recipe/cf_import/recipe_cf*.cypher
+!model_extension/migrations/v3x_e_recipe/cf_import/recipe_cf.EXAMPLE.cypher
+# staged graph snapshots (full dump of the licensed-derived inventory) — kept local:
+model_extension/**/snapshots/
+snapshots/
+graph_full_*.cypher
+graph_full_*.graphml
+# consistency-review scratch:
+model_extension/migrations/consistency/_l3_*/
