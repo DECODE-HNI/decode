@@ -1,0 +1,47 @@
+change;kind;stage;status;required_by;used_by;reported_in
+HAS_COMPONENT.connectionType/reversible/toolless;rel property;v1;applied;Reparierbarkeit/Demontage;Zirkularitaet(MCI);Digitaler Produktpass
+Artifact.disassemblyReversibility/repairabilityClass/componentCount/distinctMaterialCount;node property;v1;applied;Reparierbarkeit;Zirkularitaet(MCI);automatisierte Designempfehlung;EPD/DPP
+MAT_*_GENERIC CSV-Spaltenfix (density/recycledContent);data fix;v1;applied;jede inventarbasierte Methode ab v2;Zirkularitaet(MCI);-
+ImpactResult.value/valueLow/valueHigh/computedAt/provenance;node property;v2;applied;jede quantitative Methode (LCA,CF,H2O,THG,CED,Hotspot,Oekoeffizienz);alle Downstream-Analysen (Robustheit,Sensitivitaet,Designempfehlung);EPD/DPP
+Material-[:MODELED_BY]->Process (LCI-Proxy);rel type;v2;applied (Aluminium only);LCA/EF3.1,CF,CED,MFA;Zirkularitaet,hybride LCA;-
+Part.mass_g + massBasis;node property;v2;applied (5 Alu parts);LCA A1,MFA,MCI;Oekoeffizienz;-
+Assessment.systemBoundary/functionalUnit/referenceFlow/referenceQuantity/referenceUnit;node property;v2/v3;applied (48);LCA,CF,alle bilanzierenden,EPD;Vergleichbarkeitspruefung;EPD/DPP
+lca_computed_ef31 -> lca_generic($methodId);base query;v2->v3;applied;LCA,CF,H2O,THG,CED;Hotspot,Szenario-/Sensitivitaetsanalyse;-
+Process.lifecycleModule (EN15804) + processType-Normalisierung;node property;v3;applied (55);EPD/EN15804,THG-Bilanz,MFA;konsequenzielle LCA,Digitaler Produktpass;EPD/DPP
+AssessmentApproach-Taxonomie (3/9/29) + BROADER + APPLIES_APPROACH;label + rel types;v3;applied (41 Knoten);alle 29 Verfahren (Adressierbarkeit);Reporting/Navigation,automatisierte Designempfehlung;-
+IAM_MCI + IC_CIRCULARITY;method+category;v3.a;applied;Zirkularitaetsbewertung;EPD/DPP (Rezyklat/EoL);Digitaler Produktpass
+Material.recyclingRate/reusability/recycledContentAssumed/mci;node property;v3.a;applied (23, Klassen-Defaults);Zirkularitaetsbewertung;konsequenzielle LCA (Modul D);EPD/DPP
+EndOfLifeRoute + HAS_EOL_ROUTE {fraction};label + rel type;v3.a;applied (4 Knoten/60 Kanten, Defaults);Zirkularitaetsbewertung,MFA(EoL);konsequenzielle LCA;Digitaler Produktpass
+Artifact.designLifetime/referenceLifetime;node property;v3.a;applied (43, neutral);Zirkularitaet(Nutzenfaktor);Oekoeffizienz,dynamische LCA;EPD/DPP
+CostItem + HAS_COST + Material.unitCost;label + rel type + property;v3.b;applied (Prototyp/Platzhalter);Materialfluss-Kostenrechnung,Oekoeffizienz;hybride LCA;-
+Flow.mfcaClass;node property;v3.b;applied (2 Fluesse);Materialfluss-Kostenrechnung;MFA (product/loss);-
+Assessment.productSystemValue;node property;v3.b;applied (5, Platzhalter);Oekoeffizienz-Bewertung;-;-
+HAS_FLOW.uncertaintyDistribution;rel property;v3.c;applied (40671);Unsicherheits-/Sensitivitaetsanalyse;Robustheits-/Resilienzanalyse;-
+Parameter/ParameterValue/ModelScenario + PARAM_OF/SETS/FOR/UNDER_SCENARIO;labels + rel types;v3.c;applied (1 illustratives Szenario);prospektive/szenariobasierte/Robustheits-/Sensitivitaets-Verfahren,lernende Szenario-Modelle;konsequenzielle LCA;-
+ImpactResult.scenarioRef + Assessment.scenarioRef;node property;v3.c;applied (alle);szenariobasierte Verfahren;Robustheitsanalyse;-
+hotspot.cypher;base query;v3.c;applied;Hotspot-Analyse;alle LCA-Verfahren;-
+IAM_REPAIR + IC_REPAIRABILITY + IR_REPAIR_<art>;method+category+results;v3.d;applied (43);Wirkkettenanalyse (strukturell);automatisierte Designempfehlung;EPD/DPP
+ImpactResult-[:BASED_ON]->(CoreProperty|Feature|DataItem);rel type;v3.d;applied (57);Wirkkettenanalyse,Ersatz-/Naeherungsmodelle;Cross-Impact-Analyse,automatisierte Designempfehlung;-
+ImpactResult.confidence;node property;v3.d;applied;Umweltwirkungsprognosen,KI-Lebenszyklusmodellierung,praediktive Umweltfolgeabschaetzung;Robustheitsanalyse;EPD/DPP
+Declaration + DECLARES/REPORTS;label + rel types;v3.d;applied (1 EPD + 1 DPP);Digitaler Produktpass,EPD (EN15804);-;-
+Requirement.sustainabilityIndicatorRef/Threshold/Operator/Unit/Scope;node property;v3.d;applied (1 Demonstrator);automatisierte Designempfehlung;Verifikation (RFLPV2 Test Case);-
+PredictionModel / Recommendation (nur Typ);label;v3.d;prepared (keine Instanzen);Umweltwirkungsprognosen,Ersatzmodelle,automatisierte Designempfehlung;-;-
+PRE-5 ImpactCategory-Hygiene;merge/normalize;v3-Folgescheibe;applied;ReCiPe/CML,volle EF3.1-Kategorienabdeckung;-;-
+2. LCIA-Methode (ReCiPe) als Daten;data load;v3.e;applied (nur Klima befuellt);Oekobilanzierung (Methodenaustausch-Nachweis);-;-
+v2-data: MODELED_BY-Proxys + Part-Massen (~16 Materialien) + A3-Manufacturing-LCI;data;v2-data Arbeitsstrang;offen;LCA/EF3.1 volle Abdeckung,MFA,MCI massengewichtet;alle bilanzierenden;EPD/DPP
+Part.mass_g (alle 86, Geometrie/Typ-Default);node property;v2-data;applied;LCA A1-A3,MFA,MCI massengewichtet,Ökoeffizienz;alle massenbasierten Verfahren;EPD/DPP
+Process.energyIntensity_kWh_per_kg + FLOW_ELECTRICITY CHARACTERIZES;property + rel;v2-data;applied;LCA A3,CED,THG (A3-Anteil);Ökoeffizienz;EPD/DPP
+Material.gwp_A1_kgCO2e_per_kg + ef31_factors_A1[];node property;v2-data (Variante B);applied (18 Materialien);LCA volle Gripper-Abdeckung;MFA,MCI;EPD/DPP
+MODELED_BY -> reale ILCD-Datensätze (Stahl, PA66-Proxy);rel;v2-data (Variante A);applied;LCA A1 rigoros;Zirkularität;-
+ImpactCategory-Kanonisierung (PRE-5, 12 Merges);merge/normalize;v3-Folgescheibe;applied;mehrkategorielle LCIA (EF3.1 7->19 Kat.),ReCiPe/CML;-;EPD/DPP
+IAM_RECIPE + 18 IC_RECIPE_* + HAS_CATEGORY;method+categories;v3.e;applied (Klima befüllt);Ökobilanzierung (Methodenaustausch-Nachweis);Hotspot,Sensitivität;-
+graph_schema_v3x.json + EXTENSION_REFERENCE.md + method_onepagers/;documentation;dokumentation;applied;-;-;-
+Process.ghgScope + ghgScopeCategory;node property;v3.f;applied (55 Prozesse);THG-Bilanzierung nach Scope;LCA (Scope-Zusatzsicht),Digitaler Produktpass,konsequenzielle LCA;v3x_nonlcia/CHANGELOG.md
+Flow.ghgSpecies;node property;v3.f;applied (38 Fluesse);THG-Bilanzierung,CO2-Fussabdruck;dynamische LCA (GWP20),Hotspot;v3x_nonlcia/CHANGELOG.md
+IAM_GHG (nutzt IC_CLIMATE) + ASSESS_GHG_* + IR_GHG_*_S1/S2/S3UP;method+assessments;v3.f;applied (5 Gripper);THG-Bilanzierung nach Scope;CO2-Fussabdruck,Robustheit;v3x_nonlcia/CHANGELOG.md
+HazardStatement + HAS_HAZARD + Flow.hazardClass;label+rel+property;v3.f;applied (12 H-Saetze / 170 Kanten);Schadstoffbilanzierung;MFA,Digitaler Produktpass,LCA (Human-/Oekotox);v3x_nonlcia/CHANGELOG.md
+IC_EF_WATER_USE.referenceUnit + ASSESS_H2O_* (Huellen);property+assessments;v3.f;applied (Struktur; value=NULL, Daten offen);Wasser-Fussabdruck;LCA (Kategorie-Reporting);v3x_nonlcia/CHANGELOG.md
+INFLUENCES {sign,strength,mechanism} (Cross-Impact-Matrix);rel type;v3.g;applied (60 Kanten);Cross-Impact-Wirkungsanalyse;automatisierte Designempfehlung,Wirkkette,Zirkularitaet,Reparierbarkeit;v3x_nonlcia/CHANGELOG.md
+ASSESS_EF31_SCEN_RECALU_* + IR_* unter SC_RECYCLED_ALU;assessments+results;v3.g;applied (5 Gripper);Szenario-gestuetzte Umweltbewertung;Robustheit,prospektive LCA,THG;v3x_nonlcia/CHANGELOG.md
+4 reale PlasticsEurope ILCD-Datensätze (ABS,PC,POM,PA6.6) + MODELED_BY Variante A;process+rel+data;v2-data/ilcd_import;applied;LCA Variante A (lca_generic IAM_EF31),CO2-Fussabdruck;THG-Scopes,MCI,Szenario,Hotspot,DPP,Robustheit;v2_data/ilcd_import/CHANGELOG.md
+Charakterisierungs-Harmonisierung (CHARACTERIZES derived via CAS+Kompartiment);rel;v2-data/ilcd_import;applied (36 Kanten);EF3.1-Auswertung importierter Datensätze;ReCiPe-Klima erbt CO2/CH4;v2_data/ilcd_import/README.md
