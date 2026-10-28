@@ -1,321 +1,321 @@
-# Master-Spec: Änderungsmenge pro Bewertungsmethode
+# Master spec: change set per assessment method
 
-Stand: 2026-08-27 (Spec + Fortschritt jenes Laufs). Gehört zu
-[`model_extension/migrations/PLAN.md`](../migrations/PLAN.md). Grundlage: Live-Inspektion
-zum Ausgangszeitpunkt (2 721 Knoten / 79 647 Beziehungen) und das
-Methodendiagramm (3 Paradigmen / 9 Gruppen / 29 Verfahren; nach der
-KI-Entfernung 2026-08-29 sind 3.1.x/3.3.x raus → 7 Gruppen / 23 Verfahren).
-**Aktueller Ist-Stand:** [`model_extension/reference/EXTENSION_REFERENCE.md`](EXTENSION_REFERENCE.md)
-— Live-DB 2026-08-29: 5 620 Knoten / 86 635 Beziehungen / 6 Methoden.
+As of 2026-08-27 (spec + progress of that run). Belongs to
+[`model_extension/migrations/PLAN.md`](../migrations/PLAN.md). Basis: live inspection
+at the starting point (2,721 nodes / 79,647 relationships) and the
+method diagram (3 paradigms / 9 groups / 29 approaches; after the
+AI removal on 2026-08-29, 3.1.x/3.3.x are gone → 7 groups / 23 approaches).
+**Current state:** [`model_extension/reference/EXTENSION_REFERENCE.md`](EXTENSION_REFERENCE.md)
+— live DB 2026-08-29: 5,620 nodes / 86,635 relationships / 6 methods.
 
-Dieses Dokument sagt **pro Verfahren**, welche Knoten / Kanten / Properties /
-Vokabulare / Daten / Queries nötig sind, in welcher Ausbaustufe sie liegen und
-**welche anderen Verfahren dieselbe Änderung teilen**.
+This document states **per approach** which nodes / edges / properties /
+vocabularies / data / queries are needed, in which stage they sit, and
+**which other approaches share the same change**.
 
 ---
 
-## 0. Lesehilfe
+## 0. Reading guide
 
-**Änderungs-Tokens**
+**Change tokens**
 
-| Token | Bedeutung |
+| Token | Meaning |
 |---|---|
-| `P` | neue Property (Knoten oder Kante) |
-| `V` | kontrollierte Werteliste zu einer Property |
-| `R` | neuer Beziehungstyp |
-| `N` | neues Label |
-| `D` | Datenladung (kein Schema) |
-| `Q` | nur Query, keine Schemaänderung |
-| `~` | bestehendes normalisieren / korrigieren |
+| `P` | new property (node or edge) |
+| `V` | controlled value list for a property |
+| `R` | new relationship type |
+| `N` | new label |
+| `D` | data load (no schema) |
+| `Q` | query only, no schema change |
+| `~` | normalise / correct existing content |
 
-**Ausbaustufen** (siehe PLAN.md)
+**Stages** (see PLAN.md)
 
-| Stufe | Box | Kurz |
+| Stage | Box | In short |
 |---|---|---|
-| **v1** | black | Produktmodell + konkrete attribuierte Indikatoren + Reparierbarkeit |
-| **v2** | grey | ILCD/EF3.1-Inventar + Rechenkern (`ImpactResult.value`, `lca_computed_ef31`) |
-| **v3** | white | ILCD interpretierbar: `lca_generic($methodId)`, funkt. Einheit, Module, Kategorie-Hygiene, Methoden-Taxonomie, 2. LCIA-Methode |
-| **v3.x** | white + Modul | komponierbare Methodenfamilien (a Zirkularität · b Kosten · c Szenario/Unsicherheit · d Provenienz/Deklaration) |
+| **v1** | black | product model + concrete attributed indicators + repairability |
+| **v2** | grey | ILCD/EF3.1 inventory + calculation core (`ImpactResult.value`, `lca_computed_ef31`) |
+| **v3** | white | ILCD interpretable: `lca_generic($methodId)`, functional unit, modules, category hygiene, method taxonomy, 2nd LCIA method |
+| **v3.x** | white + module | composable method families (a circularity · b cost · c scenario/uncertainty · d provenance/declaration) |
 
-**Prinzip:** Migrationen laufen gegen die Live-DB; die Stufen-Snapshots sind
-gefilterte Exporte desselben Standes. Jede Stufe ist streng additiv.
+**Principle:** migrations run against the live DB; the stage snapshots are
+filtered exports of the same state. Every stage is strictly additive.
 
 ---
 
-## 1. Querschnittliche Voraussetzungen (PRE)
+## 1. Cross-cutting prerequisites (PRE)
 
-Einmalig, tragen mehrere Verfahren gleichzeitig.
+One-off, carry several approaches at the same time.
 
-| ID | Stufe | Änderung | Tokens |
+| ID | Stage | Change | Tokens |
 |---|---|---|---|
-| **PRE‑1** | v2 | `P ImpactResult.value, .valueLow, .valueHigh, .computedAt, .provenance` + `V provenance=[LCI-calculated, measured, literature, ml-predicted, expert-estimate]` — heute hat `ImpactResult` **keinen** Zahlenwert | 5P, 1V |
-| **PRE‑2** | v3 | `P Process.lifecycleModule` + `V` EN15804 `[A1,A2,A3,A1-A3,A4,A5,B1..B7,C1..C4,D]` + `D` Backfill ~55 Prozesse (Quelle: Freitext-Namen „… (EN15804 A1-A3)" + `processType`) + `~ Process.processType` (`EndOfLife` vs „End of Life") | 1P,1V,1D,1~ |
+| **PRE‑1** | v2 | `P ImpactResult.value, .valueLow, .valueHigh, .computedAt, .provenance` + `V provenance=[LCI-calculated, measured, literature, ml-predicted, expert-estimate]` — today `ImpactResult` has **no** numeric value | 5P, 1V |
+| **PRE‑2** | v3 | `P Process.lifecycleModule` + `V` EN15804 `[A1,A2,A3,A1-A3,A4,A5,B1..B7,C1..C4,D]` + `D` backfill ~55 processes (source: free-text names "… (EN15804 A1-A3)" + `processType`) + `~ Process.processType` (`EndOfLife` vs. "End of Life") | 1P,1V,1D,1~ |
 | **PRE‑3** | v3 | `P Assessment.functionalUnit, .referenceFlow, .referenceQuantity, .referenceUnit, .systemBoundary` + `V systemBoundary=[cradle-to-gate, cradle-to-grave, gate-to-gate, cradle-to-cradle]` | 5P,1V |
-| **PRE‑4** | v3 | Methoden-Taxonomie: `N AssessmentApproach{id,name,level,code}` + `R (AssessmentApproach)-[:BROADER]->(AssessmentApproach)` + `R (Assessment)-[:APPLIES_APPROACH]->(AssessmentApproach)` + `D` 3 Paradigmen / 9 Gruppen / 29 Verfahren aus dem Diagramm | 1N,2R,1D |
-| **PRE‑5** | v3 | `~` ImpactCategory-Hygiene: ~20 Waisen / Near-Duplikate zusammenführen (`IC_EF_CLIMATE_BIOGENIC` vs `IC_EF_CLIMATE_CHANGE_BIOGENIC`, 3× Ecotoxicity-freshwater …), `indicator`/`unit` normalisieren (teils zerrissen, z. B. `indicator=" freshwater"`) | 1~ (groß) |
+| **PRE‑4** | v3 | Method taxonomy: `N AssessmentApproach{id,name,level,code}` + `R (AssessmentApproach)-[:BROADER]->(AssessmentApproach)` + `R (Assessment)-[:APPLIES_APPROACH]->(AssessmentApproach)` + `D` 3 paradigms / 9 groups / 29 approaches from the diagram | 1N,2R,1D |
+| **PRE‑5** | v3 | `~` ImpactCategory hygiene: merge ~20 orphans / near-duplicates (`IC_EF_CLIMATE_BIOGENIC` vs `IC_EF_CLIMATE_CHANGE_BIOGENIC`, 3× ecotoxicity freshwater …), normalise `indicator`/`unit` (partly torn apart, e.g. `indicator=" freshwater"`) | 1~ (large) |
 
-Aktueller Kategorien-Zustand: 42 `ImpactCategory`-Knoten, davon 22 an `IAM_EF31`
-gehängt (`HAS_CATEGORY`), 1 an `IAM_PCF`, 20 verwaist.
+Category state at the time: 42 `ImpactCategory` nodes, of which 22 are attached to `IAM_EF31`
+(`HAS_CATEGORY`), 1 to `IAM_PCF`, 20 orphaned.
 
 ---
 
-## 2. Paradigma „bilanzierende Ansätze" — Fokus, weitgehend im Modell
+## 2. Paradigm "accounting approaches" — focus, largely in the model
 
-### 2.1 Lebenszyklusbasierte Umweltbewertung
+### 2.1 Life-cycle-based environmental assessment
 
-#### Ökobilanzierung (LCA, ISO 14040/44)
-- **Was:** Vollständige mehrkategorielle LCIA. `Artifact → ProcessPlan → CONTAINS_PROCESS → Process → HAS_FLOW → Flow → CHARACTERIZES → ImpactCategory`, gefiltert per Methode.
-- **Stufe:** v2 (EF3.1, ein-Methoden-Rechnung) → v3 (methodenagnostisch)
-- **Nutzt:** komplette ILCD-Struktur (2 102 `Flow`, 49 672 `HAS_FLOW`, 27 768 `CHARACTERIZES`), `IAM_EF31`
-- **Δ Schema:** PRE‑1 (v2), PRE‑2/PRE‑3/PRE‑4/PRE‑5 (v3)
-- **Δ Daten:** `D` restliche EF3.1-Kategorien an `HAS_CATEGORY` hängen, CF-Abdeckung prüfen
-- **Basisquery:** v2 `lca_computed_ef31($artifactId)` = Σ `CONTAINS_PROCESS.share · HAS_FLOW.amount · CHARACTERIZES.factor` je Kategorie → `ImpactResult.value`; v3 `lca_generic($methodId, $artifactId)`
-- **Änderungsmenge:** über PRE hinaus: 1D, 1Q (v2) + 1Q-Refactor (v3)
-- **Betroffene Methoden:** alle folgenden LCA-Ableitungen (CF, H₂O, THG, CED) hängen an derselben Query + PRE‑1
+#### Life cycle assessment (LCA, ISO 14040/44)
+- **What:** Complete multi-category LCIA. `Artifact → ProcessPlan → CONTAINS_PROCESS → Process → HAS_FLOW → Flow → CHARACTERIZES → ImpactCategory`, filtered per method.
+- **Stage:** v2 (EF3.1, single-method calculation) → v3 (method-agnostic)
+- **Uses:** the complete ILCD structure (2,102 `Flow`, 49,672 `HAS_FLOW`, 27,768 `CHARACTERIZES`), `IAM_EF31`
+- **Δ schema:** PRE‑1 (v2), PRE‑2/PRE‑3/PRE‑4/PRE‑5 (v3)
+- **Δ data:** `D` attach the remaining EF3.1 categories to `HAS_CATEGORY`, check CF coverage
+- **Base query:** v2 `lca_computed_ef31($artifactId)` = Σ `CONTAINS_PROCESS.share · HAS_FLOW.amount · CHARACTERIZES.factor` per category → `ImpactResult.value`; v3 `lca_generic($methodId, $artifactId)`
+- **Change set:** beyond PRE: 1D, 1Q (v2) + 1Q refactor (v3)
+- **Affected methods:** all following LCA derivatives (CF, H₂O, GHG, CED) hang on the same query + PRE‑1
 
-#### Umweltfußabdruck CO₂ (Carbon Footprint, ISO 14067)
-- **Was:** LCA-Teilmenge = nur Klimawandel-Kategorien (fossil / biogen / LULUC).
-- **Stufe:** v2 (existiert als `IAM_PCF`) → v3 (Sub-Kategorien sauber)
-- **Nutzt:** `IAM_PCF`, `IC_CLIMATE` + EF-Klima-Subkategorien
-- **Δ Schema:** keine über PRE
-- **Δ Daten:** `D` GWP-Subkategorien unter einem PCF-Approach bündeln
-- **Basisquery:** `carbon_footprint.cypher` = `lca_generic` mit `methodId='IAM_PCF'`
-- **Änderungsmenge:** 1D, 1Q
-- **Betroffene Methoden:** THG-Bilanzierung (teilt GWP-Kategorien), EPD/DPP (berichtet PCF)
+#### Carbon footprint (CO₂, ISO 14067)
+- **What:** LCA subset = climate change categories only (fossil / biogenic / LULUC).
+- **Stage:** v2 (exists as `IAM_PCF`) → v3 (clean sub-categories)
+- **Uses:** `IAM_PCF`, `IC_CLIMATE` + EF climate sub-categories
+- **Δ schema:** none beyond PRE
+- **Δ data:** `D` bundle the GWP sub-categories under one PCF approach
+- **Base query:** `carbon_footprint.cypher` = `lca_generic` with `methodId='IAM_PCF'`
+- **Change set:** 1D, 1Q
+- **Affected methods:** greenhouse gas accounting (shares GWP categories), EPD/DPP (reports PCF)
 
-#### Umweltfußabdruck H₂O (Water Footprint, ISO 14046)
-- **Was:** Teilmenge = Wassernutzung, regionalisiert.
-- **Stufe:** v3
-- **Nutzt:** `IC_EF_WATER_USE`, `CHARACTERIZES.location` (224 Regionen bereits vorhanden)
-- **Δ Schema:** keine
-- **Δ Daten:** `D` Methoden-Instanz `IAM_WATER` (AWARE) + `HAS_CATEGORY` → Wasserkat.; `D` AWARE-CF als `CHARACTERIZES{factor,location}` für Wasserflüsse; `Flow.category` „Wasser" prüfen
-- **Basisquery:** `water_footprint.cypher`
-- **Änderungsmenge:** 2D, 1Q
-- **Betroffene Methoden:** —
+#### Water footprint (H₂O, ISO 14046)
+- **What:** subset = water use, regionalised.
+- **Stage:** v3
+- **Uses:** `IC_EF_WATER_USE`, `CHARACTERIZES.location` (224 regions already present)
+- **Δ schema:** none
+- **Δ data:** `D` method instance `IAM_WATER` (AWARE) + `HAS_CATEGORY` → water category; `D` AWARE CFs as `CHARACTERIZES{factor,location}` for water flows; check `Flow.category` "water"
+- **Base query:** `water_footprint.cypher`
+- **Change set:** 2D, 1Q
+- **Affected methods:** —
 
-#### Treibhausgasbilanzierung (GHG Protocol)
-- **Was:** wie CF, aber nach **Scope 1/2/3** gegliedert statt nach Lebenszyklusmodulen.
-- **Stufe:** v3
-- **Nutzt:** GWP-Kategorien, `lca_generic`
-- **Δ Schema:** `P Process.ghgScope` + `V [scope1,scope2,scope3]`; opt. `P Process.ghgScope3Category`
-- **Δ Daten:** `D` ~55 Prozesse nach Scope klassifizieren
-- **Basisquery:** `ghg_inventory.cypher` = GWP gruppiert nach `ghgScope`
-- **Änderungsmenge:** 1–2P, 1V, 1D, 1Q
-- **Betroffene Methoden:** teilt GWP-Kategorien mit CF; Klassifikator-Bauform identisch zu PRE‑2 (`lifecycleModule`)
+#### Greenhouse gas accounting (GHG Protocol)
+- **What:** like CF, but structured by **Scope 1/2/3** instead of by life cycle modules.
+- **Stage:** v3
+- **Uses:** GWP categories, `lca_generic`
+- **Δ schema:** `P Process.ghgScope` + `V [scope1,scope2,scope3]`; opt. `P Process.ghgScope3Category`
+- **Δ data:** `D` classify ~55 processes by scope
+- **Base query:** `ghg_inventory.cypher` = GWP grouped by `ghgScope`
+- **Change set:** 1–2P, 1V, 1D, 1Q
+- **Affected methods:** shares GWP categories with CF; classifier design identical to PRE‑2 (`lifecycleModule`)
 
-### 2.2 Stoff- und ressourcenbezogene Bilanzierung
+### 2.2 Substance- and resource-related accounting
 
-#### Stoff- & Materialstromanalyse (MFA)
-- **Was:** Massenbilanz der Flüsse durch eine definierte Systemgrenze.
-- **Stufe:** v3
-- **Nutzt:** `HAS_FLOW{amount,unit,direction}`, `Flow.flowType`, `Flow.referenceUnit`, `Material.density_kg_m3`, `CONTAINS_PROCESS.sequence`
-- **Δ Schema:** `P Flow.balanceRole` + `V [input,product,coproduct,emission,waste,resource]`; opt. `N SystemBoundary` + `R (Assessment)-[:HAS_BOUNDARY]->(SystemBoundary)` + `R (SystemBoundary)-[:INCLUDES]->(Process)`
-- **Δ Daten:** `D` Flüsse taggen; Volumen→Masse über `referenceUnit` + Dichte
-- **Basisquery:** `mfa_balance.cypher` = Masse ein/aus je Prozess, Δ = Imbalance
-- **Änderungsmenge:** 1P, 1V, 1D, 1Q (+ opt 1N, 2R)
-- **Betroffene Methoden:** Zirkularität (nutzt Materialanteile), MFCA (dieselbe Flussklassifikation product/loss)
+#### Substance and material flow analysis (MFA)
+- **What:** mass balance of the flows through a defined system boundary.
+- **Stage:** v3
+- **Uses:** `HAS_FLOW{amount,unit,direction}`, `Flow.flowType`, `Flow.referenceUnit`, `Material.density_kg_m3`, `CONTAINS_PROCESS.sequence`
+- **Δ schema:** `P Flow.balanceRole` + `V [input,product,coproduct,emission,waste,resource]`; opt. `N SystemBoundary` + `R (Assessment)-[:HAS_BOUNDARY]->(SystemBoundary)` + `R (SystemBoundary)-[:INCLUDES]->(Process)`
+- **Δ data:** `D` tag flows; volume→mass via `referenceUnit` + density
+- **Base query:** `mfa_balance.cypher` = mass in/out per process, Δ = imbalance
+- **Change set:** 1P, 1V, 1D, 1Q (+ opt 1N, 2R)
+- **Affected methods:** circularity (uses material shares), MFCA (same flow classification product/loss)
 
-#### Schadstoffbilanzierung
-- **Was:** Filter auf gefährliche Stoffe, Summe je Substanz/Kompartiment.
-- **Stufe:** v3
-- **Nutzt:** `Flow.casNumber`, `Flow.category`, `HAS_FLOW.amount`
-- **Δ Schema:** `P Flow.hazardClass` (String[]) + `V [SVHC,CMR,PBT,vPvB,GHS-H…]` **oder** `N HazardStatement{code,ghs}` + `R (Flow)-[:HAS_HAZARD]->(HazardStatement)`
-- **Δ Daten:** `D` gefährliche Flüsse annotieren (Teilmenge mit CAS)
-- **Basisquery:** `pollutant_inventory.cypher`
-- **Änderungsmenge:** 1P, 1V, 1D, 1Q *(oder 1N, 1R, 1D, 1Q)*
-- **Betroffene Methoden:** Digitaler Produktpass (SVHC-Meldung), Humantoxizitäts-Kategorien (Plausibilisierung)
+#### Pollutant accounting
+- **What:** filter on hazardous substances, sum per substance/compartment.
+- **Stage:** v3
+- **Uses:** `Flow.casNumber`, `Flow.category`, `HAS_FLOW.amount`
+- **Δ schema:** `P Flow.hazardClass` (String[]) + `V [SVHC,CMR,PBT,vPvB,GHS-H…]` **or** `N HazardStatement{code,ghs}` + `R (Flow)-[:HAS_HAZARD]->(HazardStatement)`
+- **Δ data:** `D` annotate hazardous flows (subset with CAS)
+- **Base query:** `pollutant_inventory.cypher`
+- **Change set:** 1P, 1V, 1D, 1Q *(or 1N, 1R, 1D, 1Q)*
+- **Affected methods:** digital product passport (SVHC reporting), human toxicity categories (plausibility check)
 
-#### Kumulierter Energieverbrauch (CED / KEA, VDI 4600)
-- **Was:** Summe Primärenergie, erneuerbar / nicht erneuerbar.
-- **Stufe:** v3
-- **Nutzt:** `IC_ENERGY` („Energy demand", MJ), `lca_generic`
-- **Δ Schema:** `P Flow.energyResourceType` + `V [renewable,non-renewable,nuclear]`
-- **Δ Daten:** `D` Methoden-Instanz `IAM_CED`; 3 Kategorie-Instanzen (CED-total/-ren/-nonren); `D` CED-CF als `CHARACTERIZES{factor}` ab Primärenergie-Ressourcenflüssen
-- **Basisquery:** `ced.cypher` = `lca_generic` mit `methodId='IAM_CED'`
-- **Änderungsmenge:** 1P, 1V, 3D, 1Q
-- **Betroffene Methoden:** Ökoeffizienz (kann CED als Nenner nutzen), prospektive LCA (Energiemix-Szenarien)
+#### Cumulative energy demand (CED / KEA, VDI 4600)
+- **What:** sum of primary energy, renewable / non-renewable.
+- **Stage:** v3
+- **Uses:** `IC_ENERGY` ("Energy demand", MJ), `lca_generic`
+- **Δ schema:** `P Flow.energyResourceType` + `V [renewable,non-renewable,nuclear]`
+- **Δ data:** `D` method instance `IAM_CED`; 3 category instances (CED total/renewable/non-renewable); `D` CED CFs as `CHARACTERIZES{factor}` from primary energy resource flows
+- **Base query:** `ced.cypher` = `lca_generic` with `methodId='IAM_CED'`
+- **Change set:** 1P, 1V, 3D, 1Q
+- **Affected methods:** eco-efficiency (can use CED as denominator), prospective LCA (energy mix scenarios)
 
-#### Zirkularitätsbewertung (MCI, Ellen MacArthur)  → **Modul v3.a**
-- **Was:** Materialkreislauf-Index je Bauteil, massengewichtet je Artefakt.
-- **Stufe:** v3.a
-- **Nutzt:** `USES_MATERIAL.fraction`, `Material.recycledContent_pct` (Achtung: real überall NULL), `HAS_COMPONENT.quantity`, `Artifact.componentCount`/`distinctMaterialCount`/`disassemblyReversibility` (aus v1!), `Process{processType:'EndOfLife'}` + `CONTAINS_PROCESS.share`
-- **Δ Schema:** `P Material.recyclingRate, .recyclability, .reusability`; `P Artifact.designLifetime, .usageIntensity, .referenceLifetime`; `N EndOfLifeRoute{id,name,type}` + `R (Material)-[:HAS_EOL_ROUTE{fraction}]->(EndOfLifeRoute)` *(oder* `P Process.eolRouteType` *nutzen)*
-- **Δ Daten:** `D` 1 Kategorie-Instanz `IC_CIRCULARITY{indicator:'MCI',unit:'dimensionless'}`; Kreislaufparameter für ~23 `Material`; EoL-Anteile; `D` echte `recycledContent_pct`-Werte (Datenlücke!)
-- **Basisquery:** `mci.cypher` = V (Virgin), W (Waste), Nutzenfaktor, LFI, MCI
-- **Änderungsmenge:** ~6P, (1N + 1R oder 1P), 2D, 1Q
-- **Betroffene Methoden:** nutzt v1-Reparierbarkeit; speist EPD/DPP; konsequenzielle LCA (Modul D / vermiedene Last)
+#### Circularity assessment (MCI, Ellen MacArthur)  → **module v3.a**
+- **What:** material circularity index per part, mass-weighted per artifact.
+- **Stage:** v3.a
+- **Uses:** `USES_MATERIAL.fraction`, `Material.recycledContent_pct` (note: actually NULL everywhere), `HAS_COMPONENT.quantity`, `Artifact.componentCount`/`distinctMaterialCount`/`disassemblyReversibility` (from v1!), `Process{processType:'EndOfLife'}` + `CONTAINS_PROCESS.share`
+- **Δ schema:** `P Material.recyclingRate, .recyclability, .reusability`; `P Artifact.designLifetime, .usageIntensity, .referenceLifetime`; `N EndOfLifeRoute{id,name,type}` + `R (Material)-[:HAS_EOL_ROUTE{fraction}]->(EndOfLifeRoute)` *(or use* `P Process.eolRouteType` *instead)*
+- **Δ data:** `D` 1 category instance `IC_CIRCULARITY{indicator:'MCI',unit:'dimensionless'}`; circularity parameters for ~23 `Material`; EoL shares; `D` real `recycledContent_pct` values (data gap!)
+- **Base query:** `mci.cypher` = V (virgin), W (waste), utility factor, LFI, MCI
+- **Change set:** ~6P, (1N + 1R or 1P), 2D, 1Q
+- **Affected methods:** uses v1 repairability; feeds EPD/DPP; consequential LCA (module D / avoided burden)
 
-### 2.3 Integrierte ökologisch-ökonomische Bilanzierung  → **Modul v3.b (Prototyp)**
+### 2.3 Integrated ecological-economic accounting  → **module v3.b (prototype)**
 
-**Kostendimension** (heute **keine** ökonomische Property im Graphen):
+**Cost dimension** (today **no** economic property in the graph):
 
-| Variante | Änderung | Für |
+| Variant | Change | For |
 |---|---|---|
-| **A schlank** | `P Material.unitCost,.costUnit`; `P Process.unitCost,.costUnit`; `P CONTAINS_PROCESS.costShare`; `P HAS_FLOW.unitCost` | Ökoeffizienz, grobe Kostensicht |
-| **B strukturiert** *(empfohlen)* | `N CostItem{category,amount,currency,perUnit}` + `R (Process\|Part\|Material\|Flow)-[:HAS_COST]->(CostItem)` + `V category=[material,energy,system,waste-management,capital,labour]` | MFCA (braucht Kostenarten-Trennung), hybride LCA |
+| **A lean** | `P Material.unitCost,.costUnit`; `P Process.unitCost,.costUnit`; `P CONTAINS_PROCESS.costShare`; `P HAS_FLOW.unitCost` | eco-efficiency, rough cost view |
+| **B structured** *(recommended)* | `N CostItem{category,amount,currency,perUnit}` + `R (Process\|Part\|Material\|Flow)-[:HAS_COST]->(CostItem)` + `V category=[material,energy,system,waste-management,capital,labour]` | MFCA (needs separation of cost types), hybrid LCA |
 
-#### Materialfluss-Kostenrechnung (MFCA, ISO 14051)
-- **Was:** Kosten je Materialstrom, Produktpfad vs. Verlustpfad.
-- **Stufe:** v3.b
-- **Nutzt:** Kosten-B, `HAS_FLOW.amount`, `Flow.flowType`
-- **Δ Schema:** Kosten-B + `P Flow.mfcaClass` + `V [product, material-loss]`
-- **Δ Daten:** `D` CostItems je Prozess; Output-Flüsse klassifizieren
-- **Basisquery:** `mfca.cypher` = Inputkosten → Produkt- vs. Verlustpfad nach Massenanteil; „Kosten des Abfalls" hochrollen
-- **Änderungsmenge:** [1N,1R,1V] + 1P, 1V, 1D, 1Q
-- **Betroffene Methoden:** Ökoeffizienz (Wertbasis), hybride LCA (monetäre I-O), MFA (Fluss product/loss)
+#### Material flow cost accounting (MFCA, ISO 14051)
+- **What:** cost per material stream, product path vs. loss path.
+- **Stage:** v3.b
+- **Uses:** cost B, `HAS_FLOW.amount`, `Flow.flowType`
+- **Δ schema:** cost B + `P Flow.mfcaClass` + `V [product, material-loss]`
+- **Δ data:** `D` CostItems per process; classify output flows
+- **Base query:** `mfca.cypher` = input costs → product vs. loss path by mass share; roll up the "cost of waste"
+- **Change set:** [1N,1R,1V] + 1P, 1V, 1D, 1Q
+- **Affected methods:** eco-efficiency (value basis), hybrid LCA (monetary I-O), MFA (flow product/loss)
 
-#### Ökoeffizienz-Bewertung (ISO 14045)
-- **Was:** Umweltwirkung ÷ Produkt-/Systemwert.
-- **Stufe:** v3.b
-- **Nutzt:** LCA-Ergebnis (v2/v3) + Kosten oder Preis
-- **Δ Schema:** `P Assessment.productSystemValue, .productSystemValueUnit`
-- **Δ Daten:** `D` 1 Kategorie-Instanz `IC_ECOEFF`; Wertbasis wählen (MFCA-Kosten / Preis / funktionaler Output)
-- **Basisquery:** `eco_efficiency.cypher` = gewählte `ImpactResult.value` ÷ `productSystemValue`
-- **Änderungsmenge:** 2P, 1D, 1Q
-- **Betroffene Methoden:** abhängig von LCA + MFCA
+#### Eco-efficiency assessment (ISO 14045)
+- **What:** environmental impact ÷ product/system value.
+- **Stage:** v3.b
+- **Uses:** LCA result (v2/v3) + cost or price
+- **Δ schema:** `P Assessment.productSystemValue, .productSystemValueUnit`
+- **Δ data:** `D` 1 category instance `IC_ECOEFF`; choose the value basis (MFCA cost / price / functional output)
+- **Base query:** `eco_efficiency.cypher` = chosen `ImpactResult.value` ÷ `productSystemValue`
+- **Change set:** 2P, 1D, 1Q
+- **Affected methods:** depends on LCA + MFCA
 
-#### Umwelt-ökonomische Gesamtrechnung (SEEA)
-- **Was:** volkswirtschaftliches Konten-Framework.
-- **Stufe:** — (nicht im KG rechnen)
-- **Δ Schema:** nur Doku-Hook: `N ExternalFramework{id,name,url}` + `R (Assessment)-[:REPORTS_TO]->(ExternalFramework)`
-- **Basisquery:** —
-- **Änderungsmenge:** 1N, 1R, 0 Rechnung
-- **Betroffene Methoden:** —
+#### Environmental-economic accounting (SEEA)
+- **What:** macroeconomic accounts framework.
+- **Stage:** — (not computed in the KG)
+- **Δ schema:** documentation hook only: `N ExternalFramework{id,name,url}` + `R (Assessment)-[:REPORTS_TO]->(ExternalFramework)`
+- **Base query:** —
+- **Change set:** 1N, 1R, 0 calculation
+- **Affected methods:** —
 
 ---
 
-## 3. Paradigma „datenbasierte Ansätze" — kompakt, kein Fokus jetzt
+## 3. Paradigm "data-driven approaches" — compact, no focus right now
 
-**Baustein C — Parameter-/Szenario-Layer** (Voraussetzung für 3.1 tw., 3.2, 3.3), **Modul v3.c**:
+**Building block C — parameter/scenario layer** (prerequisite for 3.1 partly, 3.2, 3.3), **module v3.c**:
 `N ModelScenario{id,name,type,horizonYear}` · `N Parameter{id,name,unit,baseValue}` ·
 `N ParameterValue{value,unit}` · `R (Parameter)-[:PARAM_OF]->(Process\|Part\|Material\|Assessment)` ·
 `R (ModelScenario)-[:SETS]->(ParameterValue)` · `R (ParameterValue)-[:FOR]->(Parameter)` ·
 `R (Assessment)-[:UNDER_SCENARIO]->(ModelScenario)` · `P ImpactResult.scenarioRef`
-→ **3N, 4R, 1P**. Wichtig: getrennt von den bestehenden Greif-`Scenario`s (17×, `scenarioType:'gripping'`).
+→ **3N, 4R, 1P**. Important: kept separate from the existing gripping `Scenario`s (17×, `scenarioType:'gripping'`).
 
-### 3.1 Prospektive lebenszyklusbasierte Umweltbewertung
+### 3.1 Prospective life-cycle-based environmental assessment
 
-| Verfahren | Stufe | Δ über Baustein C | Menge | Betroffene Methoden |
+| Approach | Stage | Δ beyond building block C | Amount | Affected methods |
 |---|---|---|---|---|
-| **prospektive Ökobilanzierung** | v3.c | `P ModelScenario.horizonYear`; `D` szenario-überschriebene Hintergrundwerte | 1P, 1D, 1Q | CED (Energiemix), konsequenzielle LCA |
-| **dynamische Ökobilanzierung** | v3.c+ | `P HAS_FLOW.emissionTiming`; `R (Flow)-[:CHARACTERIZES_DYNAMIC{timeHorizon,factor}]->(ImpactCategory)`; `D` zeitaufgelöste CF | 1P, 1R, 1D, 1Q *(größer)* | CF (GWP-Zeithorizont) |
-| **konsequenzielle Ökobilanzierung** | v3.c | `P Process.modelingApproach` + `V [attributional,consequential]`; `R (Process)-[:SUBSTITUTES{ratio}]->(Process)`; `R (Process)-[:AVOIDS]->(Flow)`; `D` Marginalprozesse | 1P, 1V, 2R, 1D, 1Q | Zirkularität (Modul D), prospektive LCA |
-| **hybride Ökobilanzierung** | v3.b+c | `N EEIOSector{id,name,region,emissionIntensity,unit}` + `R (Process)-[:COMPLEMENTED_BY{monetaryAmount,currency}]->(EEIOSector)` + Kosten-B; `D` Sektorintensitäten | 1N, 1R, 1D, 1Q *(niedrige Prio)* | MFCA (monetäre Basis) |
+| **prospective life cycle assessment** | v3.c | `P ModelScenario.horizonYear`; `D` scenario-overridden background values | 1P, 1D, 1Q | CED (energy mix), consequential LCA |
+| **dynamic life cycle assessment** | v3.c+ | `P HAS_FLOW.emissionTiming`; `R (Flow)-[:CHARACTERIZES_DYNAMIC{timeHorizon,factor}]->(ImpactCategory)`; `D` time-resolved CF | 1P, 1R, 1D, 1Q *(larger)* | CF (GWP time horizon) |
+| **consequential life cycle assessment** | v3.c | `P Process.modelingApproach` + `V [attributional,consequential]`; `R (Process)-[:SUBSTITUTES{ratio}]->(Process)`; `R (Process)-[:AVOIDS]->(Flow)`; `D` marginal processes | 1P, 1V, 2R, 1D, 1Q | circularity (module D), prospective LCA |
+| **hybrid life cycle assessment** | v3.b+c | `N EEIOSector{id,name,region,emissionIntensity,unit}` + `R (Process)-[:COMPLEMENTED_BY{monetaryAmount,currency}]->(EEIOSector)` + cost B; `D` sector intensities | 1N, 1R, 1D, 1Q *(low priority)* | MFCA (monetary basis) |
 
-### 3.2 Szenariobasierte Umweltbewertung
+### 3.2 Scenario-based environmental assessment
 
-| Verfahren | Stufe | Δ über Baustein C | Menge | Betroffene Methoden |
+| Approach | Stage | Δ beyond building block C | Amount | Affected methods |
 |---|---|---|---|---|
-| **Szenario-gestützte Bewertung** | v3.c | `D` Szenarienset | 1D, 1Q | alle v3.c-Verfahren |
-| **Cross-Impact-Wirkungsanalyse** | v3.c | `R (Parameter\|Function\|ImpactCategory)-[:INFLUENCES{sign,strength}]->(…)`; `D` Einflussmatrix | 1R, 1D, 1Q | Wirkkettenanalyse |
-| **Robustheits- und Resilienzanalyse** | v3.c | keine; opt. `P Assessment.robustnessIndex` | 0–1P, 1Q | Unsicherheits-/Sensitivitätsanalyse |
+| **scenario-supported assessment** | v3.c | `D` scenario set | 1D, 1Q | all v3.c approaches |
+| **cross-impact analysis** | v3.c | `R (Parameter\|Function\|ImpactCategory)-[:INFLUENCES{sign,strength}]->(…)`; `D` influence matrix | 1R, 1D, 1Q | impact chain analysis |
+| **robustness and resilience analysis** | v3.c | none; opt. `P Assessment.robustnessIndex` | 0–1P, 1Q | uncertainty/sensitivity analysis |
 
-### 3.3 Wirkungs- und Unsicherheitsanalysen
+### 3.3 Impact and uncertainty analyses
 
-| Verfahren | Stufe | Δ | Menge | Betroffene Methoden |
+| Approach | Stage | Δ | Amount | Affected methods |
 |---|---|---|---|---|
-| **Wirkkettenanalyse** | v3 / v3.d | `R (ImpactResult)-[:BASED_ON]->(Feature\|CoreProperty\|DataItem)` (Gap 4); `Q` variable-length Pfad `Requirement→…→ImpactCategory` | 1R, 1Q | Cross-Impact |
-| **Unsicherheits- & Sensitivitätsanalyse** | v3.c | `P HAS_FLOW.uncertaintyDistribution` + `V [lognormal,normal,uniform,triangular]`, `.uncertaintyGSD/.min/.max`; `P CHARACTERIZES.uncertainty`; `P Parameter.uncertainty*`; `Q` OAT-Sensitivität | ~5P, 1V, 1Q | Robustheit; Basis: `HAS_FLOW.uncertainty` zu 82 % gefüllt (40 671/49 672) |
-| **Hotspot-Analyse** | v2 | keine; `Q` Beitrags-Ranking Prozesse/Flüsse je Kategorie | 1Q | alle LCA-Verfahren |
+| **impact chain analysis** | v3 / v3.d | `R (ImpactResult)-[:BASED_ON]->(Feature\|CoreProperty\|DataItem)` (gap 4); `Q` variable-length path `Requirement→…→ImpactCategory` | 1R, 1Q | cross-impact |
+| **uncertainty & sensitivity analysis** | v3.c | `P HAS_FLOW.uncertaintyDistribution` + `V [lognormal,normal,uniform,triangular]`, `.uncertaintyGSD/.min/.max`; `P CHARACTERIZES.uncertainty`; `P Parameter.uncertainty*`; `Q` OAT sensitivity | ~5P, 1V, 1Q | robustness; basis: `HAS_FLOW.uncertainty` 82 % populated (40,671/49,672) |
+| **hotspot analysis** | v2 | none; `Q` contribution ranking of processes/flows per category | 1Q | all LCA approaches |
 
 ---
 
-## 4. Provenienz + Deklaration  → **Modul v3.d**
+## 4. Provenance + declaration  → **module v3.d**
 
-> **2026-08-29:** Das Paradigma „lernende Ansätze" (KI/ML — Umweltwirkungs­prognosen,
-> KI-LCA-Modellierung, Ersatz-/Näherungsmodelle, lernende Szenario-Modelle,
-> prädiktive Umweltfolgeabschätzungen, automatisierte Designempfehlung) ist nach
-> Nutzerentscheidung **nicht** Teil der Fallstudie und aus Graph und Doku
-> entfernt — `model_extension/migrations/consistency/remove_ki_stubs.cypher`. Was aus dem
-> ursprünglichen v3.d-Andockpunkt-Set **bleibt** (weil umgesetzt und
-> KI-unabhängig):
+> **2026-08-29:** The paradigm "learning approaches" (AI/ML — environmental impact
+> forecasts, AI-based LCA modelling, surrogate/approximation models, learning
+> scenario models, predictive environmental impact assessments, automated design
+> recommendation) is, by the user's decision, **not** part of the case study and has been
+> removed from the graph and the docs — `model_extension/migrations/consistency/remove_ki_stubs.cypher`.
+> What **remains** of the original v3.d docking-point set (because it is implemented and
+> AI-independent):
 
-`P ImpactResult.confidence` (+ `.provenance` aus PRE‑1) ·
-Gap 4 `R (ImpactResult)-[:BASED_ON]->(Feature|CoreProperty|DataItem)` ·
+`P ImpactResult.confidence` (+ `.provenance` from PRE‑1) ·
+gap 4 `R (ImpactResult)-[:BASED_ON]->(Feature|CoreProperty|DataItem)` ·
 `N Declaration{id,type:[EPD,DPP],standard,functionalUnit,validFrom,validUntil}`
 + `R (Declaration)-[:DECLARES]->(Artifact)` + `R (Declaration)-[:REPORTS]->(ImpactResult)` ·
-`P Requirement.sustainabilityIndicatorRef/Threshold/Operator/Unit/Scope` (aus RFLPV²-Spec).
+`P Requirement.sustainabilityIndicatorRef/Threshold/Operator/Unit/Scope` (from the RFLPV² spec).
 
-| Verfahren | Stufe | Beitrag im KG | Menge |
+| Approach | Stage | Contribution in the KG | Amount |
 |---|---|---|---|
-| **Digitaler Produktpass** | v3.d | `Declaration{type:'DPP'}` — Reporting-Sicht über Material, Rezyklat, EoL, PCF, SVHC, Reparierbarkeit (v1!) | teilt `Declaration` mit EPD |
-| **Umwelt-Wissensgraph** | — | *ist dieses Projekt* — Substrat, keine Änderung | 0 |
+| **Digital product passport** | v3.d | `Declaration{type:'DPP'}` — reporting view over material, recycled content, EoL, PCF, SVHC, repairability (v1!) | shares `Declaration` with EPD |
+| **Environmental knowledge graph** | — | *is this project* — substrate, no change | 0 |
 
-EPD (EN 15804) ist kein eigenes Diagramm-Blatt, fällt aber mit `Declaration{type:'EPD'}`
-+ PRE‑2 (Module) + PRE‑3 (funkt. Einheit) automatisch mit ab.
+EPD (EN 15804) is not a sheet of its own in the diagram, but comes along automatically with
+`Declaration{type:'EPD'}` + PRE‑2 (modules) + PRE‑3 (functional unit).
 
 ---
 
-## 5. Konsolidierte Bausteine über die 5 bekannten Gaps hinaus
+## 5. Consolidated building blocks beyond the 5 known gaps
 
-Die 5 „Flexibilitäts-Gaps" aus der ursprünglichen Analyse:
-1 `Process.lifecycleModule` · 2 funktionale Einheit · 3 `ASSESSES` auf Part/Material/Process/ProcessPlan erweitern ·
-4 `ImpactResult -[:BASED_ON]->` · 5 Property-Ergänzungen (recyclability, Lebensdauer, Verbindungstyp).
+The 5 "flexibility gaps" from the original analysis:
+1 `Process.lifecycleModule` · 2 functional unit · 3 extend `ASSESSES` to Part/Material/Process/ProcessPlan ·
+4 `ImpactResult -[:BASED_ON]->` · 5 property additions (recyclability, service life, joining type).
 
-Zusätzlich aus dem Methodendiagramm:
+In addition, from the method diagram:
 
-| # | Baustein | Stufe | Freischaltet | Aufwand |
+| # | Building block | Stage | Unlocks | Effort |
 |---|---|---|---|---|
-| **A** | Methoden-Taxonomie als Daten (`AssessmentApproach`) | v3 (PRE‑4) | jede der 29 Methoden explizit im Graphen | klein |
-| **L** | `ImpactResult.value` (+ Intervall, `computedAt`) | v2 (PRE‑1) | jede quantitative Methode + alle Downstream-Analysen | klein, essenziell |
-| **M** | ImpactCategory-Hygiene | v3 (PRE‑5) | verlässliche Mehrkategorien-Methoden (EF3.1, ReCiPe, CML) | mittel |
-| **C** | Parameter-/Modellszenario-Layer | v3.c | ganzes Paradigma „datenbasiert" | groß, hoher Hebel |
-| **B** | Ökonomische Dimension (`CostItem`) | v3.b | MFCA, Ökoeffizienz, hybride LCA | groß |
-| **D** | Zeitdimension (Emissionszeitpunkt, zeitabh. CF) | v3.c+ | dynamische & prospektive LCA | mittel–groß |
-| **E** | Unsicherheits-Metadaten (`{distribution,params}`) | v3.c | Unsicherheit/Sensitivität, Robustheit | mittel (Basis 82 % gefüllt) |
-| **F** | Klassifikator-Tags (Scope 1/2/3, attributional/consequential, Wasser-Knappheit) | v3 | THG-Bilanz, konseq. LCA, Wasserfußabdruck | klein |
-| **G** | `SUBSTITUTES`/`AVOIDS`-Kante | v3.c | konsequenzielle LCA, Zirkularität Modul D | klein |
-| **H** | `INFLUENCES{sign,strength}`-Kante | v3.c | Cross-Impact-Analyse | klein |
-| **J** | `ImpactResult.provenance` + `confidence` (allgemein, nicht KI-spezifisch) | v3.d | Herkunftskennzeichnung aller Ergebnisse | klein |
-| **K** | `Declaration`/`Report`-Knoten | v3.d | EPD, Digitaler Produktpass | mittel |
-| **I** | EEIO-Sektordaten | v3.b+c | hybride LCA | groß, niedrige Prio |
+| **A** | Method taxonomy as data (`AssessmentApproach`) | v3 (PRE‑4) | each of the 29 methods explicitly in the graph | small |
+| **L** | `ImpactResult.value` (+ interval, `computedAt`) | v2 (PRE‑1) | every quantitative method + all downstream analyses | small, essential |
+| **M** | ImpactCategory hygiene | v3 (PRE‑5) | reliable multi-category methods (EF3.1, ReCiPe, CML) | medium |
+| **C** | Parameter/model scenario layer | v3.c | the entire "data-driven" paradigm | large, high leverage |
+| **B** | Economic dimension (`CostItem`) | v3.b | MFCA, eco-efficiency, hybrid LCA | large |
+| **D** | Time dimension (emission timing, time-dependent CF) | v3.c+ | dynamic & prospective LCA | medium–large |
+| **E** | Uncertainty metadata (`{distribution,params}`) | v3.c | uncertainty/sensitivity, robustness | medium (basis 82 % populated) |
+| **F** | Classifier tags (scope 1/2/3, attributional/consequential, water scarcity) | v3 | GHG accounting, consequential LCA, water footprint | small |
+| **G** | `SUBSTITUTES`/`AVOIDS` edge | v3.c | consequential LCA, circularity module D | small |
+| **H** | `INFLUENCES{sign,strength}` edge | v3.c | cross-impact analysis | small |
+| **J** | `ImpactResult.provenance` + `confidence` (general, not AI-specific) | v3.d | provenance marking of all results | small |
+| **K** | `Declaration`/`Report` nodes | v3.d | EPD, digital product passport | medium |
+| **I** | EEIO sector data | v3.b+c | hybrid LCA | large, low priority |
 
 ---
 
-## 6. Reihenfolge
+## 6. Order
 
-> **Fortschritt 2026-08-27 (autonomer Lauf):** vollständig umgesetzt —
-> v1 · v2-minimal · v3-minimal · v3.x-Module **a–e** (a Zirkularität/MCI ·
-> b Kosten/MFCA-Prototyp · c Parameter-/Szenario-/Unsicherheits-Layer ·
-> d Provenienz + Reparierbarkeit-als-Ergebnis + EPD/DPP · **e ReCiPe 2016 Midpoint**) ·
-> **v2-data** (Part-Massen aller 86 Teile, Fertigungsenergie, Werkstoff-GWP-Literale;
-> Varianten **A** real-only und **B** Literal-Vollabdeckung, parallel via `dataVariant`) ·
-> **PRE‑5** (ImpactCategory 44→29 kanonisiert, EF3.1 rechnet 19 statt 7 Kategorien) ·
-> Reparaturpass `v3x_repair.cypher`.
-> Doku: `model_extension/reference/EXTENSION_REFERENCE.md`, `ASSUMPTIONS.md`,
-> `model_extension/reference/graph_schema_v3x.json`, `methods/onepagers/` (jetzt 23),
-> `model_extension/reference/change_method_matrix.csv`, je Modul `CHANGELOG.md`.
-> **Live-DB (Endstand 2026-08-29, nach v3.f–i · LCI-Hygiene · DQ-Konzept ·
-> Demonstrator-Scheibe · Konsistenzprüfung Ebene 1–4 · KI-Entfernung):**
-> 5 620 Knoten / 86 635 Beziehungen / 39 Labels / 54 Beziehungstypen /
-> 39 Constraints, 6 `ImpactAssessmentMethod`, 0 Inkonsistenzen.
-> **Entscheidung Datenvariante A vs. B:** getroffen (2026-08-28) — Variante A ist
-> Fallstudien-Standard, B bleibt Fallback (siehe `model_extension/migrations/PLAN.md`).
-> **Offene Datenaufgaben:** echte ILCD/EPD-Datensätze für Nicht-Al/Stahl-Werkstoffe;
-> ReCiPe-Faktoren für die 17 Nicht-Klima-Kategorien; Basisqueries + Daten für die
-> Nicht-LCIA-Verfahren (1.1.3/1.1.4/1.2.1–3/1.3.1–2/2.x).
+> **Progress 2026-08-27 (autonomous run):** fully implemented —
+> v1 · v2-minimal · v3-minimal · v3.x modules **a–e** (a circularity/MCI ·
+> b cost/MFCA prototype · c parameter/scenario/uncertainty layer ·
+> d provenance + repairability-as-result + EPD/DPP · **e ReCiPe 2016 Midpoint**) ·
+> **v2-data** (part masses of all 86 parts, manufacturing energy, material GWP literals;
+> variants **A** real-only and **B** literal full coverage, in parallel via `dataVariant`) ·
+> **PRE‑5** (ImpactCategory 44→29 canonicalised, EF3.1 computes 19 instead of 7 categories) ·
+> repair pass `v3x_repair.cypher`.
+> Docs: `model_extension/reference/EXTENSION_REFERENCE.md`, `ASSUMPTIONS.md`,
+> `model_extension/reference/graph_schema_v3x.json`, `methods/onepagers/` (now 23),
+> `model_extension/reference/change_method_matrix.csv`, `CHANGELOG.md` per module.
+> **Live DB (final state 2026-08-29, after v3.f–i · LCI hygiene · DQ concept ·
+> demonstrator slice · consistency review layers 1–4 · AI removal):**
+> 5,620 nodes / 86,635 relationships / 39 labels / 54 relationship types /
+> 39 constraints, 6 `ImpactAssessmentMethod`, 0 inconsistencies.
+> **Decision data variant A vs. B:** made (2026-08-28) — variant A is the
+> case-study standard, B remains a fallback (see `model_extension/migrations/PLAN.md`).
+> **Open data tasks:** real ILCD/EPD datasets for non-Al/steel materials;
+> ReCiPe factors for the 17 non-climate categories; base queries + data for the
+> non-LCIA approaches (1.1.3/1.1.4/1.2.1–3/1.3.1–2/2.x).
 
-1. **PRE** (v2: PRE‑1 · v3: PRE‑2…PRE‑5) → schaltet LCA, CF, Hotspot, Methoden-Taxonomie frei
-2. **v2** Rechenkern + `lca_computed_ef31` → Vergleichbarkeit
-3. **v3** `lca_generic` + 2. LCIA-Methode (ReCiPe/CML als reine Daten) → Interpretierbarkeit
-4. **v3 P1-Rest**: H₂O, THG, MFA, Schadstoff, CED (je 1P–1V–wenige D–1Q)
-5. **v3.a** Zirkularität → **v3.b** Kosten-Prototyp → **v3.c** Parameter-/Szenario-Layer → **v3.d** Andockpunkte
-6. dynamische/hybride LCA + volle Cross-Impact: dokumentierte Erweiterungspfade
+1. **PRE** (v2: PRE‑1 · v3: PRE‑2…PRE‑5) → unlocks LCA, CF, hotspot, method taxonomy
+2. **v2** calculation core + `lca_computed_ef31` → comparability
+3. **v3** `lca_generic` + 2nd LCIA method (ReCiPe/CML as pure data) → interpretability
+4. **v3 P1 remainder**: H₂O, GHG, MFA, pollutants, CED (each 1P–1V–a few D–1Q)
+5. **v3.a** circularity → **v3.b** cost prototype → **v3.c** parameter/scenario layer → **v3.d** docking points
+6. dynamic/hybrid LCA + full cross-impact: documented extension paths
 
-Reparierbarkeit / Demontage (strukturell-qualitativer Index) ist bereits **v1**
-(`migration_v1.cypher`, `repairability.cypher`), Klassen A/B/C. Verfeinerungen
-(gewichtete eDIM, Verbinderzahl, Werkzeugklassen) = optionales v3.x.
+Repairability / disassembly (structural-qualitative index) is already **v1**
+(`migration_v1.cypher`, `repairability.cypher`), classes A/B/C. Refinements
+(weighted eDIM, number of connectors, tool classes) = optional v3.x.
 
 ---
 
-## 7. Offene Datenlücken (Live-Befund 2026-08-27)
+## 7. Open data gaps (live finding 2026-08-27)
 
-| Lücke | Betrifft |
+| Gap | Affects |
 |---|---|
-| `Material.recycledContent_pct` bei **allen** realen Materialien NULL | Zirkularität/MCI, Rezyklat-Indikator, EPD/DPP |
-| `ImpactResult` ohne Zahlenwert (`status:"not calculated"`) | jede quantitative Methode → PRE‑1 |
-| `Process.lifecycleModule` fehlt; nur Freitext-Namen + uneinheitlicher `processType` | EN15804-Staging, EPD, THG, MFA → PRE‑2 |
-| keine ökonomische Property | ganze Gruppe 2.3 → Baustein B |
-| `Scenario` = nur Greifszenarien | Paradigma „datenbasiert" braucht separaten `ModelScenario` → Baustein C |
-| ImpactCategory: 20 Waisen / Near-Duplikate, `indicator`/`unit` teils zerrissen | EF3.1/ReCiPe/CML → PRE‑5 |
-| `CHARACTERIZES` ohne Unsicherheit | Sensitivitätsanalyse → Baustein E |
+| `Material.recycledContent_pct` NULL for **all** real materials | circularity/MCI, recycled-content indicator, EPD/DPP |
+| `ImpactResult` without numeric value (`status:"not calculated"`) | every quantitative method → PRE‑1 |
+| `Process.lifecycleModule` missing; only free-text names + inconsistent `processType` | EN15804 staging, EPD, GHG, MFA → PRE‑2 |
+| no economic property | the whole group 2.3 → building block B |
+| `Scenario` = gripping scenarios only | the "data-driven" paradigm needs a separate `ModelScenario` → building block C |
+| ImpactCategory: 20 orphans / near-duplicates, `indicator`/`unit` partly torn apart | EF3.1/ReCiPe/CML → PRE‑5 |
+| `CHARACTERIZES` without uncertainty | sensitivity analysis → building block E |

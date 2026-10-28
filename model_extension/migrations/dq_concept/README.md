@@ -5,7 +5,7 @@
 > sets and 155 LCA assessments carry an auto-derived 0..4 DQ profile (the
 > assessment count grew from 134 to 155 after the demonstrator slice added
 > `IAM_EF31`/`IAM_RECIPE` assessments and `03_compute_dq.cypher` was re-run).
-> Read it with [`../../base_queries/dq_radar.cypher`](../../base_queries/dq_radar.cypher).
+> Read it with [`../../../methods/base_queries/dq_radar.cypher`](../../../methods/base_queries/dq_radar.cypher).
 
 Aligns the graph's data-quality layer with the published HNI concept
 (Rarbach / Gräßler / Pottebaum — *"Data Quality in the Engineering of Circular
@@ -103,7 +103,7 @@ rather than hiding it in an average.
 01_criteria_catalogue.cypher   criteria restructure + 1..5 -> 0..4 rescale
 02_phase_targets.cypher         DQPhase (3) + TARGETS (24) + constraint
 03_compute_dq.cypher            automated / semi-automated scoring + roll-up
-../../base_queries/dq_radar.cypher   read: radar vector + phase gate (params)
+../../../methods/base_queries/dq_radar.cypher   read: radar vector + phase gate (params)
 ```
 
 All three are idempotent / re-runnable. `03` drops and recomputes auto edges

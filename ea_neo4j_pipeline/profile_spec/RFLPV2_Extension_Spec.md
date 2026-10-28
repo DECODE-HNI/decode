@@ -1,130 +1,133 @@
-# RFLPV² – Erweiterung um Product Element, Process Element und Testfälle
+# RFLPV² – Extension by Product Element, Process Element and Test Cases
 
-Konsolidierte Spezifikation aller abgestimmten Änderungen am RFLPV²-Profil
-(Ausgangsbasis: `RFLPV²-Profil.mdzip`, Cameo Systems Modeler 2024x, HNI Paderborn).
-Diese Datei ist die werkzeugneutrale Referenz — die beigelegte `.xml` ist nur ein
-Best-Effort-Exportversuch daraus (siehe Abschnitt 9 zu den Grenzen in Enterprise Architect).
+Consolidated specification of all agreed changes to the RFLPV² profile
+(baseline: `RFLPV²-Profil.mdzip`, Cameo Systems Modeler 2024x, HNI Paderborn).
+This file is the tool-neutral reference — the accompanying `.xml` is only a
+best-effort export attempt derived from it (see section 9 for the limits in
+Enterprise Architect).
 
-**Geltungsbereich:** Nur geänderte/neue Elemente + die unveränderten Elemente, die als
-Generalisierungs- oder Beziehungsziel gebraucht werden. NICHT enthalten (weil unverändert und
-bereits im bestehenden Cameo-Projekt korrekt vorhanden): Customer Need/Requirement, Function,
-Logical Element, Test/Inspection/Demonstration/Simulation, MBSE Role Model, ECR, Architecture
-Candidate.
+**Scope:** Only changed/new elements plus the unchanged elements that are needed as
+generalisation or relationship targets. NOT included (because unchanged and
+already correctly present in the existing Cameo project): Customer Need/Requirement,
+Function, Logical Element, Test/Inspection/Demonstration/Simulation, MBSE Role Model,
+ECR, Architecture Candidate.
 
-**Statuskennzeichnung:** ✅ bestätigt und in der beigelegten XMI umgesetzt · 🕓 bestätigt,
-aber nur als Zielzustand dokumentiert (kein Eingriff am laufenden Neo4j-Modell/der Pipeline) ·
-💡 offener Vorschlag, noch nicht entschieden.
+**Status markers:** ✅ confirmed and implemented in the accompanying XMI · 🕓 confirmed,
+but documented as a target state only (no change to the running Neo4j model/the
+pipeline) · 💡 open proposal, not yet decided.
 
 ---
 
-## 1. Umbenennung: Physical Element → Product Element ✅
+## 1. Renaming: Physical Element → Product Element ✅
 
-**Begründung:** "Physical" suggeriert Materialität und passt bei CPS mit hohem Softwareanteil
-nicht mehr zum Inhalt der Schicht (Steuergeräte, Regelsoftware sind keine physischen Objekte).
-Technisch unkritisch: in Cameo/EA hängt die Stereotyp-Identität an der internen ID, nicht am
-Namen — bestehende Modellinhalte migrieren automatisch mit.
+**Rationale:** "Physical" suggests materiality and no longer fits the content of the
+layer for CPS with a high software share (control units and control software are not
+physical objects). Technically uncritical: in Cameo/EA the stereotype identity hangs on
+the internal ID, not on the name — existing model content migrates automatically.
 
-| Alt (Physical Element) | Neu (Product Element) |
+| Old (Physical Element) | New (Product Element) |
 |---|---|
 | `physicalID` | `productID` |
 | `physicalType` | `productType` |
 | `physicalParameter` | `productParameter` |
 | `physicalParameterType` | `productParameterType` |
-| `variantTag`, `elementOwner`, `discipline`, `costs` | unverändert |
+| `variantTag`, `elementOwner`, `discipline`, `costs` | unchanged |
 
-Paket `04_Physical Element` → `04_Product Element` (Diagrammname, Icon-Datei entsprechend
-nachziehen — kosmetisch, kein Modellrisiko).
+Package `04_Physical Element` → `04_Product Element` (diagram name; adjust the icon file
+accordingly — cosmetic, no model risk).
 
-## 2. Neue Tags an Product Element ✅
+## 2. New tags on Product Element ✅
 
-| Tag | Typ | Zweck |
+| Tag | Type | Purpose |
 |---|---|---|
-| `materialRef` | String **[0..\*]** | Referenz-ID(s), matcht `Material.id` im Neo4j-Graphen. Mehrfachbezug zulässig, da ein Product Element mehrere Materialien enthalten kann. Mengenanteile (`fraction`/`mass_g`) werden bewusst NICHT auf SysML-Seite dupliziert — die bleiben exklusiv in Neo4j (`USES_MATERIAL.fraction`). |
-| `realizationType` | **`RealizationType`** (Enum) | löst das eigentliche Unterscheidungsproblem, das die Umbenennung motiviert hat |
+| `materialRef` | String **[0..\*]** | Reference ID(s), matches `Material.id` in the Neo4j graph. Multiple references are allowed because a Product Element can contain several materials. Quantity shares (`fraction`/`mass_g`) are deliberately NOT duplicated on the SysML side — they stay exclusively in Neo4j (`USES_MATERIAL.fraction`). |
+| `realizationType` | **`RealizationType`** (enum) | solves the actual distinction problem that motivated the renaming |
 
 ### Enumeration `RealizationType`
 `hardware` · `software` · `hybrid`
 
-## 3. Neue Tags an System Requirement ✅
+## 3. New tags on System Requirement ✅
 
-Kein eigener Stereotyp für Nachhaltigkeit — nur zusätzliche Tags, analog zu
-`requirementPriority`/`requirementParameter`, die schon heute ohne eigenen Stereotyp auskommen:
+No dedicated stereotype for sustainability — only additional tags, analogous to
+`requirementPriority`/`requirementParameter`, which already work without a dedicated
+stereotype today:
 
-| Tag | Typ | Beispiel |
+| Tag | Type | Example |
 |---|---|---|
-| `sustainabilityIndicatorRef` | String | `GWP100` (referenziert eine `ImpactCategory` in Neo4j) |
+| `sustainabilityIndicatorRef` | String | `GWP100` (references an `ImpactCategory` in Neo4j) |
 | `sustainabilityThreshold` | Real | `120` |
-| `sustainabilityOperator` | **`SustainabilityOperator`** (Enum) | `lessOrEqual` |
+| `sustainabilityOperator` | **`SustainabilityOperator`** (enum) | `lessOrEqual` |
 | `sustainabilityUnit` | String | `kgCO2eq` |
 | `sustainabilityScope` | String | `A1-A3` |
 
-Die vier Felder zusammen ergeben einen vollständig auswertbaren Ausdruck:
-`sustainabilityIndicatorRef sustainabilityOperator sustainabilityThreshold [sustainabilityUnit], Geltungsbereich sustainabilityScope`.
+The four fields together yield a fully evaluable expression:
+`sustainabilityIndicatorRef sustainabilityOperator sustainabilityThreshold [sustainabilityUnit], scope sustainabilityScope`.
 
-`sustainabilityScope` bleibt bewusst String statt Enum, auch wenn `Process Element.lifecycleModule`
-enumeriert ist (s. u.): Anforderungen beziehen sich oft auf Modul-**Bereiche** ("A1-A3",
-"A1-C4"), die sich nicht als einzelner Enum-Literal abbilden lassen.
+`sustainabilityScope` deliberately stays a string instead of an enum, even if
+`Process Element.lifecycleModule` were enumerated (see below): requirements often refer to
+module **ranges** ("A1-A3", "A1-C4"), which cannot be represented as a single enum literal.
 
 ### Enumeration `SustainabilityOperator`
 `lessThan` · `lessOrEqual` · `equal` · `greaterOrEqual` · `greaterThan`
 
-## 4. Process Element — Tag-Semantik präzisiert ✅
+## 4. Process Element — tag semantics clarified ✅
 
-Keine strukturelle Änderung an den Tags selbst, nur Klarstellung:
+No structural change to the tags themselves, only a clarification:
 
-| Tag | Bedeutung |
+| Tag | Meaning |
 |---|---|
-| `processID` | persistenter Identifier des Process Elements **im SysML-Modell** |
-| `processRef` | Referenz auf **`Process.id` im Neo4j-Graphen** |
-| `lifecycleModule` | EN-15804-Modul: `A1`–`A3` (Herstellung), `A4`–`A5` (Transport/Montage), `B1`–`B7` (Nutzung), `C1`–`C4` (End-of-Life), `D` (Gutschriften) |
+| `processID` | persistent identifier of the Process Element **in the SysML model** |
+| `processRef` | reference to **`Process.id` in the Neo4j graph** |
+| `lifecycleModule` | EN 15804 module: `A1`–`A3` (manufacturing), `A4`–`A5` (transport/assembly), `B1`–`B7` (use), `C1`–`C4` (end of life), `D` (credits) |
 
-## 5. Beziehungen Process Element ↔ Product Element
+## 5. Relationships Process Element ↔ Product Element
 
-SysML-seitig unverändert, vollständig wiederverwendet (keine neue Relation im Profil):
+Unchanged on the SysML side, fully reused (no new relation in the profile):
 
-| Lebenszyklusphase (EN 15804) | Relation |
+| Life cycle phase (EN 15804) | Relation |
 |---|---|
-| A1–A3 (Herstellung) | `Process Element --Realizes--> Product Element` |
+| A1–A3 (manufacturing) | `Process Element --Realizes--> Product Element` |
 | A4–A5, B1–B7, C1–C4, D | `Process Element --Affects--> Product Element` |
 
-**🕓 Neo4j-Zielzustand (dokumentiert, nicht umgesetzt):** `Realizes`/`Affects` sollen im Graphen
-als eigene Relationstypen `REALIZES`/`AFFECTS` erscheinen statt beide unter `APPLIES_TO`
-mitzulaufen — begründet durch einen bereits real existierenden Fall: der Abfallverbrennungs-
-prozess (`PROC_WASTE_INCINERATION_MSW`, ein C-Modul/"Affects"-Fall) ist heute über `APPLIES_TO`
-nicht von den A-Modul/"Realizes"-Fertigungsprozessen unterscheidbar. Umsetzung erfordert eine
-Reklassifizierung der bestehenden Kanten (17 Fertigungsprozesse → `REALIZES`, der eine
-EoL-Prozess → `AFFECTS`) sowie Anpassungen am Data-Importer-Schema/den Pipeline-Skripten —
-bewusst erst beim nächsten vollen Rebuild, nicht jetzt am laufenden Modell.
+**🕓 Neo4j target state (documented, not implemented):** `Realizes`/`Affects` are to appear
+in the graph as dedicated relationship types `REALIZES`/`AFFECTS` instead of both being
+carried under `APPLIES_TO` — justified by an already existing real case: the waste
+incineration process (`PROC_WASTE_INCINERATION_MSW`, a C-module/"Affects" case) cannot
+currently be distinguished via `APPLIES_TO` from the A-module/"Realizes" manufacturing
+processes. Implementation requires reclassifying the existing edges (17 manufacturing
+processes → `REALIZES`, the one EoL process → `AFFECTS`) as well as adjustments to the
+Data Importer schema/the pipeline scripts — deliberately only at the next full rebuild,
+not now on the running model.
 
-## 6. Verification-Schicht: Test Case, Test Case Description, Test Scenario ✅
+## 6. Verification layer: Test Case, Test Case Description, Test Scenario ✅
 
-(nach Ebel/Pottebaum/Graessler 2024, "Model-based planning of test cases and test scenarios...",
-ISSE 2024). Alle drei generalisieren das bestehende `Verification` (bzw. `Class`), keine
-Änderung an `Test`/`Inspection`/`Demonstration`/`Simulation`.
+(after Ebel/Pottebaum/Graessler 2024, "Model-based planning of test cases and test scenarios...",
+ISSE 2024). All three generalise the existing `Verification` (or `Class`); no change to
+`Test`/`Inspection`/`Demonstration`/`Simulation`.
 
-| Stereotyp | generalisiert | Tags |
+| Stereotype | generalises | Tags |
 |---|---|---|
-| `Test Case` | `Verification` (erbt `base_Behavior`, `base_Operation`, `verificationID`, `verificationParameter`) | `testCaseOwner`, `systemLevel`, `dataAnalysisType`, `testMethod`, `sustainabilityResult`, `sustainabilityStatus` |
+| `Test Case` | `Verification` (inherits `base_Behavior`, `base_Operation`, `verificationID`, `verificationParameter`) | `testCaseOwner`, `systemLevel`, `dataAnalysisType`, `testMethod`, `sustainabilityResult`, `sustainabilityStatus` |
 | `Test Case Description` | `Class` | `environmentalConditions`, `systemState`, `user`, `expectedResults` |
 | `Test Scenario` | `Verification` | `testScenarioOwner`, `testItems`, `testScenarioEnvironmentalParameters` |
 
-`verificationID` wird als Test-Case-ID weiterverwendet, kein separates `testCaseID`.
+`verificationID` continues to be used as the test case ID; there is no separate `testCaseID`.
 
-### Semantik `sustainabilityResult`/`sustainabilityStatus` ✅ (Tags bleiben, Bedeutung präzisiert)
+### Semantics of `sustainabilityResult`/`sustainabilityStatus` ✅ (tags stay, meaning clarified)
 
-| Tag | Typ | Bedeutung |
+| Tag | Type | Meaning |
 |---|---|---|
-| `sustainabilityResult` | Real | Ergebnis der aktuell bzw. zuletzt durchgeführten Nachhaltigkeitsbewertung dieses Test Case |
-| `sustainabilityStatus` | String | aktueller Verifikationsstatus. Empfohlene Werte: `passed`, `failed`, `inconclusive`, `notEvaluated` |
+| `sustainabilityResult` | Real | result of the sustainability assessment of this test case that is currently being or was last performed |
+| `sustainabilityStatus` | String | current verification status. Recommended values: `passed`, `failed`, `inconclusive`, `notEvaluated` |
 
-Beziehungen (alle wiederverwendet, keine neue Relation): `Test Case --Verifies--> System
-Requirement`, `Test Case --(einfache Dependency)--> Product Element` (Test Item), `Test Case
-*-- Test Case Description` (Komposition), `Test Scenario --(einfache Dependency)--> Test Case`
-(≥2, bildet die Verifikationsmatrix).
+Relationships (all reused, no new relation): `Test Case --Verifies--> System
+Requirement`, `Test Case --(simple dependency)--> Product Element` (test item), `Test Case
+*-- Test Case Description` (composition), `Test Scenario --(simple dependency)--> Test Case`
+(≥2, forms the verification matrix).
 
-**✅ Neo4j-Zielzustand (umgesetzt 2026-08-29, `model_extension/migrations/demonstrator/`):** Die
-Nachhaltigkeitsbewertung bleibt fachlich das Ergebnis eines Test Case; Neo4j speichert die
-konkreten Durchführungen separat:
+**✅ Neo4j target state (implemented 2026-08-29, `model_extension/migrations/demonstrator/`):**
+Substantively, the sustainability assessment remains the result of a test case; Neo4j
+stores the concrete executions separately:
 
 ```
 TestCase --[:VERIFIES]--> Requirement
@@ -132,70 +135,70 @@ TestCase --[:HAS_ASSESSMENT]--> Assessment --[:HAS_RESULT]--> ImpactResult --[:F
 TestCase --[:TESTS]--> Artifact        (Test Item)
 ```
 
-`sustainabilityResult`/`sustainabilityStatus` im SysML-Modell = aktueller Cache-Wert;
-`Assessment` in Neo4j = vollständige Bewertungsausführung. Der neue Knotentyp `TestCase`
+`sustainabilityResult`/`sustainabilityStatus` in the SysML model = current cache value;
+`Assessment` in Neo4j = complete assessment execution. The new node type `TestCase`
 (`verificationID`, `testCaseOwner`, `systemLevel`, `dataAnalysisType`, `testMethod`,
 `sustainabilityResult`, `sustainabilityStatus` ∈ {`passed`,`failed`,`inconclusive`,
-`notEvaluated`}) trägt zusätzlich die Constraint `TestCase_id_unique`. Umgesetzt zunächst für
-eine 8-Greifer-Demonstrator-Scheibe (24 Test Cases). Der Test-Case-Status wird auf
-`SATISFIES_REQUIREMENT.verificationStatus` zurückgeschrieben.
+`notEvaluated`}) additionally carries the constraint `TestCase_id_unique`. Implemented
+initially for an 8-gripper demonstrator slice (24 test cases). The test case status is
+written back to `SATISFIES_REQUIREMENT.verificationStatus`.
 
-## 7. Neo4j-Gesamtübersicht
+## 7. Neo4j overview
 
 | SysML | Neo4j | Status |
 |---|---|---|
 | `Product Element.materialRef` | `Material.id` | ✅ |
 | `Process Element.processRef` | `Process.id` | ✅ |
 | `Process Element.processType` | `Process.processType` | ✅ |
-| `Process Element.lifecycleModule` | `Process.lifecycleModule` | ✅ live auf allen 58 `Process`-Knoten seit v2 (Werte `A1`, `A1-A3`, `A3`, `B1`, `B4`, `C3`), von der DQ-Schicht ausgewertet — Korrektur aus der Konsistenzprüfung Ebene 4 (DE-01), Stand 2026-08-29 |
-| `Process Element --Realizes--> Product Element` | `Process -[:REALIZES]-> Part` | 🕓 s. Abschnitt 5 |
-| `Process Element --Affects--> Product Element` | `Process -[:AFFECTS]-> Part` | 🕓 s. Abschnitt 5 |
+| `Process Element.lifecycleModule` | `Process.lifecycleModule` | ✅ live on all 58 `Process` nodes since v2 (values `A1`, `A1-A3`, `A3`, `B1`, `B4`, `C3`), evaluated by the DQ layer — correction from consistency review layer 4 (DE-01), as of 2026-08-29 |
+| `Process Element --Realizes--> Product Element` | `Process -[:REALIZES]-> Part` | 🕓 see section 5 |
+| `Process Element --Affects--> Product Element` | `Process -[:AFFECTS]-> Part` | 🕓 see section 5 |
 | `System Requirement.sustainabilityIndicatorRef` | `ImpactCategory.id` | ✅ |
-| `System Requirement.sustainabilityThreshold` | `Specification.valueNumber` | ✅ (bereits vorhandenes Feld) |
-| `System Requirement.sustainabilityUnit` | `Specification.unit` | 💡 bereits vorhandenes Feld, keine neue Property nötig |
-| `System Requirement.sustainabilityOperator` | `Specification.comparator` (neu) *oder* aus `toleranceMin`/`toleranceMax` ableitbar | 💡 offen, siehe unten |
-| `Test Case.sustainabilityResult`/`-Status` | bleibt SysML-seitiger Cache-Wert; in Neo4j auf `TestCase` gespiegelt | ✅ |
-| konkrete Testdurchführung | `TestCase -[:HAS_ASSESSMENT]-> Assessment` | ✅ umgesetzt 2026-08-29 (`demonstrator/`) |
-| Bewertungsergebnis | `Assessment -[:HAS_RESULT]-> ImpactResult` | ✅ bereits vorhanden |
-| Wirkungskategorie | `ImpactResult -[:FOR_CATEGORY]-> ImpactCategory` | ✅ bereits vorhanden |
+| `System Requirement.sustainabilityThreshold` | `Specification.valueNumber` | ✅ (existing field) |
+| `System Requirement.sustainabilityUnit` | `Specification.unit` | 💡 existing field, no new property needed |
+| `System Requirement.sustainabilityOperator` | `Specification.comparator` (new) *or* derivable from `toleranceMin`/`toleranceMax` | 💡 open, see below |
+| `Test Case.sustainabilityResult`/`-Status` | stays a cache value on the SysML side; mirrored on `TestCase` in Neo4j | ✅ |
+| concrete test execution | `TestCase -[:HAS_ASSESSMENT]-> Assessment` | ✅ implemented 2026-08-29 (`demonstrator/`) |
+| assessment result | `Assessment -[:HAS_RESULT]-> ImpactResult` | ✅ already present |
+| impact category | `ImpactResult -[:FOR_CATEGORY]-> ImpactCategory` | ✅ already present |
 
-## 8. Offene Vorschläge (noch nicht entschieden) 💡
+## 8. Open proposals (not yet decided) 💡
 
-Diese drei Punkte wurden in der Diskussion aufgeworfen, aber nicht bestätigt — bewusst nicht in
-die beigelegte XMI übernommen:
+These three points were raised in the discussion but not confirmed — deliberately not
+carried into the accompanying XMI:
 
-1. **`lifecycleModule` als Enum `EN15804Module`** (`A1`…`A5`, `B1`…`B7`, `C1`…`C4`, `D`) statt
-   String — konsistent zur Entscheidung bei `realizationType`, da EN 15804 ein geschlossenes
-   Normvokabular ist.
-2. **`sustainabilityStatus` als Enum `TestVerificationStatus`** (`passed`/`failed`/
-   `inconclusive`/`notEvaluated`) statt String — aus demselben Konsistenzgrund.
-3. **`Specification.unit` für `sustainabilityUnit` wiederverwenden**, statt eine neue Property
-   anzulegen; für `sustainabilityOperator` ggf. die bestehende `toleranceMin`/`toleranceMax`-
-   Struktur nutzen statt eines neuen `comparator`-Felds.
+1. **`lifecycleModule` as enum `EN15804Module`** (`A1`…`A5`, `B1`…`B7`, `C1`…`C4`, `D`) instead
+   of a string — consistent with the decision on `realizationType`, since EN 15804 is a
+   closed standard vocabulary.
+2. **`sustainabilityStatus` as enum `TestVerificationStatus`** (`passed`/`failed`/
+   `inconclusive`/`notEvaluated`) instead of a string — for the same consistency reason.
+3. **Reuse `Specification.unit` for `sustainabilityUnit`** instead of creating a new
+   property; for `sustainabilityOperator`, possibly use the existing `toleranceMin`/
+   `toleranceMax` structure instead of a new `comparator` field.
 
-## 9. Grenzen des beigelegten XMI-Exports für Enterprise Architect
+## 9. Limits of the accompanying XMI export for Enterprise Architect
 
-EA und Cameo sind beide XMI-2.1-konform, aber **strukturell unterschiedlich** im Umgang mit
-Stereotyp-Tags: Cameo bildet Tags als reguläre `uml:Property`-Elemente am Stereotyp ab (so wie in
-der beigelegten Datei), EA verwaltet Tags dagegen intern über ein eigenes "Tagged Value Types"-
-Verzeichnis, das nicht 1:1 aus einer rohen UML2-Profil-XMI befüllt wird. Die beigelegte
-`RFLPV2_Extension_Profile.xml` ist deshalb ein **Best-Effort-Gerüst**, kein garantierter
-Ein-Klick-Import — sie wurde nicht gegen eine echte EA-Instanz getestet.
+EA and Cameo are both XMI 2.1 compliant but **structurally different** in how they handle
+stereotype tags: Cameo represents tags as regular `uml:Property` elements on the stereotype
+(as in the accompanying file), whereas EA manages tags internally through its own "Tagged
+Value Types" directory, which is not populated 1:1 from a raw UML2 profile XMI. The
+accompanying `RFLPV2_Extension_Profile.xml` is therefore a **best-effort scaffold**, not a
+guaranteed one-click import — it has not been tested against a real EA instance.
 
-Zwei Wege, je nach Ergebnis des Imports:
-1. **Import versuchen**: `Extensions > Import Reference Data` (oder je nach EA-Version `Publish
-   > Technology > Import Technology`) mit der `.xml`. Falls Stereotypen ohne Tags oder ohne
-   funktionierende Metaklassen-Zuordnung ankommen: das Profil ist trotzdem als Rohgerüst nutzbar,
-   Tags müssen dann manuell im Profile Helper nachgezogen werden.
-2. **Direkt in EA nachbauen** (sicherer Weg, ca. 30–45 Min. für die 9 Stereotypen dieser
-   Erweiterung): `Configure > Reference Data > UML Profiles > New Profile`, je Stereotyp einen
-   Klassifizierer mit `«stereotype»` anlegen, per Extend-Beziehung an die Metaklasse (`Class`,
-   `Block`, `TestCase`, `Dependency`, `Behavior`+`Operation`) hängen, Tags über die dortige
-   "Tagged Value Types"-Verwaltung anlegen (Name + Typ aus den Tabellen oben, inkl. der beiden
-   Enumerationen `RealizationType` und `SustainabilityOperator`). Diese Spezifikation ist dafür
-   die vollständige Quelle.
+Two ways, depending on the result of the import:
+1. **Try the import**: `Extensions > Import Reference Data` (or, depending on the EA version,
+   `Publish > Technology > Import Technology`) with the `.xml`. If stereotypes arrive
+   without tags or without a working metaclass assignment: the profile is still usable as
+   a raw scaffold, and the tags must then be added manually in the Profile Helper.
+2. **Rebuild directly in EA** (the safer way, approx. 30–45 min for the 9 stereotypes of this
+   extension): `Configure > Reference Data > UML Profiles > New Profile`, create one classifier
+   with `«stereotype»` per stereotype, attach it via an Extend relationship to the metaclass
+   (`Class`, `Block`, `TestCase`, `Dependency`, `Behavior`+`Operation`), create the tags via
+   the "Tagged Value Types" management there (name + type from the tables above, including
+   the two enumerations `RealizationType` and `SustainabilityOperator`). This specification
+   is the complete source for that.
 
-Die Generalisierungen auf SysML-Stereotypen (`Block`, `Requirement`, `TestCase`, `Trace`) setzen
-zusätzlich voraus, dass in EA die SysML-Technologie aktiviert ist — sonst lassen sich die
-`generalization`-Kanten dort manuell auf `Class` umbiegen, ohne dass Tags oder Relationen davon
-betroffen sind.
+The generalisations to SysML stereotypes (`Block`, `Requirement`, `TestCase`, `Trace`)
+additionally require the SysML technology to be activated in EA — otherwise the
+`generalization` edges can be manually redirected to `Class` there, without affecting tags
+or relations.

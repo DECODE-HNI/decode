@@ -1,202 +1,202 @@
-# Ausbaustufen des Nachhaltigkeits-Wissensgraphen — Plan
+# Development stages of the sustainability knowledge graph — plan
 
-Stand: 2026-08-27. Pfade relativ zur Wurzel des Repositorys bzw. zu diesem Ordner.
+As of 2026-08-27. Paths are relative to the repository root or to this folder.
 
-Der Greifer-Wissensgraph wird in gestuften Fassungen entwickelt und dokumentiert.
-Leitachse ist **black / grey / white-box-Transparenz der Nachhaltigkeitsbewertung**
-(nicht des Produktmodells — das ist schon detailliert). Jede Stufe hat eine eigene
-Wertaussage für die Entwicklung; jede Stufe ist **streng additiv und nicht-brechend**
-gegenüber der vorigen (das ist der Flexibilitätsnachweis).
+The gripper knowledge graph is developed and documented in staged versions.
+The guiding axis is **black / grey / white-box transparency of the sustainability
+assessment** (not of the product model — that is already detailed). Each stage has its
+own value statement for development; each stage is **strictly additive and
+non-breaking** with respect to the previous one (that is the proof of flexibility).
 
 ---
 
-## 1. Stufen im Überblick
+## 1. Stages at a glance
 
-| Stufe | Box | Leistung in der Entwicklung | Grenze der Stufe |
+| Stage | Box | Contribution to development | Limit of the stage |
 |---|---|---|---|
-| **v1** | black | Umweltwirkung **früh und leichtgewichtig** bewerten; erzeugt direkt **Nachweisdaten** (koppelt an die RFLPV²-Verifikationsschicht: `sustainabilityResult` / `sustainabilityStatus` am Test Case) | Kennzahlen sind gesetzt, nicht zerlegbar → keine Lieferketten-Vergleichbarkeit |
-| **v2** | grey | **echte Vergleichbarkeit über die Lieferkette** — Ergebnisse aus `Process→Flow`-Ketten gerechnet, Varianten / Zulieferer auf gleicher Basis vergleichbar (EF3.1) | eine Methode, feste Systemgrenze; ILCD-Daten importiert, aber nicht semantisch offen |
-| **v3** | white | **Interpretierbarkeit + Austauschfähigkeit**: das ILCD-Format wird im Graphen interpretierbar — methodenagnostische Query, funktionale Einheit, Lebenszyklusmodule, bereinigte Kategorien, zweite LCIA-Methode als reine Daten | — |
-| **v3.x** | white + Module | **weitergehende Aussagen** (Zirkularität, Kosten, Szenario/Unsicherheit, Provenienz) klinken sich additiv ein | je Modul eigene Doku + Snapshot |
+| **v1** | black | Assess environmental impact **early and lightweight**; directly produces **evidence data** (couples to the RFLPV² verification layer: `sustainabilityResult` / `sustainabilityStatus` on the Test Case) | Key figures are set, not decomposable → no supply-chain comparability |
+| **v2** | grey | **real comparability across the supply chain** — results computed from `Process→Flow` chains, variants / suppliers comparable on the same basis (EF3.1) | one method, fixed system boundary; ILCD data imported, but not semantically open |
+| **v3** | white | **Interpretability + exchangeability**: the ILCD format becomes interpretable in the graph — method-agnostic query, functional unit, life cycle modules, cleaned categories, second LCIA method as pure data | — |
+| **v3.x** | white + modules | **further-reaching statements** (circularity, cost, scenario/uncertainty, provenance) plug in additively | own documentation + snapshot per module |
 
-### Flexibilitätsnachweis in drei Ebenen
+### Proof of flexibility on three levels
 
-1. **v1 → v2** — ein neues *Paradigma* (inventarbasierte LCA) klinkt sich additiv ein.
-2. **innerhalb v3** — eine neue *Metrik / Methode* ist reine Daten (Methoden-Knoten +
-   Kategorien + Charakterisierungsfaktoren), **null Schemaänderung**.
-3. **v3 → v3.x** — ganze *Methodenfamilien* hängen als orthogonale, nicht-kollidierende
-   Module an.
+1. **v1 → v2** — a new *paradigm* (inventory-based LCA) plugs in additively.
+2. **within v3** — a new *metric / method* is pure data (method node +
+   categories + characterisation factors), **zero schema change**.
+3. **v3 → v3.x** — entire *method families* attach as orthogonal, non-colliding
+   modules.
 
 ---
 
-## 2. Präzise Stufen-Definition
+## 2. Precise stage definition
 
-### v1 — Black box: Produktmodell + konkrete Indikatoren
+### v1 — Black box: product model + concrete indicators
 
-**Enthält** (20 Labels, 431 Knoten / 1 392 Beziehungen, Stand 2026-08-27):
+**Contains** (20 labels, 431 nodes / 1,392 relationships, as of 2026-08-27):
 Product, Artifact, Assembly, Part, Material, Feature, Form, Geometry, Function,
-Behavior, SolutionPrinciple, Requirement, Specification, Scenario (Greifszenarien),
+Behavior, SolutionPrinciple, Requirement, Specification, Scenario (gripping scenarios),
 CoreProperty, DataItem, DataSource, DataQuality, DataQualityCriterion, ProcessPlan
-(als Plan-Kopf — Prozessschritte kommen erst in v2).
+(as plan head — process steps only come in v2).
 
-**Enthält *nicht*** die ILCD-/Inventar-LCIA-Typen: Flow, FlowProperty, Process,
-ImpactCategory, ImpactAssessmentMethod, Assessment, ImpactResult (und deren Kanten
+**Does *not* contain** the ILCD/inventory LCIA types: Flow, FlowProperty, Process,
+ImpactCategory, ImpactAssessmentMethod, Assessment, ImpactResult (and their edges
 HAS_FLOW, CHARACTERIZES, CONTAINS_PROCESS, HAS_CATEGORY, USES_METHOD, ASSESSES,
 HAS_RESULT, FOR_CATEGORY, DERIVED_FROM, APPLIES_TO, HAS_FLOW_PROPERTY).
 
-**v1-Migration (noch offen)** — macht v1 zu einer *vollständigen* einfachen Bewertung,
-nicht nur einem reduzierten Snapshot:
-- Reparierbarkeit formalisieren: `connectionType` + `reversible` auf `HAS_COMPONENT`
-  und/oder `Feature`; die heute in `DataItem.valueText` = „screw (reversible)"
-  (an einem *Process* „Screw fastening" hängende) Verbindungsinfo **umhängen**, damit
-  sie ohne die ILCD-Ebene überlebt.
-- Reparierbarkeits-/Demontageindex als `CoreProperty` (propertyType `sustainability`)
-  + Basisquery `repairability.cypher`.
-- Weitere konkrete Indikatoren direkt attribuiert: Masse, Rezyklatanteil-Rollup,
-  ausgewiesener GWP-Wert, Energie — als `CoreProperty` / `ImpactResult` mit
-  **literalem** Wert (keine Herleitung).
+**v1 migration (still open)** — makes v1 a *complete* simple assessment,
+not just a reduced snapshot:
+- Formalise repairability: `connectionType` + `reversible` on `HAS_COMPONENT`
+  and/or `Feature`; **re-attach** the joining information that currently sits in
+  `DataItem.valueText` = "screw (reversible)" (attached to a *Process* "Screw fastening"),
+  so that it survives without the ILCD layer.
+- Repairability/disassembly index as `CoreProperty` (propertyType `sustainability`)
+  + base query `repairability.cypher`.
+- Further concrete indicators attributed directly: mass, recycled-content roll-up,
+  declared GWP value, energy — as `CoreProperty` / `ImpactResult` with a
+  **literal** value (no derivation).
 
-### v2 — Grey box: ILCD/EF3.1-Inventar + Rechnung
+### v2 — Grey box: ILCD/EF3.1 inventory + calculation
 
-Fügt hinzu: `Process`–`HAS_FLOW`–`Flow`, `FlowProperty`, `CHARACTERIZES`→`ImpactCategory`,
-`ImpactAssessmentMethod` (EF3.1), die abgeleitete Assessment-Schicht.
-**Rechnung wohnt hier:** `P ImpactResult.value` + `Q lca_computed_ef31` (fest auf EF3.1).
-→ Vergleichbarkeit auf EF3.1-Kategorien. Vordergrund rückverfolgbar, Hintergrund
-aggregiert.
+Adds: `Process`–`HAS_FLOW`–`Flow`, `FlowProperty`, `CHARACTERIZES`→`ImpactCategory`,
+`ImpactAssessmentMethod` (EF3.1), the derived assessment layer.
+**The calculation lives here:** `P ImpactResult.value` + `Q lca_computed_ef31` (fixed to EF3.1).
+→ Comparability on EF3.1 categories. Foreground traceable, background
+aggregated.
 
-### v3 — White box: ILCD interpretierbar machen
+### v3 — White box: making ILCD interpretable
 
-Kein neuer Rechenkern, nur öffnen und parametrisieren:
+No new calculation core, only opening up and parametrising:
 - `lca_computed_ef31` → `lca_generic($methodId)`
 - `P Assessment.functionalUnit, .referenceFlow, .referenceQuantity, .referenceUnit,
   .systemBoundary` (+ `V systemBoundary`)
-- `P Process.lifecycleModule` (+ `V` EN15804 A1..D) + Backfill
-- ImpactCategory-Hygiene (~20 Waisen / Near-Duplikate zusammenführen,
-  `indicator`/`unit` normalisieren)
-- Methoden-Taxonomie: `N AssessmentApproach` + `R BROADER` + `R APPLIES_APPROACH`,
-  3 Paradigmen / 9 Gruppen / 28 Methoden aus dem Methodendiagramm
-- **zweite volle LCIA-Methode** (ReCiPe *oder* CML) als reine Daten geladen
+- `P Process.lifecycleModule` (+ `V` EN15804 A1..D) + backfill
+- ImpactCategory hygiene (merge ~20 orphans / near-duplicates,
+  normalise `indicator`/`unit`)
+- Method taxonomy: `N AssessmentApproach` + `R BROADER` + `R APPLIES_APPROACH`,
+  3 paradigms / 9 groups / 28 methods from the method diagram
+- **second full LCIA method** (ReCiPe *or* CML) loaded as pure data
 
-### v3.x — Komponierbare Module (jeweils Migration + Basisqueries + Doku + Snapshot)
+### v3.x — Composable modules (each: migration + base queries + docs + snapshot)
 
-| Modul | Fügt hinzu | Belegt |
+| Module | Adds | Demonstrates |
 |---|---|---|
-| **v3.a Zirkularität (MCI)** | Material-Kreislaufparameter, `EndOfLifeRoute`, `IC_CIRCULARITY` | nicht-inventarbasierte Metrik steckbar |
-| **v3.b Kosten / MFCA** (Prototyp) | `CostItem` + `HAS_COST`, `Flow.mfcaClass`, `mfca`- + `eco_efficiency`-Query | ökonomische Dimension steckbar |
-| **v3.c Szenario + Unsicherheit** | `ModelScenario` / `Parameter` / `ParameterValue`-Layer, Unsicherheitsverteilungen, Sensitivitäts- / Robustheits- / Hotspot-Query | analytische Verfahren steckbar |
-| **v3.d Provenienz** | `Declaration` als Typ, `confidence`, EPD/DPP-Andockpunkte | Herkunfts-/Deklarationsdimension steckbar |
-| *v3.z (optional)* | alle Module zugleich | Kompositionsnachweis — Module kollidieren nicht |
+| **v3.a Circularity (MCI)** | material circularity parameters, `EndOfLifeRoute`, `IC_CIRCULARITY` | non-inventory-based metric is pluggable |
+| **v3.b Cost / MFCA** (prototype) | `CostItem` + `HAS_COST`, `Flow.mfcaClass`, `mfca` + `eco_efficiency` query | economic dimension is pluggable |
+| **v3.c Scenario + uncertainty** | `ModelScenario` / `Parameter` / `ParameterValue` layer, uncertainty distributions, sensitivity / robustness / hotspot query | analytical methods are pluggable |
+| **v3.d Provenance** | `Declaration` as a type, `confidence`, EPD/DPP docking points | provenance/declaration dimension is pluggable |
+| *v3.z (optional)* | all modules at once | composition proof — modules do not collide |
 
-> Das Paradigma „lernende Ansätze" (KI/ML) war ursprünglich als reiner
-> Andockpunkt in v3.d/v3.i vorgesehen; es wurde am 2026-08-29 vollständig aus
-> Graph und Doku entfernt (außerhalb des Fallstudien-Umfangs) —
+> The paradigm "learning approaches" (AI/ML) was originally intended as a pure
+> docking point in v3.d/v3.i; it was removed completely from the graph and the docs on
+> 2026-08-29 (outside the case-study scope) —
 > `consistency/remove_ki_stubs.cypher`.
 
 ---
 
-## 3. Dokumentationspflicht je Änderung
+## 3. Documentation duty per change
 
-Jede Schemaänderung (Knoten, Kanten, Properties, Vokabulare, Datenladungen) wird
-**nicht nur angewendet, sondern dokumentiert**:
+Every schema change (nodes, edges, properties, vocabularies, data loads) is
+**not just applied but documented**:
 
-- **welche bestehenden Artefakte** (Knoten/Kanten/Properties) berührt werden,
-- **was die Änderung je betroffener Bewertungsmethode** bedeutet,
-- **welche weiteren Methoden** durch dieselbe Änderung betroffen sind
-  (Änderungs-→-Methoden-Matrix, möglichst bidirektional).
+- **which existing artefacts** (nodes/edges/properties) are touched,
+- **what the change means for each affected assessment method**,
+- **which further methods** are affected by the same change
+  (change → methods matrix, bidirectional where possible).
 
-Zielartefakte:
+Target artefacts:
 ```
-model_extension/reference/methods_change_sets.md      ← Master-Spec: Änderungsmenge pro Methode (noch zu erstellen)
-model_extension/reference/change_method_matrix.csv    ← Zeilen = atomare Änderungen, Spalten = Methoden
-methods/onepagers/<methode>.md
+model_extension/reference/methods_change_sets.md      ← master spec: change set per method (still to be created)
+model_extension/reference/change_method_matrix.csv    ← rows = atomic changes, columns = methods
+methods/onepagers/<method>.md
 ```
 
 ---
 
-## 4. Snapshot-Verfahren
+## 4. Snapshot procedure
 
-Stream-Export über `cypher-shell --format plain` + Decoder funktioniert bis ~1 MB
-sauber (v1: 426 Knoten). Ab v2 (voller Graph, ~27 MB) liefert der Stream **mehrere**
-`cypherStatements`-Zeilen und lässt sich nicht verlustfrei zu einer Datei fügen.
+Stream export via `cypher-shell --format plain` + decoder works cleanly up to ~1 MB
+(v1: 426 nodes). From v2 on (full graph, ~27 MB) the stream delivers **several**
+`cypherStatements` lines and cannot be joined losslessly into a single file.
 
-**Erforderlich vor v3:** `apoc.export.file.enabled=true` in
-`<DBMS-Verzeichnis>/conf/apoc.conf` (Datei neu anlegen) + DBMS-Neustart über
-Neo4j Desktop. Danach `CALL apoc.export.cypher.all('v3_snapshot.cypher', {format:'plain'})`
-→ schreibt in `<DBMS-Verzeichnis>/import/`, von dort mit Read einlesbar.
+**Required before v3:** `apoc.export.file.enabled=true` in
+`<DBMS directory>/conf/apoc.conf` (create the file) + DBMS restart via
+Neo4j Desktop. Then `CALL apoc.export.cypher.all('v3_snapshot.cypher', {format:'plain'})`
+→ writes into `<DBMS directory>/import/`.
 
-Die dafür verwendeten Hilfsskripte (Exportquery mit Label-Ausschlussfilter, Stream-Decoder,
-`cypher-shell`-Wrapper) gehören nicht zum Repository.
+The helper scripts used for this (export query with label exclusion filter, stream
+decoder, `cypher-shell` wrapper) are not part of the repository.
 
-Solange nicht umgestellt: Stufenzustand als `vN_state.md` (Schema + Zähler) +
-`migration_vN.cypher` als autoritatives Delta.
+As long as the switch has not been made: stage state as `vN_state.md` (schema + counters) +
+`migration_vN.cypher` as the authoritative delta.
 
 ---
 
 ## 5. Status
 
-| Artefakt | Stand |
+| Artefact | State |
 |---|---|
-| `v1_blackbox/v1_snapshot.cypher` | **aktuell** (2026-08-27, nach Migration) — 426 Knoten / 1 397 Beziehungen, ILCD-Typen + `MAT_*_GENERIC` ausgeschlossen, verifiziert |
-| `v1_blackbox/migration_v1.cypher` + `repairability.cypher` | **angewendet & verifiziert** — Reparierbarkeit formalisiert, `repairabilityClass` A=1 / B=12 / C=30. Doku: `v1_blackbox/CHANGELOG.md` |
-| `_fixes/fix_generic_materials.cypher` | **angewendet** — CSV-Spaltenversatz der 5 generischen Materialien behoben |
-| [`model_extension/reference/methods_change_sets.md`](../reference/methods_change_sets.md) | **erstellt** (2026-08-27) — Änderungsmenge pro Verfahren (29), PRE-Bausteine, Reihenfolge, Datenlücken |
-| `v2_greybox/migration_v2.cypher` + `lca_computed_ef31.cypher` | **angewendet & verifiziert** (v2-minimal) — Rechenkern am Aluminium-A1-Pfad, 5 Gripper × 7 EF3.1-Kategorien berechnet. Doku: `v2_greybox/CHANGELOG.md`, `v2_state.md` |
-| `v3_whitebox/migration_v3.cypher` + `lca_generic.cypher` | **angewendet & verifiziert** (v3-minimal) — PRE‑2 `lifecycleModule` (55), PRE‑3 funkt. Einheit (48), PRE‑4 `AssessmentApproach`-Taxonomie (41), methodenparametrisierte Query. Methodenwechsel EF31↔PCF ohne Schemaänderung. Doku: `v3_whitebox/CHANGELOG.md`, `v3_state.md` |
-| `v3x_{a..d}/migration_v3*.cypher` + `v3x_repair.cypher` | **angewendet & verifiziert** — a Zirkularität (MCI, `IAM_MCI`), b Kosten/MFCA-Prototyp (`CostItem`), c Parameter-/Szenario-/Unsicherheits-Layer, d Provenienz + Reparierbarkeit als Ergebnis + EPD/DPP-Demonstrator. Ein Reparaturpass (48 Dup-Knoten, 2 verlorene Kanten). Doku: `v3x_CHANGELOG.md`, `v3x_state.md` |
-| [`model_extension/reference/change_method_matrix.csv`](../reference/change_method_matrix.csv) | **erstellt** — atomare Änderungen v1…v3.x mit betroffenen Methoden |
-| `v2_data/` (Varianten A + B) | **angewendet & verifiziert** — Part-Massen (alle 86), Fertigungsenergie, Werkstoff-GWP-Literale; **A** (nur reale ILCD-Datensätze: Al/Stahl/PA-Proxy) und **B** (Literale, alle 43 Gripper, A1-A3) parallel via `dataVariant`. Doku: `v2_data/CHANGELOG.md`, `ASSUMPTIONS.md` |
-| `v3_followup_pre5/migration_pre5.cypher` | **angewendet & verifiziert** — ImpactCategory kanonisiert (44 → 29), EF3.1 rechnet nun **19** statt 7 Kategorien; Kernkategorien unangetastet. Doku: `v3_followup_pre5/CHANGELOG.md` |
-| `v3x_e_recipe/migration_v3e.cypher` | **angewendet & verifiziert** — 2. LCIA-Methode `IAM_RECIPE` (18 Midpoint-Kategorien, Klima befüllt × 1,06). `lca_generic` unverändert. Doku: `v3x_e_recipe/CHANGELOG.md` |
-| [`methods/onepagers/`](../../methods/onepagers/) | **erstellt** — 29 Verfahrens-Steckbriefe + README |
-| [`model_extension/reference/graph_schema_v3x.json`](../reference/graph_schema_v3x.json) + `EXTENSION_REFERENCE.md` | **erstellt & laufend gepflegt** — vollständiges Ist-Schema (93 Keys) + konsolidierte Referenz |
-| `dq_concept/`, `demonstrator/`, `v3x_e_recipe/cf_import/`, `v2_data/lci_hygiene/` | **angewendet & verifiziert** (2026-08-29) — Datenqualitätskonzept, Verifikationskette 8-Greifer-Scheibe, voller ReCiPe-CF-Import (16/18 rechnen), LCI-Hygiene (CAS/Einheiten/Kompartiment) |
-| `consistency/` (Ebene 1–4) | **abgeschlossen** (2026-08-29) — read-only Prüfharness; 8 + 1 + 2 Befunde triagiert; `FINDINGS.md`, `CHANGELOG.md`. KI/ML-Paradigma entfernt (`remove_ki_stubs.cypher`) |
-| Voll-Snapshots | **erledigt** (2026-08-29) — `apoc.conf` gesetzt + DBMS-Neustart; `snapshots/graph_full_2026-08-29.{cypher,graphml}` + `schema_2026-08-29.json` (nur in der Arbeitskopie des Maintainers; die 2 großen Dumps NICHT im Repository) |
+| `v1_blackbox/v1_snapshot.cypher` | **current** (2026-08-27, after migration) — 426 nodes / 1,397 relationships, ILCD types + `MAT_*_GENERIC` excluded, verified |
+| `v1_blackbox/migration_v1.cypher` + `repairability.cypher` | **applied & verified** — repairability formalised, `repairabilityClass` A=1 / B=12 / C=30. Docs: `v1_blackbox/CHANGELOG.md` |
+| `_fixes/fix_generic_materials.cypher` | **applied** — CSV column shift of the 5 generic materials fixed |
+| [`model_extension/reference/methods_change_sets.md`](../reference/methods_change_sets.md) | **created** (2026-08-27) — change set per approach (29), PRE building blocks, order, data gaps |
+| `v2_greybox/migration_v2.cypher` + `lca_computed_ef31.cypher` | **applied & verified** (v2-minimal) — calculation core on the aluminium A1 path, 5 grippers × 7 EF3.1 categories computed. Docs: `v2_greybox/CHANGELOG.md`, `v2_state.md` |
+| `v3_whitebox/migration_v3.cypher` + `lca_generic.cypher` | **applied & verified** (v3-minimal) — PRE‑2 `lifecycleModule` (55), PRE‑3 functional unit (48), PRE‑4 `AssessmentApproach` taxonomy (41), method-parametrised query. Method switch EF31↔PCF without schema change. Docs: `v3_whitebox/CHANGELOG.md`, `v3_state.md` |
+| `v3x_{a..d}/migration_v3*.cypher` + `v3x_repair.cypher` | **applied & verified** — a circularity (MCI, `IAM_MCI`), b cost/MFCA prototype (`CostItem`), c parameter/scenario/uncertainty layer, d provenance + repairability as a result + EPD/DPP demonstrator. One repair pass (48 duplicate nodes, 2 lost edges). Docs: `v3x_CHANGELOG.md`, `v3x_state.md` |
+| [`model_extension/reference/change_method_matrix.csv`](../reference/change_method_matrix.csv) | **created** — atomic changes v1…v3.x with affected methods |
+| `v2_data/` (variants A + B) | **applied & verified** — part masses (all 86), manufacturing energy, material GWP literals; **A** (real ILCD datasets only: Al/steel/PA proxy) and **B** (literals, all 43 grippers, A1-A3) in parallel via `dataVariant`. Docs: `v2_data/CHANGELOG.md`, `ASSUMPTIONS.md` |
+| `v3_followup_pre5/migration_pre5.cypher` | **applied & verified** — ImpactCategory canonicalised (44 → 29), EF3.1 now computes **19** instead of 7 categories; core categories untouched. Docs: `v3_followup_pre5/CHANGELOG.md` |
+| `v3x_e_recipe/migration_v3e.cypher` | **applied & verified** — 2nd LCIA method `IAM_RECIPE` (18 midpoint categories, climate populated × 1.06). `lca_generic` unchanged. Docs: `v3x_e_recipe/CHANGELOG.md` |
+| [`methods/onepagers/`](../../methods/onepagers/) | **created** — 29 approach one-pagers + README |
+| [`model_extension/reference/graph_schema_v3x.json`](../reference/graph_schema_v3x.json) + `EXTENSION_REFERENCE.md` | **created & continuously maintained** — complete as-built schema (93 keys) + consolidated reference |
+| `dq_concept/`, `demonstrator/`, `v3x_e_recipe/cf_import/`, `v2_data/lci_hygiene/` | **applied & verified** (2026-08-29) — data quality concept, verification chain for the 8-gripper slice, full ReCiPe CF import (16/18 compute), LCI hygiene (CAS/units/compartment) |
+| `consistency/` (layers 1–4) | **completed** (2026-08-29) — read-only check harness; 8 + 1 + 2 findings triaged; `FINDINGS.md`, `CHANGELOG.md`. AI/ML paradigm removed (`remove_ki_stubs.cypher`) |
+| Full snapshots | **done** (2026-08-29) — `apoc.conf` set + DBMS restart; `snapshots/graph_full_2026-08-29.{cypher,graphml}` + `schema_2026-08-29.json` (only in the maintainer's working copy; the 2 large dumps are NOT in the repository) |
 
-Live-DB nach diesem Lauf (2026-08-27): 3 652 Knoten / 81 813 Beziehungen /
-36 Constraints. **Danach weiter ausgebaut** — aktueller Ist-Stand
-[`EXTENSION_REFERENCE.md`](../reference/EXTENSION_REFERENCE.md), Live-DB 2026-08-29:
-**5 620 Knoten / 86 635 Beziehungen / 39 Constraints**, 0 label-lose Knoten,
-0 Duplikate, 0 verwaiste Ergebnisse.
-**6 Methoden** im Graphen: `IAM_EF31` (19 Kat., rechnet), `IAM_PCF` (Klima),
-`IAM_RECIPE` (18 Kat., 16 rechnen), `IAM_MCI` (rechnet), `IAM_REPAIR` (rechnet),
-`IAM_GHG` (THG nach Scope). Alle **23 Verfahren** des Diagramms (nach
-KI-Entfernung) als `AssessmentApproach`-Knoten adressierbar.
+Live DB after this run (2026-08-27): 3,652 nodes / 81,813 relationships /
+36 constraints. **Developed further since** — current state:
+[`EXTENSION_REFERENCE.md`](../reference/EXTENSION_REFERENCE.md), live DB 2026-08-29:
+**5,620 nodes / 86,635 relationships / 39 constraints**, 0 label-less nodes,
+0 duplicates, 0 orphaned results.
+**6 methods** in the graph: `IAM_EF31` (19 cat., computes), `IAM_PCF` (climate),
+`IAM_RECIPE` (18 cat., 16 compute), `IAM_MCI` (computes), `IAM_REPAIR` (computes),
+`IAM_GHG` (GHG by scope). All **23 approaches** of the diagram (after the
+AI removal) are addressable as `AssessmentApproach` nodes.
 
-### v2-Umfangsentscheidung (2026-08-27)
+### v2 scope decision (2026-08-27)
 
-Schlankste umsetzbare Variante gewählt: **v2-minimal** — Rechenkern end-to-end an
-**einem** sauberen Pfad (Aluminium, A1) als Mechanismusnachweis; volle LCI-Abdeckung
-ist ein getrennter Daten-Arbeitsstrang `v2-data`. Systemgrenze **A1** (einzige Stufe
-mit charakterisierten ILCD-Daten). Material→Datensatz über neue Kante `MODELED_BY`.
+Leanest feasible variant chosen: **v2-minimal** — calculation core end-to-end on
+**one** clean path (aluminium, A1) as a proof of mechanism; full LCI coverage is a
+separate data work strand `v2-data`. System boundary **A1** (the only stage
+with characterised ILCD data). Material→dataset via the new edge `MODELED_BY`.
 Details: `v2_greybox/CHANGELOG.md`.
 
-### Offene Entscheidung (erledigt)
+### Open decision (resolved)
 
-**Option 2** — v1 ohne ILCD-Typen; v2 ergänzt sie additiv. Umgesetzt.
+**Option 2** — v1 without ILCD types; v2 adds them additively. Implemented.
 
-### Datenvariante A vs. B — ENTSCHIEDEN (2026-08-28)
+### Data variant A vs. B — DECIDED (2026-08-28)
 
-Beide Varianten liegen parallel im Graphen, unterscheidbar über
+Both variants exist side by side in the graph, distinguishable via
 `Assessment.dataVariant` / `ImpactResult.dataVariant`:
 
-- **A-realdataset** — `MODELED_BY` nur auf reale ILCD-Datensätze. Rigoros, ILCD-nah.
-  Klima 0,16–0,54 kg CO₂-eq/Gripper.
-- **B-literal** — Werkstoff-GWP-Literale für alle 18 Materialien, A1 + A3-Stromklima.
-  Volle Abdeckung aller 43 Gripper, gemischte Datenqualität. Klima 0,34–1,01.
+- **A-realdataset** — `MODELED_BY` only to real ILCD datasets. Rigorous, close to ILCD.
+  Climate 0.16–0.54 kg CO₂-eq/gripper.
+- **B-literal** — material GWP literals for all 18 materials, A1 + A3 electricity climate.
+  Full coverage of all 43 grippers, mixed data quality. Climate 0.34–1.01.
 
-**Festlegung des Nutzers:** ab **v3** ist **Variante A** (ILCD-nahe reale Datensätze)
-der **Fallstudien-Standard**. **Variante B** bleibt nur als Grundlage/Fallback.
+**User's decision:** from **v3** on, **variant A** (real datasets close to ILCD) is the
+**case-study standard**. **Variant B** remains only as a basis/fallback.
 
-**Stand 2026-08-28:** Import-Pipeline `v2_data/ilcd_import/` gebaut; **ABS, PC, POM,
-PA 6.6** als reale PlasticsEurope-ILCD-Pakete eingespielt (GWP 3,1–6,5 kg CO₂e/kg,
-`MODELED_BY` Variante A), `refresh_variantA.cypher` → Variante-A-Ergebnisse über
-alle 43 Greifer. Offen: Elastomere, PETG, PLA, PA12-spezifisch, Kohlefaser
-(Proxy/Literal bis Datensatz vorliegt). Sphera-Lizenz = nur Basisversion.
+**State 2026-08-28:** import pipeline `v2_data/ilcd_import/` built; **ABS, PC, POM,
+PA 6.6** loaded as real PlasticsEurope ILCD packages (GWP 3.1–6.5 kg CO₂e/kg,
+`MODELED_BY` variant A), `refresh_variantA.cypher` → variant A results across
+all 43 grippers. Open: elastomers, PETG, PLA, PA12-specific, carbon fibre
+(proxy/literal until a dataset is available). Sphera licence = base version only.
 
-### Kostendimension — ENTSCHIEDEN (2026-08-28)
+### Cost dimension — DECIDED (2026-08-28)
 
-Bleibt **schlank**: nur `Material.unitCost`-Platzhalter (v3.b Variante A). Das
-strukturierte `CostItem`/`HAS_COST`-Knotenmodell (v3.b Variante B) wird **nicht
-weiterverfolgt**; die Knoten bleiben im Graphen, werden aber nicht ausgebaut.
-`mfca.cypher` / `eco_efficiency.cypher` laufen weiter auf `unitCost`.
+Stays **lean**: only the `Material.unitCost` placeholder (v3.b variant A). The
+structured `CostItem`/`HAS_COST` node model (v3.b variant B) will **not be pursued
+further**; the nodes remain in the graph but are not built out.
+`mfca.cypher` / `eco_efficiency.cypher` continue to run on `unitCost`.

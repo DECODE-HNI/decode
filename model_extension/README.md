@@ -75,16 +75,16 @@ model_extension/
 │   ├── demonstrator/     8-gripper verification chain (00–04 + README/CHANGELOG)
 │   ├── consistency/      4-layer review harness (check_*, fix_*, FINDINGS, CHANGELOG)
 │   ├── _fixes/           data-quality corrections
-│   ├── PLAN.md           staged plan: stage rationale, snapshot procedure, status table (German)
-│   └── RUN_2026-08-27.md log of the first autonomous run, partial state (German)
+│   ├── PLAN.md           staged plan: stage rationale, snapshot procedure, status table
+│   └── RUN_2026-08-27.md log of the first autonomous run, partial state
 └── reference/
     ├── EXTENSION_REFERENCE.md   consolidated label / relationship / query catalogue
     ├── ASSUMPTIONS.md          every literature value used, with sources
     ├── change_method_matrix.csv  one row per atomic change × the methods it affects
-    ├── methods_change_sets.md   change set per assessment method, companion to the matrix (German)
+    ├── methods_change_sets.md   change set per assessment method, companion to the matrix
     ├── graph_schema_v3x.json    machine-readable schema of the extended graph
-    ├── NEO4J_MODEL_EXPORT.md    importer schema vs. migrations, reproduction order (German)
-    ├── HANDOFF.md               project state and context as of 2026-08-29 (German)
+    ├── NEO4J_MODEL_EXPORT.md    importer schema vs. migrations, reproduction order
+    ├── HANDOFF.md               project state and context as of 2026-08-29
     └── Sustainability_Assessment_Flexibility_Analysis.md
 ```
 

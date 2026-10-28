@@ -44,7 +44,3 @@ Method exchangeability is demonstrated concretely: three LCIA methods
 (EF3.1, PCF, ReCiPe) run through the single `lca_generic($methodId)` query in
 [`../model_extension/migrations/v3_whitebox/`](../model_extension/migrations/v3_whitebox/) —
 adding ReCiPe was pure data, zero query change.
-
-> Note on language: the one-pagers and the `.cypher` comments are in German
-> (the demonstrator's working language); IDs, structure and this catalogue
-> are in English.
