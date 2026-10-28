@@ -2,22 +2,22 @@
 ============================================================
 ilcd_to_csv_v2.ps1
 
-Erweiterung von ilcd_to_csv.ps1 (frueherer Entwicklungsstand):
-- exchangeId (= "<processId>#<dataSetInternalID>") wird jetzt in die
-  HAS_FLOW-CSV geschrieben -- war vorher nur intern bekannt.
-- uncertainty (aus relativeStandardDeviation95In) und comment (aus
-  dataSourceType + dataDerivationTypeStatus, beides echte ILCD-Felder --
-  nichts erfunden) neu je Exchange.
-- referenceYear auf HAS_FLOW UND zusaetzlich auf Process.csv (Provenienz).
-- source/sourceDatabase auf Process.csv UND Flow.csv (Provenienz), da nach
-  Dedup jeder Flow/Process genau einen Ursprung hat.
-- ProcessTypeMap statt einzelnem ProcessType, da die neu ausgewaehlten
-  Prozesse unterschiedliche Kategorien sind (Rohstoff/Fertigungsschritt/EoL).
-Alles andere unveraendert aus der Originalversion uebernommen (Unquoted-CSV-
-Schreiber, InvariantCulture ueberall, Scoping auf tatsaechlich genutzte
-Flows/CFs, Sphera- wie IDEMAT-Exchange-Form).
+Extension of ilcd_to_csv.ps1 (earlier development state):
+- exchangeId (= "<processId>#<dataSetInternalID>") is now written to the
+HAS_FLOW CSV -- previously only known internally.
+- uncertainty (from relativeStandardDeviation95In) and comment (from
+dataSourceType + dataDerivationTypeStatus, both real ILCD fields --
+nothing invented) new per exchange.
+- referenceYear on HAS_FLOW AND additionally on Process.csv (provenance).
+- source/sourceDatabase on Process.csv AND Flow.csv (provenance), since after
+dedup every flow/process has exactly one origin.
+- ProcessTypeMap instead of a single ProcessType, because the newly selected
+processes belong to different categories (raw material/manufacturing step/EoL).
+Everything else taken over unchanged from the original version (unquoted CSV
+writer, InvariantCulture everywhere, scoping to the flows/CFs actually used,
+Sphera as well as IDEMAT exchange form).
 ============================================================
-AUFRUF-BEISPIEL:
+USAGE EXAMPLE:
 
 .\ilcd_to_csv_v2.ps1 -IlcdDir "C:\extracted\alu" -OutDir "C:\out\alu" `
   -Source "Sphera" -SourceDatabase "Sphera Managed LCA Content (MLC)" `
@@ -39,8 +39,8 @@ param(
     [string] $SourceDatabase = "",
     [string] $DataMaturity = "background_LCI_secondary_ILCD",
 
-    # Falls gesetzt: nur diese Prozess-UUIDs verarbeiten (Dateiname ohne .xml),
-    # alle anderen im processes-Ordner ignorieren. Leer = alle verarbeiten.
+    # If set: process only these process UUIDs (file name without .xml),
+    # ignore all others in the processes folder. Empty = process all.
     [string[]] $OnlyProcessUuids = @()
 )
 
@@ -71,7 +71,7 @@ $ugDir   = Join-Path $IlcdDir "ILCD\unitgroups"
 $lciaDir = Join-Path $IlcdDir "ILCD\lciamethods"
 
 foreach ($d in @($procDir, $flowDir, $fpDir, $ugDir)) {
-    if (-not (Test-Path $d)) { throw "Erwarteter Ordner fehlt: $d" }
+    if (-not (Test-Path $d)) { throw "Expected folder is missing: $d" }
 }
 
 $fpCache = @{}
@@ -191,8 +191,8 @@ function Read-ProcessXml {
         $amount = if ($meanNode) { $meanNode.InnerText } else { $ex.GetAttribute("olca:amount") }
         $locNode = $ex.SelectSingleNode("p:location", $ns)
 
-        # Neu: Unsicherheit + Kommentar aus echten ILCD-Feldern (nichts erfunden;
-        # falls das Feld fehlt, bleibt die Spalte leer statt eines erfundenen Werts).
+        # New: uncertainty + comment from real ILCD fields (nothing invented;
+        # if the field is missing, the column stays empty instead of an invented value).
         $rsdNode = $ex.SelectSingleNode("p:relativeStandardDeviation95In", $ns)
         $uncertainty = if ($rsdNode) { $rsdNode.InnerText } else { "" }
         $dstNode = $ex.SelectSingleNode("p:dataSourceType", $ns)
@@ -253,10 +253,10 @@ function Set-ReferenceNormalized {
 }
 
 # ============================================================
-# HAUPTABLAUF
+# MAIN FLOW
 # ============================================================
 
-Write-Output "1) Prozesse einlesen..."
+Write-Output "1) Reading processes..."
 $processes = New-Object System.Collections.Generic.List[object]
 $usedFlowUuids = New-Object 'System.Collections.Generic.HashSet[string]'
 
@@ -277,17 +277,17 @@ foreach ($pf in $procFiles) {
     foreach ($ex in $proc.exchanges) { [void]$usedFlowUuids.Add($ex.flowUuid) }
     Write-Output "   $procId ($uuid) : $($proc.exchanges.Count) Exchanges"
 }
-Write-Output "   -> $($processes.Count) Prozesse, $($usedFlowUuids.Count) referenzierte Flows"
+Write-Output "   -> $($processes.Count) processes, $($usedFlowUuids.Count) referenced flows"
 
-Write-Output "2) Nur tatsaechlich genutzte Flows einlesen..."
+Write-Output "2) Reading only the flows actually used..."
 $flowRows = New-Object System.Collections.Generic.List[object]
 foreach ($uuid in $usedFlowUuids) {
     $f = Read-FlowXml -Uuid $uuid
     if ($f) { $flowRows.Add($f) }
 }
-Write-Output "   -> $($flowRows.Count) Flow-Zeilen"
+Write-Output "   -> $($flowRows.Count) flow rows"
 
-Write-Output "3) Process.csv schreiben..."
+Write-Output "3) Writing Process.csv..."
 $procCsvRows = foreach ($p in $processes) {
     [PSCustomObject]@{
         id = $p.id; name = $p.name; processType = $p.processType
@@ -299,10 +299,10 @@ $procCsvRows = foreach ($p in $processes) {
 }
 $procCsvRows | Write-UnquotedCsv -Path (Join-Path $OutDir "Process.csv") -Columns @('id','name','processType','technology','geographicalLocation','dataAcquisition','status','source','sourceDatabase','referenceYear')
 
-Write-Output "4) Flow.csv schreiben..."
+Write-Output "4) Writing Flow.csv..."
 $flowRows | Write-UnquotedCsv -Path (Join-Path $OutDir "Flow.csv") -Columns @('id','name','flowType','category','referenceUnit','casNumber','status','description','source','sourceDatabase')
 
-Write-Output "5) HAS_FLOW-Kanten schreiben (mit exchangeId, referenceYear, uncertainty, comment)..."
+Write-Output "5) Write HAS_FLOW edges (with exchangeId, referenceYear, uncertainty, comment)..."
 $unitLookup = @{}
 $flowRows | ForEach-Object { $unitLookup[$_.id] = $_.referenceUnit }
 
@@ -326,9 +326,9 @@ $hasFlowRows = foreach ($p in $processes) {
     }
 }
 $hasFlowRows | Write-UnquotedCsv -Path (Join-Path $OutDir "r_HAS_FLOW_Process_TO_Flow.csv") -Columns @('exchangeId','from_id','to_id','amount','unit','direction','location','quantitativeReference','ratioToReference','dataMaturity','referenceYear','uncertainty','comment')
-Write-Output "   -> $($hasFlowRows.Count) HAS_FLOW-Zeilen"
+Write-Output "   -> $($hasFlowRows.Count) HAS_FLOW rows"
 
-Write-Output "6) CHARACTERIZES (nur falls ILCD\lciamethods vorhanden)..."
+Write-Output "6) CHARACTERIZES (only if ILCD\lciamethods is present)..."
 if (Test-Path $lciaDir) {
     $catRows = New-Object System.Collections.Generic.List[object]
     $cfRows = New-Object System.Collections.Generic.List[object]
@@ -363,10 +363,10 @@ if (Test-Path $lciaDir) {
 
     $catRows | Write-UnquotedCsv -Path (Join-Path $OutDir "ImpactCategory_neu.csv") -Columns @('id','name','indicator','unit')
     $cfRows | Write-UnquotedCsv -Path (Join-Path $OutDir "r_CHARACTERIZES_Flow_TO_ImpactCategory.csv") -Columns @('from_id','to_id','factor','location')
-    Write-Output "   -> $($catRows.Count) Kategorien, $($cfRows.Count) CHARACTERIZES-Zeilen"
+    Write-Output "   -> $($catRows.Count) categories, $($cfRows.Count) CHARACTERIZES rows"
 } else {
-    Write-Output "   kein lciamethods-Ordner gefunden -- ueberspringe CHARACTERIZES."
+    Write-Output "   no lciamethods folder found -- skipping CHARACTERIZES."
 }
 
 Write-Output ""
-Write-Output "Fertig. CSVs liegen in: $OutDir"
+Write-Output "Done. CSVs are in: $OutDir"

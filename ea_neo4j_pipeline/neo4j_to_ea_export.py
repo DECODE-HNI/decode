@@ -194,7 +194,7 @@ NODE_SPECS = [
     },
 ]
 
-# (Cypher fuer Source->Target, EA-Dependency-Stereotyp)
+# (Cypher for Source->Target, EA dependency stereotype)
 DEPENDENCY_SPECS = [
     ("MATCH (a:SolutionPrinciple)-[:REALIZES_FUNCTION]->(b:Function) "
      "RETURN a.id AS source_id, b.id AS target_id ORDER BY a.id, b.id", "Realizes"),
@@ -285,7 +285,7 @@ def fetch_nodes(session):
             seen_ids[bid] = spec["neo4j_label"]
             parsed.append(dict(r))
         nodes_by_spec.append(parsed)
-        print(f"  {spec['neo4j_label']}: {len(parsed)} Knoten")
+        print(f"  {spec['neo4j_label']}: {len(parsed)} nodes")
     return nodes_by_spec
 
 
@@ -330,7 +330,7 @@ def fetch_dependencies(session):
     for query, stereotype in DEPENDENCY_SPECS:
         rows = list(session.run(query))
         deps.append((stereotype, [(r["source_id"], r["target_id"]) for r in rows]))
-        print(f"  {stereotype} ({query.split('[:')[1].split(']')[0]}): {len(rows)} Kanten")
+        print(f"  {stereotype} ({query.split('[:')[1].split(']')[0]}): {len(rows)} edges")
     return deps
 
 
@@ -642,7 +642,7 @@ def build_xmi(nodes_by_spec, parent_of, material_ref, deps, with_diagram=True):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--out", default="rflpv2_from_neo4j.xml", help="Ausgabedatei (XMI 2.1)")
+    ap.add_argument("--out", default="rflpv2_from_neo4j.xml", help="Output file (XMI 2.1)")
     ap.add_argument("--database", default="neo4j")
     ap.add_argument("--no-diagram", action="store_true",
                      help="Do not generate an EA diagram, only the bare model elements "

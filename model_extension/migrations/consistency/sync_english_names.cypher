@@ -10,6 +10,13 @@
 // script once against it. Idempotent: it only touches ids that still carry the
 // old spelling and re-sets names to the same values.
 //
+// Beyond the taxonomy, two ImpactResult notes written by
+// lca_bulk_load/close_upstream_gap_assembly_finish.cypher were translated; they
+// are re-set in the second block. The AAS import nodes carry the declared
+// submodel as a string (rawSubmodelJson); to refresh the English wording there,
+// re-run aas_interface/aas_instance_blackbox_..._import.cypher and
+// aas_instance_greybox_..._import.cypher (MERGE-based, safe to repeat).
+//
 // Each ';'-statement is independent (re-MATCH by id, no shared variables).
 // Rollback: the three renames below can be reversed by swapping old/new ids.
 // ============================================================================
@@ -56,7 +63,15 @@ UNWIND [
 MATCH (n:AssessmentApproach {id: row.id})
 SET n.name = row.name;
 
+// --- ImpactResult notes (English wording; same facts as before) -------------
+MATCH (ir:ImpactResult {id:'RES_PREC_AL7075_CC'})
+SET ir.note = 'Manufacturing stage (~A1-A3): PROC_CNC (aluminium ingot + green electricity DE) + PROC_SCREW (screws, quantity assumed) + PROC_FINISH (electricity, quantity assumed). Calculated 2026-08-26.';
+MATCH (ir:ImpactResult {id:'RES_PREC_AL7075_REPAIR_CC'})
+SET ir.note = 'Assumed: repair = new production of a replacement contact element, same upstream quantities as PROC_CNC. Quantity not from original data. Calculated 2026-08-26.';
+
 // --- verification -----------------------------------------------------------
+MATCH (ir:ImpactResult) WHERE ir.note =~ '.*(Fertigungsstufe|Berechnet|Angenommen|Vorketten).*'
+RETURN count(ir) AS notes_still_german;                                          // expect 0
 MATCH (n:AssessmentApproach) RETURN count(n) AS approaches;                    // expect 33
 MATCH (n:AssessmentApproach) WHERE n.id IN ['AP_BILANZIEREND','AP_DATENBASIERT','AP_LERNEND']
 RETURN count(n) AS stale_ids;                                                    // expect 0

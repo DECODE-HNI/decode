@@ -6,8 +6,8 @@
       "idShort": "AAS_PART_PREC_AL7075_CONTACT_BlackBox",
       "description": [
         {
-          "language": "de",
-          "text": "Black-Box-AAS fuer PART_PREC_AL7075_CONTACT: EPD-artige Mehrindikator-Deklaration (Vorbild IDTA 02093, Feldnamen provisorisch nach EN15804/ISO14025, da die offizielle Spec noch nicht oeffentlich ist). Alle zehn Werte real aus den CHARACTERIZES-Faktoren der drei Vorketten-Prozesse berechnet (PROC_ALU_INGOT_MIX_CONSUMPTION, PROC_ELECTRICITY_GREEN_GRID_MIX_DE, PROC_SCREW_GALVANIZED), skaliert auf die tatsaechlich verbrauchten Mengen von PROC_CNC+PROC_SCREW+PROC_FINISH. Bewusst: KEINE Relationship-Elemente zur angehaengten Datei -- das ist der methodische Unterschied zur Grey-Box-Instanz (aas_instance_greybox_prec_al7075_contact.json), die dieselbe Datei per FragmentReference verlinkt."
+          "language": "en",
+          "text": "Black-box AAS for PART_PREC_AL7075_CONTACT: EPD-style multi-indicator declaration (modelled on IDTA 02093, field names provisional following EN15804/ISO14025 because the official spec is not public yet). All ten values computed for real from the CHARACTERIZES factors of the three upstream processes (PROC_ALU_INGOT_MIX_CONSUMPTION, PROC_ELECTRICITY_GREEN_GRID_MIX_DE, PROC_SCREW_GALVANIZED), scaled to the quantities actually consumed by PROC_CNC+PROC_SCREW+PROC_FINISH. Deliberately: NO relationship elements to the attached file -- that is the methodological difference to the grey-box instance (aas_instance_greybox_prec_al7075_contact.json), which links the same file via FragmentReference."
         }
       ],
       "assetInformation": {
@@ -41,9 +41,9 @@
           "idShort": "EPDMetadata",
           "value": [
             { "modelType": "Property", "idShort": "ProgramOperator",  "valueType": "xs:string", "value": "IBU" },
-            { "modelType": "Property", "idShort": "UnderlyingPCR",    "valueType": "xs:string", "value": "PCR Teil B: Metalle" },
+            { "modelType": "Property", "idShort": "UnderlyingPCR",    "valueType": "xs:string", "value": "PCR Part B: Metals" },
             { "modelType": "Property", "idShort": "ValidUntil",       "valueType": "xs:string", "value": "2031-08-26" },
-            { "modelType": "Property", "idShort": "Verifier",         "valueType": "xs:string", "value": "unabhaengiger Dritt-Pruefer (Typ III, illustrativ)" }
+            { "modelType": "Property", "idShort": "Verifier",         "valueType": "xs:string", "value": "independent third-party verifier (Type III, illustrative)" }
           ]
         },
 

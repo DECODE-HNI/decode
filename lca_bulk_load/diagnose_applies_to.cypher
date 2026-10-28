@@ -1,6 +1,6 @@
-// Findet exakt die Zeilen, fuer die KEINE entsprechende Relationship im
-// Graphen existiert. Rein lesend, kein Transaktions-Batching noetig.
-// Bitte alle drei einzeln ausfuehren und die Ergebnisse teilen.
+// Finds exactly the rows for which NO corresponding relationship exists in the
+// graph. Read-only, no transaction batching needed.
+// Please run all three individually and share the results.
 
 // --- 1) APPLIES_TO Process -> Part ---
 LOAD CSV WITH HEADERS FROM 'file:///r_1_APPLIES_TO_Process_TO_Part.csv' AS row

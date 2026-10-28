@@ -17,7 +17,7 @@ $sb = New-Object System.Text.StringBuilder
 
 # --- APPLIES_TO Process -> Part ---
 $rows1 = Import-Csv (Join-Path $build "r_1_APPLIES_TO_Process_TO_Part.csv")
-$null = $sb.AppendLine("// --- APPLIES_TO: Process -> Part ($($rows1.Count) Zeilen) ---")
+$null = $sb.AppendLine("// --- APPLIES_TO: Process -> Part ($($rows1.Count) rows) ---")
 $null = $sb.AppendLine("UNWIND [")
 $lines1 = foreach ($r in $rows1) { '{f:"' + (Esc $r.from_id) + '", t:"' + (Esc $r.to_id) + '", role:"' + (Esc $r.role) + '"}' }
 $null = $sb.AppendLine(($lines1 -join ",`r`n"))
@@ -30,7 +30,7 @@ $null = $sb.AppendLine("")
 
 # --- APPLIES_TO Process -> Material ---
 $rows2 = Import-Csv (Join-Path $build "r_39_APPLIES_TO_Process_TO_Material.csv")
-$null = $sb.AppendLine("// --- APPLIES_TO: Process -> Material ($($rows2.Count) Zeilen) ---")
+$null = $sb.AppendLine("// --- APPLIES_TO: Process -> Material ($($rows2.Count) rows) ---")
 $null = $sb.AppendLine("UNWIND [")
 $lines2 = foreach ($r in $rows2) { '{f:"' + (Esc $r.from_id) + '", t:"' + (Esc $r.to_id) + '", role:"' + (Esc $r.role) + '"}' }
 $null = $sb.AppendLine(($lines2 -join ",`r`n"))
@@ -43,7 +43,7 @@ $null = $sb.AppendLine("")
 
 # --- EVALUATES_CRITERION DataQuality -> DataQualityCriterion ---
 $rows3 = Import-Csv (Join-Path $build "r_6_EVALUATES_CRITERION_DataQuality_TO_DataQualityCriterion.csv")
-$null = $sb.AppendLine("// --- EVALUATES_CRITERION: DataQuality -> DataQualityCriterion ($($rows3.Count) Zeilen) ---")
+$null = $sb.AppendLine("// --- EVALUATES_CRITERION: DataQuality -> DataQualityCriterion ($($rows3.Count) rows) ---")
 $null = $sb.AppendLine("UNWIND [")
 $lines3 = foreach ($r in $rows3) {
     $scoreVal = if ($r.score) { $r.score } else { "null" }

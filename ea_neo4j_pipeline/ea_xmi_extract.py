@@ -69,7 +69,7 @@ NODE_STEREOTYPE_TO_LABEL = {
     "Function": "Function",
     "Logical Element": "SolutionPrinciple",
     "Process Element": "Process",
-    "Product Element": None,  # wird per Komposition zu Artifact/Assembly/Part aufgeloest
+    "Product Element": None,  # resolved via composition to Artifact/Assembly/Part
     "Test Case Description": "TestCaseDescription",
 }
 
@@ -169,14 +169,14 @@ def parse_xmi(path, debug=False):
 
     profile_uris = detect_profile_namespaces(path)
     if debug:
-        print(f"[debug] erkannte Profil-Namespace(s): {profile_uris}", file=sys.stderr)
+        print(f"[debug] detected profile namespace(s): {profile_uris}", file=sys.stderr)
     if not profile_uris:
         print("WARNING: no profile namespace found on the root -- probably no "
               "RFLPV2 stereotypes were used in the exported package at all.", file=sys.stderr)
 
     base_elements = {}   # xmi:id -> {"name":.., "xmi_type":..}
     dependencies = []    # (dep_id, client_id, supplier_id)
-    associations = []    # <packagedElement xmi:type="uml:Association"> Elemente
+    associations = []    # <packagedElement xmi:type="uml:Association"> elements
     all_ends = {}        # end_id -> {"aggregation":.., "type": type_id}
     stereo_apps = []     # {"base_id":.., "stereotype":.., "tags": {...}}
 
@@ -396,8 +396,8 @@ def write_csv(path, rows, leading_fields=("id", "name", "sourceStereotype")):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--input", required=True, help="Pfad zum EA-XMI-2.1-Export")
-    ap.add_argument("--out-dir", default="ea_extract", help="Zielverzeichnis fuer die CSVs")
+    ap.add_argument("--input", required=True, help="Path to the EA XMI 2.1 export")
+    ap.add_argument("--out-dir", default="ea_extract", help="Target directory for the CSVs")
     ap.add_argument("--debug", action="store_true")
     args = ap.parse_args()
 
@@ -422,7 +422,7 @@ def main():
 
     for label, rows in sorted(rows_by_label.items()):
         write_csv(os.path.join(args.out_dir, f"ea_{label}.csv"), rows)
-        print(f"  {label}: {len(rows)} Zeilen -> {args.out_dir}/ea_{label}.csv")
+        print(f"  {label}: {len(rows)} rows -> {args.out_dir}/ea_{label}.csv")
 
     rows_by_type = build_relationship_rows(dependencies, dependency_apps, stereo_by_base_id, id_by_base_id)
     for rel_type, rows in sorted(rows_by_type.items()):
@@ -431,7 +431,7 @@ def main():
             rows,
             leading_fields=("from_id", "to_id", "sourceStereotype", "targetStereotype"),
         )
-        print(f"  :{rel_type}: {len(rows)} Zeilen -> {args.out_dir}/ea_rel_{rel_type}.csv")
+        print(f"  :{rel_type}: {len(rows)} rows -> {args.out_dir}/ea_rel_{rel_type}.csv")
 
     if not rows_by_label:
         print("\nWARNING: no nodes extracted. Please re-run with --debug.",

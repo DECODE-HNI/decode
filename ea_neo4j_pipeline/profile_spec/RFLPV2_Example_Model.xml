@@ -6,28 +6,28 @@
 	</xmi:Documentation>
 
 	<!-- ==================================================================== -->
-	<!-- Repraesentatives Beispiel, End-to-End durch die neue Profilerweiterung: -->
-	<!-- Aluminium-Greiferbacke -> Aluminium-Strangpressen (Prozess) -> GWP-  -->
-	<!-- Sustainability-Requirement -> Testfall zur Grenzwertpruefung.        -->
-	<!-- ACHTUNG: die IDs processRef='PROC_ALU_EXTRUSION_EF' und die          -->
-	<!-- Groessenordnung sustainabilityThreshold=120 stammen aus dem letzten  -->
-	<!-- bekannten Stand dieser Konversation, nicht aus einer frischen        -->
-	<!-- Live-Abfrage. materialRef='MAT_ALUMINIUM' und die Part-/Requirement- -->
-	<!-- IDs sind plausible, aber NICHT verifizierte Platzhalter nach eurer   -->
-	<!-- Namenskonvention - bitte gegen den echten Graphen abgleichen         -->
-	<!-- (z.B. MATCH (p:Part) WHERE p.name CONTAINS 'Backe' RETURN p.id).     -->
-	<!--                                                                       -->
-	<!-- Dies ist ein neuer, ungetesteter Code-Pfad (Instanz-Import mit       -->
-	<!-- angewandten Stereotypen), anders als der bereits validierte          -->
-	<!-- Profil-Import - ggf. sind wieder ein/zwei Korrekturrunden noetig.    -->
+	<!-- Representative example, end-to-end through the new profile extension: -->
+	<!-- aluminium gripper jaw -> aluminium extrusion (process) -> GWP          -->
+	<!-- sustainability requirement -> test case for the limit check.          -->
+	<!-- ATTENTION: the IDs processRef='PROC_ALU_EXTRUSION_EF' and the         -->
+	<!-- order of magnitude sustainabilityThreshold=120 stem from the last     -->
+	<!-- known state at the time of writing, not from a fresh                  -->
+	<!-- live query. materialRef='MAT_ALUMINIUM' and the part/requirement      -->
+	<!-- IDs are plausible but NOT verified placeholders following the         -->
+	<!-- naming convention - please match them against the real graph          -->
+	<!-- (e.g. MATCH (p:Part) WHERE toLower(p.name) CONTAINS 'jaw' RETURN p.id).      -->
+	<!--                                                                        -->
+	<!-- This is a new, untested code path (instance import with               -->
+	<!-- applied stereotypes), unlike the already validated                    -->
+	<!-- profile import - one or two rounds of corrections may be needed again. -->
 	<!-- ==================================================================== -->
 
 	<uml:Model xmi:id='_model_RFLPV2Example' name='RFLPV2_Example_Model'>
 
-		<packagedElement xmi:type='uml:Class' xmi:id='ex_part_jaw' name='Greiferbacke Aluminium'/>
-		<packagedElement xmi:type='uml:Class' xmi:id='ex_process_extrusion' name='Aluminium-Strangpressen (EF)'/>
-		<packagedElement xmi:type='uml:Class' xmi:id='ex_req_gwp' name='Klimawirkung Herstellung'/>
-		<packagedElement xmi:type='uml:OpaqueBehavior' xmi:id='ex_testcase_gwp' name='GWP-Grenzwertpruefung Greiferbacke'/>
+		<packagedElement xmi:type='uml:Class' xmi:id='ex_part_jaw' name='Gripper jaw aluminium'/>
+		<packagedElement xmi:type='uml:Class' xmi:id='ex_process_extrusion' name='Aluminium extrusion (EF)'/>
+		<packagedElement xmi:type='uml:Class' xmi:id='ex_req_gwp' name='Climate impact of manufacturing'/>
+		<packagedElement xmi:type='uml:OpaqueBehavior' xmi:id='ex_testcase_gwp' name='GWP limit check gripper jaw'/>
 
 		<packagedElement xmi:type='uml:Dependency' xmi:id='ex_dep_realizes' client='ex_process_extrusion' supplier='ex_part_jaw'/>
 		<packagedElement xmi:type='uml:Dependency' xmi:id='ex_dep_satisfies' client='ex_part_jaw' supplier='ex_req_gwp'/>
@@ -35,13 +35,13 @@
 
 		<rflpv2ext:ProductElement xmi:id='ex_app_product' base_Class='ex_part_jaw'
 			productID='PART_GRIPPER_JAW_AL'
-			productType='Aluminiumprofil, spanend nachbearbeitet'
+			productType='Aluminium profile, machined'
 			materialRef='MAT_ALUMINIUM'
 			realizationType='hardware'/>
 
 		<rflpv2ext:ProcessElement xmi:id='ex_app_process' base_Class='ex_process_extrusion'
 			processID='PE_ALU_EXTRUSION'
-			processType='Aluminium-Strangpressen'
+			processType='Aluminium extrusion'
 			lifecycleModule='A1-A3'
 			processRef='PROC_ALU_EXTRUSION_EF'/>
 
@@ -56,7 +56,7 @@
 			testCaseOwner='V&amp;V-Team'
 			systemLevel='Component'
 			testMethod='Analysis'
-			dataAnalysisType='LCA-Berechnung'
+			dataAnalysisType='LCA calculation'
 			sustainabilityStatus='notEvaluated'/>
 
 		<rflpv2ext:Realizes xmi:id='ex_app_realizes' base_Dependency='ex_dep_realizes'/>

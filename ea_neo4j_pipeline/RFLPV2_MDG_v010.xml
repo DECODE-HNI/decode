@@ -1,6 +1,6 @@
 <?xml  version='1.0' encoding='windows-1252' ?>
 <MDG.Technology version="1.0">
-	<Documentation id="RFLPV2" name="RFLPV2" version="1.9" notes="v1.9: neuer Dependency-Stereotyp Applies (Process Element -> Product Element, mappt auf Neo4j APPLIES_TO) fuer die EA-&gt;Neo4j-Fachlichkeit."/>
+	<Documentation id="RFLPV2" name="RFLPV2" version="1.9" notes="v1.9: new dependency stereotype Applies (Process Element -> Product Element, maps to Neo4j APPLIES_TO) for the EA-&gt;Neo4j domain logic."/>
 	<UMLProfiles>
 <UMLProfile profiletype="uml2">
 	<Documentation id="D6051D3DE0" name="RFLPV2_Sustainability_Process_Extension" version="1.0" notes="RFLPV2_Sustainability_Process_Extension"/>

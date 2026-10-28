@@ -120,14 +120,14 @@ def run_batches(driver, database, query, rows, batch_size, label):
             elapsed = time.time() - t0
             rate = done / elapsed if elapsed > 0 else 0
             print(f"  [{label}] {done}/{total} ({rate:.0f} rows/s)")
-    print(f"[{label}] fertig: {total} Zeilen in {time.time()-t0:.1f}s")
+    print(f"[{label}] done: {total} rows in {time.time()-t0:.1f}s")
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--has-flow", required=True, help="Pfad zur konsolidierten r_HAS_FLOW_Process_TO_Flow.csv")
-    ap.add_argument("--characterizes", required=True, help="Pfad zur konsolidierten r_CHARACTERIZES_Flow_TO_ImpactCategory.csv")
-    ap.add_argument("--database", default="neo4j", help="Zieldatenbank (Default: neo4j)")
+    ap.add_argument("--has-flow", required=True, help="Path to the consolidated r_HAS_FLOW_Process_TO_Flow.csv")
+    ap.add_argument("--characterizes", required=True, help="Path to the consolidated r_CHARACTERIZES_Flow_TO_ImpactCategory.csv")
+    ap.add_argument("--database", default="neo4j", help="Target database (default: neo4j)")
     ap.add_argument("--batch-size", type=int, default=500)
     ap.add_argument("--no-wipe", action="store_true", help="Do NOT delete existing HAS_FLOW/CHARACTERIZES edges beforehand")
     args = ap.parse_args()
@@ -139,10 +139,10 @@ def main():
     with driver.session(database=args.database) as session:
         for stmt in CREATE_CONSTRAINTS:
             session.run(stmt).consume()
-    print("Eindeutigkeits-Constraints angelegt (exchangeId, characterizesId).")
+    print("Uniqueness constraints created (exchangeId, characterizesId).")
 
     if not args.no_wipe:
-        print("Loesche bestehende HAS_FLOW/CHARACTERIZES-Kanten (Full-Rebuild)...")
+        print("Deleting existing HAS_FLOW/CHARACTERIZES edges (full rebuild)...")
         with driver.session(database=args.database) as session:
             session.run(WIPE_HAS_FLOW).consume()
             session.run(WIPE_CHARACTERIZES).consume()
@@ -151,11 +151,11 @@ def main():
         print("--no-wipe set: existing edges are kept (MERGE only, no prior deletion).")
 
     has_flow_rows = read_rows(args.has_flow)
-    print(f"HAS_FLOW: {len(has_flow_rows)} Zeilen aus {args.has_flow} gelesen.")
+    print(f"HAS_FLOW: read {len(has_flow_rows)} rows from {args.has_flow}.")
     run_batches(driver, args.database, HAS_FLOW_QUERY, has_flow_rows, args.batch_size, "HAS_FLOW")
 
     cf_rows = read_rows(args.characterizes)
-    print(f"CHARACTERIZES: {len(cf_rows)} Zeilen aus {args.characterizes} gelesen.")
+    print(f"CHARACTERIZES: read {len(cf_rows)} rows from {args.characterizes}.")
     run_batches(driver, args.database, CHARACTERIZES_QUERY, cf_rows, args.batch_size, "CHARACTERIZES")
 
     with driver.session(database=args.database) as session:

@@ -1,16 +1,16 @@
 // ============================================================
-// Kompletter Rebuild in EINEM Skript: Kanal A (Data-Importer-Export) +
-// Sicherheits-Wartezeile + Kanal B (HAS_FLOW/CHARACTERIZES) + Schlusskontrolle.
+// Complete rebuild in ONE script: channel A (Data Importer export) +
+// safety wait + channel B (HAS_FLOW/CHARACTERIZES) + final check.
 //
-// Voraussetzung: alle referenzierten CSVs liegen im import/-Ordner dieser
-// DBMS (bereits der Fall). Setzt eine LEERE Datenbank voraus (siehe
-// reset_to_blank.cypher) -- sonst schlagen die Constraint-Erstellungen
-// oder MERGE-Aufrufe ggf. auf bereits vorhandenen, abweichenden Daten fehl.
+// Prerequisite: all referenced CSVs are in the import/ folder of this
+// DBMS (already the case). Requires an EMPTY database (see
+// reset_to_blank.cypher) -- otherwise the constraint creations
+// or MERGE calls may fail on existing, differing data.
 //
-// Ausfuehrung: als Ganzes in Neo4j Browser/Neo4j Desktop einfuegen und
-// laufen lassen (":param" wird dort verstanden). NICHT in der Aura Query
-// Console -- dort funktioniert ":param" nicht und Datei-Pfade sind ohnehin
-// nicht erreichbar (siehe HANDOFF_CONTEXT_V2.md).
+// Execution: paste as a whole into Neo4j Browser/Neo4j Desktop and
+// run it (":param" is understood there). NOT in the Aura Query
+// Console -- ":param" does not work there and file paths are not
+// reachable anyway (see README.md in this folder).
 // ============================================================
 
 :param {
@@ -82,7 +82,7 @@
 };
 
 // ============================================================
-// KANAL A -- CONSTRAINTS (aus dem Data-Importer-Export)
+// CHANNEL A -- CONSTRAINTS (from the Data Importer export)
 // ============================================================
 CREATE CONSTRAINT `Product_id_unique` IF NOT EXISTS FOR (n: `Product`) REQUIRE (n.`id`) IS UNIQUE;
 CREATE CONSTRAINT `Artifact_id_unique` IF NOT EXISTS FOR (n: `Artifact`) REQUIRE (n.`id`) IS UNIQUE;
@@ -112,14 +112,14 @@ CREATE CONSTRAINT `DataQualityCriterion_id_unique` IF NOT EXISTS FOR (n: `DataQu
 CREATE CONSTRAINT `Flow_id_unique` IF NOT EXISTS FOR (n: `Flow`) REQUIRE (n.`id`) IS UNIQUE;
 CREATE CONSTRAINT `FlowProperty_id_unique` IF NOT EXISTS FOR (n: `FlowProperty`) REQUIRE (n.`id`) IS UNIQUE;
 
-// Kanal-B-Constraints hier schon mit anlegen, damit EIN gemeinsamer
-// awaitIndexes()-Aufruf fuer alles wartet (Sicherheitsmassnahme gegen Bug #8).
+// Create the channel B constraints here already, so that ONE shared
+// awaitIndexes() call waits for everything (safeguard: all constraint-backed indexes online before loading).
 CREATE CONSTRAINT has_flow_exchangeid_unique IF NOT EXISTS
 FOR ()-[r:HAS_FLOW]-() REQUIRE r.exchangeId IS UNIQUE;
 CREATE CONSTRAINT characterizes_id_unique IF NOT EXISTS
 FOR ()-[r:CHARACTERIZES]-() REQUIRE r.characterizesId IS UNIQUE;
 
-// --- Sicherheitsmassnahme gegen Bug #8 (siehe HANDOFF_CONTEXT_V2.md) ---
+// --- Safeguard against bug #8 (see HANDOFF_CONTEXT_V2.md) ---
 CALL db.awaitIndexes();
 
 :param {
@@ -360,7 +360,7 @@ CALL (row) {
 } IN TRANSACTIONS OF 10000 ROWS;
 
 // ============================================================
-// KANAL A -- RELATIONSHIP LOAD (alles ausser HAS_FLOW/CHARACTERIZES)
+// CHANNEL A -- RELATIONSHIP LOAD (everything except HAS_FLOW/CHARACTERIZES)
 // ============================================================
 LOAD CSV WITH HEADERS FROM ($file_path_root + $file_27) AS row
 WITH row CALL (row) {
@@ -581,9 +581,9 @@ WITH row CALL (row) {
 } IN TRANSACTIONS OF 10000 ROWS;
 
 // ============================================================
-// KANAL B -- HAS_FLOW / CHARACTERIZES (nicht Teil des Data-Importer-Schemas,
-// siehe HANDOFF_CONTEXT_V2.md Abschnitt 4 -- Parallel-Kanten brauchen einen
-// zusammengesetzten MERGE-Schluessel, den der Data Importer nicht kann)
+// CHANNEL B -- HAS_FLOW / CHARACTERIZES (not part of the Data Importer schema,
+// see README.md in this folder -- parallel edges need a
+// composite MERGE key, which the Data Importer cannot do)
 // ============================================================
 LOAD CSV WITH HEADERS FROM ($file_path_root + $file_62) AS row
 CALL (row) {
@@ -602,8 +602,8 @@ CALL (row) {
       r.comment = row.comment
 } IN TRANSACTIONS OF 500 ROWS;
 
-// location als null->'' normieren (LOAD CSV liefert leere Felder als null,
-// MERGE-Pattern erlaubt kein null -- siehe Memory-Datei Punkt 4)
+// normalise location null->'' (LOAD CSV delivers empty fields as null,
+// a MERGE pattern does not allow null -- see the comment in kanal_b_load_csv.cypher)
 LOAD CSV WITH HEADERS FROM ($file_path_root + $file_63) AS row
 CALL (row) {
   MATCH (f:Flow {id: row.from_id})
@@ -615,6 +615,6 @@ CALL (row) {
 } IN TRANSACTIONS OF 500 ROWS;
 
 // ============================================================
-// SCHLUSSKONTROLLE
+// FINAL CHECK
 // ============================================================
 MATCH ()-[r]->() RETURN type(r) AS relType, count(r) AS n ORDER BY relType;

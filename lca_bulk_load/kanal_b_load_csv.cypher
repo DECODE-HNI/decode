@@ -1,30 +1,30 @@
 // ============================================================
-// Kanal B fuer lokale Neo4j-Instanz: r_40_HAS_FLOW_Process_TO_Flow.csv /
-// r_41_CHARACTERIZES_Flow_TO_ImpactCategory.csv liegen bereits im import/-
-// Ordner dieser DBMS -- LOAD CSV FROM 'file:///...'
-// funktioniert hier direkt (im Gegensatz zu Aura). Ersetzt das Python-
-// Skript vollstaendig fuer diese lokale Instanz.
+// Channel B for a local Neo4j instance: r_40_HAS_FLOW_Process_TO_Flow.csv /
+// r_41_CHARACTERIZES_Flow_TO_ImpactCategory.csv are already in the import/
+// folder of this DBMS -- LOAD CSV FROM 'file:///...'
+// works directly here (unlike Aura). Replaces the Python
+// script completely for this local instance.
 //
-// WICHTIG: MERGE-Schluessel enthaelt bewusst mehr als (from,to), sonst
-// kollabieren Parallel-Kanten zwischen gleichem Knotenpaar (die urspruengliche
-// Ursache des gesamten HAS_FLOW/CHARACTERIZES-Problems):
-//   HAS_FLOW: MERGE-Schluessel = exchangeId (global eindeutig)
-//   CHARACTERIZES: MERGE-Schluessel = (from,to,location)
+// IMPORTANT: the MERGE key deliberately contains more than (from,to), otherwise
+// parallel edges between the same pair of nodes collapse (the original
+// cause of the whole HAS_FLOW/CHARACTERIZES problem):
+//   HAS_FLOW: MERGE key = exchangeId (globally unique)
+//   CHARACTERIZES: MERGE key = (from,to,location)
 //
-// Erst NACH dem Kanal-A-Import ausfuehren (Process/Flow/ImpactCategory-
-// Knoten muessen existieren, sonst finden die MATCH-Klauseln nichts).
+// Run only AFTER the channel A import (the Process/Flow/ImpactCategory
+// nodes must exist, otherwise the MATCH clauses find nothing).
 //
-// Vorher werden bestehende HAS_FLOW/CHARACTERIZES-Kanten geloescht (voller
-// Rebuild, wie bereits fuer den Aura-Weg vorgesehen) -- bei einer frischen
-// lokalen Instanz ohne vorherigen Import ist das ein no-op.
+// Beforehand, existing HAS_FLOW/CHARACTERIZES edges are deleted (full
+// rebuild, as already planned for the Aura route) -- on a fresh
+// local instance without a previous import this is a no-op.
 // ============================================================
 
-// --- Eindeutigkeits-Constraints (einmalig, IF NOT EXISTS macht Reruns sicher) ---
-// HAS_FLOW.exchangeId ist per Konstruktion global eindeutig -> direkter Constraint.
-// CHARACTERIZES ist nur ueber (Flow,ImpactCategory,location) eindeutig -- dafuer
-// unten die synthetische characterizesId mitschreiben und DARAUF constrainen,
-// da ein Relationship-Constraint nur eigene Properties pruefen kann, keine
-// Endknoten-Kombinationen.
+// --- Uniqueness constraints (once; IF NOT EXISTS makes reruns safe) ---
+// HAS_FLOW.exchangeId is globally unique by construction -> direct constraint.
+// CHARACTERIZES is only unique via (flow, impact category, location) -- so write
+// the synthetic characterizesId below and constrain ON THAT,
+// because a relationship constraint can only check its own properties, not
+// end-node combinations.
 CREATE CONSTRAINT has_flow_exchangeid_unique IF NOT EXISTS
 FOR ()-[r:HAS_FLOW]-()
 REQUIRE r.exchangeId IS UNIQUE;
@@ -55,13 +55,13 @@ CALL (row) {
 } IN TRANSACTIONS OF 500 ROWS;
 
 // --- CHARACTERIZES ---
-// WICHTIG: LOAD CSV liefert ein leeres CSV-Feld als null, nicht als "" --
-// und Cypher erlaubt kein null als Property-Wert INNERHALB eines MERGE-
-// Patterns ("22N31: cannot be used with ... null"). location muss daher
-// VOR dem MERGE mit coalesce() auf einen echten (leeren) String-Default
-// abgebildet werden. Betrifft hier 4.035 Zeilen (globale/Default-Faktoren
-// ohne laenderspezifischen Location-Code). characterizesId wird direkt aus
-// derselben normierten location gebildet, damit sie zum Constraint passt.
+// IMPORTANT: LOAD CSV delivers an empty CSV field as null, not as "" --
+// and Cypher does not allow null as a property value INSIDE a MERGE
+// pattern ("22N31: cannot be used with ... null"). location must therefore be
+// mapped with coalesce() to a real (empty) string default
+// BEFORE the MERGE. Affects 4,035 rows here (global/default factors
+// without a country-specific location code). characterizesId is formed directly from
+// the same normalised location so that it fits the constraint.
 LOAD CSV WITH HEADERS FROM 'file:///r_41_CHARACTERIZES_Flow_TO_ImpactCategory.csv' AS row
 CALL (row) {
   MATCH (f:Flow {id: row.from_id})
@@ -72,6 +72,6 @@ CALL (row) {
       r.characterizesId = f.id + '|' + c.id + '|' + loc
 } IN TRANSACTIONS OF 500 ROWS;
 
-// --- Kontrollzaehlung ---
+// --- Control count ---
 MATCH ()-[r]->() WHERE type(r) IN ['HAS_FLOW','CHARACTERIZES']
 RETURN type(r) AS relType, count(r) AS n ORDER BY relType;

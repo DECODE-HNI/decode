@@ -2,20 +2,20 @@
 __pycache__/
 *.pyc
 
-# Reproduzierbare Skript-Ausgaben (jederzeit neu erzeugbar, kein Quellmaterial)
+# Reproducible script outputs (can be regenerated at any time, not source material)
 ea_neo4j_pipeline/ea_extract/
 ea_neo4j_pipeline/ea_extract_merge_test/
 ea_neo4j_pipeline/rflpv2_from_neo4j.xml
 lca_bulk_load/build/
 
-# EA-Backup-Dateien (legt Sparx EA automatisch neben dem Projekt an)
+# EA backup files (created automatically by Sparx EA next to the project)
 *.bak
 *.eap.bak
 *.qea.bak
 
-# Lokale EA-Testprojekte ausserhalb von ea_neo4j_pipeline/ (nicht fuer den
-# Import gedacht -- die referenzierten .qea-Projekte dort sind bewusst
-# committed, alles andere ist persoenliches Scratch-Material)
+# Local EA test projects outside ea_neo4j_pipeline/ (not meant for
+# import -- the referenced .qea projects there are committed on purpose,
+# everything else is personal scratch material)
 /rflpv2_diagram.qea
 
 # --- model_extension: locally generated, licensed-derived or reproducible ---

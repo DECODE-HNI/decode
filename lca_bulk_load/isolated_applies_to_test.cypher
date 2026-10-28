@@ -1,7 +1,7 @@
-// Isolierter Test: APPLIES_TO komplett loeschen und NUR diesen einen Typ neu
-// laden, ohne dass irgendein anderer Ladeschritt vorher/nachher stattfindet.
-// Ziel: klaeren, ob das Problem am Statement selbst + Knotenzustand liegt,
-// oder an einer Wechselwirkung mit anderen zuvor geladenen Relationship-Typen.
+// Isolated test: delete APPLIES_TO completely and reload ONLY this one type,
+// without any other load step before/after.
+// Goal: clarify whether the problem lies in the statement itself + node state,
+// or in an interaction with other relationship types loaded before.
 
 MATCH ()-[r:APPLIES_TO]->() DELETE r;
 

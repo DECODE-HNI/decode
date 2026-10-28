@@ -1,4 +1,4 @@
-// --- APPLIES_TO: Process -> Part (196 Zeilen) ---
+// --- APPLIES_TO: Process -> Part (196 rows) ---
 UNWIND [
 {f:"PROC_MJF", t:"PART_CUSTOM_CONTACT", role:"manufactures contact element"},
 {f:"PROC_FINISH", t:"PART_CUSTOM_CONTACT", role:"optional finishing"},
@@ -202,7 +202,7 @@ MATCH (target:Part {id: row.t})
 MERGE (source)-[r:APPLIES_TO]->(target)
 SET r.role = row.role;
 
-// --- APPLIES_TO: Process -> Material (23 Zeilen) ---
+// --- APPLIES_TO: Process -> Material (23 rows) ---
 UNWIND [
 {f:"PROC_ALU_EXTRUSION_IDEMAT", t:"MAT_ALU_GENERIC", role:"produces material"},
 {f:"PROC_ALU_SHEET_IDEMAT", t:"MAT_ALU_GENERIC", role:"produces material"},
@@ -233,7 +233,7 @@ MATCH (target:Material {id: row.t})
 MERGE (source)-[r:APPLIES_TO]->(target)
 SET r.role = row.role;
 
-// --- EVALUATES_CRITERION: DataQuality -> DataQualityCriterion (23 Zeilen) ---
+// --- EVALUATES_CRITERION: DataQuality -> DataQualityCriterion (23 rows) ---
 UNWIND [
 {f:"DQ_MANUF", t:"DQC_TEMP", score:5.0, rating:"very good"},
 {f:"DQ_MANUF", t:"DQC_ACC", score:5.0, rating:"very good"},

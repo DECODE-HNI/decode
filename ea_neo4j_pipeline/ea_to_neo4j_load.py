@@ -169,7 +169,7 @@ def load_nodes(driver, database, extract_dir, batch_size):
     for path in node_files:
         label = os.path.basename(path)[len("ea_"):-len(".csv")]
         rows = [coerce_row(r) for r in read_rows(path)]
-        print(f"{label}: {len(rows)} Zeilen aus {path}")
+        print(f"{label}: {len(rows)} rows from {path}")
         query = NODE_MERGE_QUERY.format(label=label)
         run_batches(driver, database, query, rows, batch_size, label)
         id_index[label] = {r["id"] for r in rows}
@@ -192,7 +192,7 @@ def load_relationships(driver, database, extract_dir, batch_size):
     for path in rel_files:
         rel_type = os.path.basename(path)[len("ea_rel_"):-len(".csv")]
         rows = read_rows(path)
-        print(f":{rel_type}: {len(rows)} Zeilen aus {path}")
+        print(f":{rel_type}: {len(rows)} rows from {path}")
         query = REL_MERGE_QUERY_TEMPLATE.format(rel_type=rel_type)
         run_batches(driver, database, query, rows, batch_size, rel_type)
 
@@ -204,12 +204,12 @@ def ensure_constraints(driver, database):
                 f"CREATE CONSTRAINT {name} IF NOT EXISTS "
                 f"FOR (n:{label}) REQUIRE n.id IS UNIQUE"
             ).consume()
-    print(f"{len(NEW_LABEL_CONSTRAINTS)} Uniqueness-Constraints fuer neue Labels sichergestellt.")
+    print(f"{len(NEW_LABEL_CONSTRAINTS)} uniqueness constraints for new labels ensured.")
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--extract-dir", default="ea_extract", help="Verzeichnis mit ea_xmi_extract.py-Ausgabe")
+    ap.add_argument("--extract-dir", default="ea_extract", help="Directory with the ea_xmi_extract.py output")
     ap.add_argument("--database", default="neo4j")
     ap.add_argument("--batch-size", type=int, default=500)
     ap.add_argument("--skip-constraints", action="store_true")

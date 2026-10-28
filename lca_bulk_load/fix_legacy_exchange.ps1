@@ -67,7 +67,7 @@ $legacyHasFlow = foreach ($ex in $exchanges) {
         direction = $ex.direction
         location = $ex.location
         quantitativeReference = $ex.quantitativeReference
-        ratioToReference = $ex.amount   # Referenzmenge ist ueberall 1.0 -> ratio == amount
+        ratioToReference = $ex.amount   # reference quantity is 1.0 everywhere -> ratio == amount
         dataMaturity = $ex.dataMaturity
         referenceYear = ""
         uncertainty = ""

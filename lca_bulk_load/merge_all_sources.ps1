@@ -220,7 +220,7 @@ foreach ($row in (Import-Csv (Join-Path $existingDir "ImpactCategory.csv"))) {
 $byCatName = @{}
 foreach ($c in $categories.Values) { $byCatName[$c.name.Trim()] = $c.id }
 
-$catUuidToId = @{}   # UUID (aus frischer Extraktion) -> finale sprechende ID
+$catUuidToId = @{}   # UUID (from a fresh extraction) -> final descriptive ID
 $icAdded = 0; $icMatched = 0
 function Slugify($name) {
     $s = $name.ToUpper() -replace '[^A-Z0-9]+', '_'

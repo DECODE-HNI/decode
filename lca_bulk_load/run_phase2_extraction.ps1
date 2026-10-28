@@ -76,7 +76,7 @@ $sources += [PSCustomObject]@{
         "fd9db252-4998-11dd-ae16-0800200c9a66" = "PROC_ZINC_PRIMARY"
         "fd9db253-4998-11dd-ae16-0800200c9a66" = "PROC_LEAD_PRIMARY"
     }
-    ProcessTypeMap = @{}   # alle RawMaterialProduction -> Default greift
+    ProcessTypeMap = @{}   # all RawMaterialProduction -> default applies
     OnlyProcessUuids = @()
 }
 

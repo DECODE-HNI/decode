@@ -1,21 +1,21 @@
-// --- 1) Alle Daten loeschen (gebatcht, sicher auch bei grossen Mengen) ---
+// --- 1) Delete all data (batched, safe even for large volumes) ---
 MATCH (n)
 CALL (n) { DETACH DELETE n } IN TRANSACTIONS OF 10000 ROWS;
  
-// --- 2) Alle Constraints entfernen ---
-// Cypher kann DROP CONSTRAINT nicht dynamisch aus einer Variable bilden --
-// daher zuerst anzeigen lassen und die Namen einzeln droppen. Fuer dieses
-// Modell aktuell genau diese beiden (siehe HANDOFF_CONTEXT_V2.md):
+// --- 2) Remove all constraints ---
+// Cypher cannot form DROP CONSTRAINT dynamically from a variable --
+// so list them first and drop the names one by one. For this
+// model currently exactly these two (see README.md in this folder):
 DROP CONSTRAINT has_flow_exchangeid_unique IF EXISTS;
 DROP CONSTRAINT characterizes_id_unique IF EXISTS;
-// Falls der volle Kanal-A-Import bereits gelaufen war, zusaetzlich die 27
-// Node-Unique-Constraints (Product_id_unique, Artifact_id_unique, ...) --
-// per SHOW CONSTRAINTS pruefen und die restlichen Namen ergaenzen:
+// If the full channel A import had already run, additionally the 27
+// node unique constraints (Product_id_unique, Artifact_id_unique, ...) --
+// check with SHOW CONSTRAINTS and add the remaining names:
 SHOW CONSTRAINTS YIELD name RETURN name;
-// Danach jeden verbleibenden Namen so entfernen:
+// Then remove every remaining name like this:
 //   DROP CONSTRAINT <name> IF EXISTS;
  
-// --- 3) Kontrolle: sollte alles auf 0 stehen ---
+// --- 3) Check: everything should be at 0 ---
 MATCH (n) RETURN count(n) AS nodes;
 MATCH ()-[r]->() RETURN count(r) AS relationships;
 SHOW CONSTRAINTS YIELD name RETURN count(name) AS remainingConstraints;

@@ -1,11 +1,11 @@
 // ea_new_labels_constraints.cypher
 //
-// Uniqueness-Constraints fuer die Neo4j-Labels, die durch die EA->Neo4j-Pipeline
-// (RFLPV2_Extension_Profile_V006) neu hinzukommen, weil es dafuer noch kein
-// Bestands-Gegenstueck gibt (siehe ea_to_neo4j_mapping.md, Abschnitt 2).
-// Werden von ea_to_neo4j_load.py beim Start automatisch angelegt
-// (IF NOT EXISTS) -- diese Datei ist die manuelle Referenz, analog zu
-// add_constraints.cypher fuer Kanal B.
+// Uniqueness constraints for the Neo4j labels newly introduced by the EA->Neo4j pipeline
+// (RFLPV2_Extension_Profile_V006), because there is no existing counterpart for them
+// (see ea_to_neo4j_mapping.md, section 2).
+// Created automatically by ea_to_neo4j_load.py on start
+// (IF NOT EXISTS) -- this file is the manual reference, analogous to
+// add_constraints.cypher for channel B.
 
 CREATE CONSTRAINT customerneed_id_unique IF NOT EXISTS
 FOR (n:CustomerNeed) REQUIRE n.id IS UNIQUE;

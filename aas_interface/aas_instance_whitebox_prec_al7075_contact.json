@@ -6,8 +6,8 @@
       "idShort": "AAS_PART_PREC_AL7075_CONTACT",
       "description": [
         {
-          "language": "de",
-          "text": "White-Box-AAS fuer das Kontaktelement PART_PREC_AL7075_CONTACT (Baugruppe ASSY_PREC_AL7075). Alle Prozess-, Flow- und Ergebniswerte 1:1 aus der lokalen Neo4j-Instanz (2.722 Knoten / 79.651 Relationships, Stand 26.08.2026) exportiert -- keine erfundenen Beispielwerte, mit Ausnahme der explizit als 'assumed' markierten Mengen fuer PROC_SCREW/PROC_FINISH/PROC_REPAIR."
+          "language": "en",
+          "text": "White-box AAS for the contact element PART_PREC_AL7075_CONTACT (assembly ASSY_PREC_AL7075). All process, flow and result values exported 1:1 from the local Neo4j instance (2,722 nodes / 79,651 relationships, as of 2026-08-26) -- no invented example values, except for the quantities for PROC_SCREW/PROC_FINISH/PROC_REPAIR that are explicitly marked 'assumed'."
         }
       ],
       "assetInformation": {
@@ -62,7 +62,7 @@
           "modelType": "SubmodelElementList",
           "typeValueListElement": "SubmodelElementCollection",
           "idShort": "ManufacturingProcesses",
-          "description": [{ "language": "de", "text": "Lebenszyklusstufe ~A1-A3. Prozesse, die real auf PART_PREC_AL7075_CONTACT angewendet werden (APPLIES_TO im Graphen)." }],
+          "description": [{ "language": "en", "text": "Life cycle stage ~A1-A3. Processes that are really applied to PART_PREC_AL7075_CONTACT (APPLIES_TO in the graph)." }],
           "value": [
             {
               "modelType": "SubmodelElementCollection",
@@ -168,7 +168,7 @@
                         { "modelType": "Property", "idShort": "Unit",       "valueType": "xs:string", "value": "kg" },
                         { "modelType": "Property", "idShort": "FlowId",     "valueType": "xs:string", "value": "0d925357-e1c9-48c1-a5c7-caaae8185108" },
                         { "modelType": "Property", "idShort": "FlowName",   "valueType": "xs:string", "value": "Screw M6 (hardened; zinc coated)" },
-                        { "modelType": "Property", "idShort": "AmountAssumption", "valueType": "xs:string", "value": "ANGENOMMEN: 4x Schraube M6 verzinkt a ca. 1.5 g -- keine Originalmenge im Modell vorhanden" },
+                        { "modelType": "Property", "idShort": "AmountAssumption", "valueType": "xs:string", "value": "ASSUMED: 4x galvanised M6 screw of approx. 1.5 g each -- no original quantity in the model" },
                         {
                           "modelType": "SubmodelElementCollection", "idShort": "UpstreamContribution",
                           "value": [
@@ -208,7 +208,7 @@
                         { "modelType": "Property", "idShort": "Unit",       "valueType": "xs:string", "value": "MJ" },
                         { "modelType": "Property", "idShort": "FlowId",     "valueType": "xs:string", "value": "890a70b7-b677-4e2a-8a1b-7d017e0a10ae" },
                         { "modelType": "Property", "idShort": "FlowName",   "valueType": "xs:string", "value": "Electricity" },
-                        { "modelType": "Property", "idShort": "AmountAssumption", "valueType": "xs:string", "value": "ANGENOMMEN: 0.05 kWh fuer kurzen Entgrat-Vorgang -- keine Originalmenge im Modell vorhanden" },
+                        { "modelType": "Property", "idShort": "AmountAssumption", "valueType": "xs:string", "value": "ASSUMED: 0.05 kWh for a short deburring step -- no original quantity in the model" },
                         {
                           "modelType": "SubmodelElementCollection", "idShort": "UpstreamContribution",
                           "value": [
@@ -230,7 +230,7 @@
         {
           "modelType": "SubmodelElementCollection",
           "idShort": "ServiceStageProcess_PROC_REPAIR",
-          "description": [{ "language": "de", "text": "Lebenszyklusstufe B4 (Replace/Repair) -- separat von der Fertigungsstufe gehalten, siehe CarbonFootprintSummary. Annahme: Reparatur = Neuproduktion eines Ersatz-Kontaktelements." }],
+          "description": [{ "language": "en", "text": "Life cycle stage B4 (replace/repair) -- kept separate from the manufacturing stage, see CarbonFootprintSummary. Assumption: repair = new production of a replacement contact element." }],
           "value": [
             { "modelType": "Property", "idShort": "ProcessId",   "valueType": "xs:string", "value": "PROC_REPAIR" },
             { "modelType": "Property", "idShort": "ProcessName", "valueType": "xs:string", "value": "Replace jaw / pad" },
@@ -273,7 +273,7 @@
       "id": "https://ned2-gripper.example/ids/sm/CarbonFootprintSummary_PART_PREC_AL7075_CONTACT",
       "idShort": "CarbonFootprintSummary",
       "kind": "Instance",
-      "description": [{ "language": "de", "text": "Zusammenfassung, abgeleitet aus ILCDProcessDataset in diesem selben Environment -- reine Bequemlichkeits-Rollup, keine eigenstaendige Quelle. Feldnamen an IDTA 02023 (Carbon Footprint) angelehnt; semanticIds hier bewusst ausgelassen, da nicht gegen die offizielle Spec verifiziert." }],
+      "description": [{ "language": "en", "text": "Summary derived from the ILCDProcessDataset in this same environment -- pure convenience rollup, not an independent source. Field names modelled on IDTA 02023 (Carbon Footprint); semanticIds deliberately omitted here because they are not verified against the official spec." }],
       "submodelElements": [
         {
           "modelType": "SubmodelElementCollection",
