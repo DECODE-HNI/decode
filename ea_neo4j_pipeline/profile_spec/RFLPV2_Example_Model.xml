@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xmi:XMI xmlns:uml='http://www.omg.org/spec/UML/20131001' xmlns:xmi='http://www.omg.org/spec/XMI/20131001' xmlns:rflpv2ext='http://claude.local/profiles/RFLPV2SustainabilityProcessExtension'>
+	<xmi:Documentation>
+		<xmi:exporter>Claude</xmi:exporter>
+		<xmi:exporterVersion>1.0</xmi:exporterVersion>
+	</xmi:Documentation>
+
+	<!-- ==================================================================== -->
+	<!-- Repraesentatives Beispiel, End-to-End durch die neue Profilerweiterung: -->
+	<!-- Aluminium-Greiferbacke -> Aluminium-Strangpressen (Prozess) -> GWP-  -->
+	<!-- Sustainability-Requirement -> Testfall zur Grenzwertpruefung.        -->
+	<!-- ACHTUNG: die IDs processRef='PROC_ALU_EXTRUSION_EF' und die          -->
+	<!-- Groessenordnung sustainabilityThreshold=120 stammen aus dem letzten  -->
+	<!-- bekannten Stand dieser Konversation, nicht aus einer frischen        -->
+	<!-- Live-Abfrage. materialRef='MAT_ALUMINIUM' und die Part-/Requirement- -->
+	<!-- IDs sind plausible, aber NICHT verifizierte Platzhalter nach eurer   -->
+	<!-- Namenskonvention - bitte gegen den echten Graphen abgleichen         -->
+	<!-- (z.B. MATCH (p:Part) WHERE p.name CONTAINS 'Backe' RETURN p.id).     -->
+	<!--                                                                       -->
+	<!-- Dies ist ein neuer, ungetesteter Code-Pfad (Instanz-Import mit       -->
+	<!-- angewandten Stereotypen), anders als der bereits validierte          -->
+	<!-- Profil-Import - ggf. sind wieder ein/zwei Korrekturrunden noetig.    -->
+	<!-- ==================================================================== -->
+
+	<uml:Model xmi:id='_model_RFLPV2Example' name='RFLPV2_Example_Model'>
+
+		<packagedElement xmi:type='uml:Class' xmi:id='ex_part_jaw' name='Greiferbacke Aluminium'/>
+		<packagedElement xmi:type='uml:Class' xmi:id='ex_process_extrusion' name='Aluminium-Strangpressen (EF)'/>
+		<packagedElement xmi:type='uml:Class' xmi:id='ex_req_gwp' name='Klimawirkung Herstellung'/>
+		<packagedElement xmi:type='uml:OpaqueBehavior' xmi:id='ex_testcase_gwp' name='GWP-Grenzwertpruefung Greiferbacke'/>
+
+		<packagedElement xmi:type='uml:Dependency' xmi:id='ex_dep_realizes' client='ex_process_extrusion' supplier='ex_part_jaw'/>
+		<packagedElement xmi:type='uml:Dependency' xmi:id='ex_dep_satisfies' client='ex_part_jaw' supplier='ex_req_gwp'/>
+		<packagedElement xmi:type='uml:Dependency' xmi:id='ex_dep_verifies' client='ex_testcase_gwp' supplier='ex_req_gwp'/>
+
+		<rflpv2ext:ProductElement xmi:id='ex_app_product' base_Class='ex_part_jaw'
+			productID='PART_GRIPPER_JAW_AL'
+			productType='Aluminiumprofil, spanend nachbearbeitet'
+			materialRef='MAT_ALUMINIUM'
+			realizationType='hardware'/>
+
+		<rflpv2ext:ProcessElement xmi:id='ex_app_process' base_Class='ex_process_extrusion'
+			processID='PE_ALU_EXTRUSION'
+			processType='Aluminium-Strangpressen'
+			lifecycleModule='A1-A3'
+			processRef='PROC_ALU_EXTRUSION_EF'/>
+
+		<rflpv2ext:SystemRequirement xmi:id='ex_app_requirement' base_Class='ex_req_gwp'
+			sustainabilityIndicatorRef='IC_EF_GWP100'
+			sustainabilityThreshold='120'
+			sustainabilityOperator='lessOrEqual'
+			sustainabilityUnit='kgCO2eq'
+			sustainabilityScope='A1-A3'/>
+
+		<rflpv2ext:TestCase xmi:id='ex_app_testcase' base_Behavior='ex_testcase_gwp'
+			testCaseOwner='V&amp;V-Team'
+			systemLevel='Component'
+			testMethod='Analysis'
+			dataAnalysisType='LCA-Berechnung'
+			sustainabilityStatus='notEvaluated'/>
+
+		<rflpv2ext:Realizes xmi:id='ex_app_realizes' base_Dependency='ex_dep_realizes'/>
+		<rflpv2ext:Satisfies xmi:id='ex_app_satisfies' base_Dependency='ex_dep_satisfies'/>
+		<rflpv2ext:Verifies xmi:id='ex_app_verifies' base_Dependency='ex_dep_verifies'/>
+
+	</uml:Model>
+</xmi:XMI>

@@ -1,0 +1,487 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xmi:XMI xmlns:uml='http://www.omg.org/spec/UML/20131001' xmlns:xmi='http://www.omg.org/spec/XMI/20131001'>
+	<xmi:Documentation>
+		<xmi:exporter>Claude</xmi:exporter>
+		<xmi:exporterVersion>2.0</xmi:exporterVersion>
+	</xmi:Documentation>
+
+	<uml:Profile xmi:id='_profile_RFLPV2Ext' name='RFLPV2_Sustainability_Process_Extension'>
+
+		<!-- ============ local, self-contained datatypes/enums ============ -->
+		<!-- Declared locally (not via external href) because Enterprise Architect's -->
+		<!-- XMI import does not bind attribute Type references through nested       -->
+		<!-- <type href='...'/> children reliably - confirmed empirically: the       -->
+		<!-- attribute's Type field came back empty until switched to a local        -->
+		<!-- classifier referenced via a plain type='...' XML attribute.             -->
+		<packagedElement xmi:type='uml:PrimitiveType' xmi:id='_type_Real' name='Real'/>
+		<packagedElement xmi:type='uml:PrimitiveType' xmi:id='_type_String' name='String'/>
+		<packagedElement xmi:type='uml:PrimitiveType' xmi:id='_type_Boolean' name='Boolean'/>
+		<packagedElement xmi:type='uml:Enumeration' xmi:id='_enum_RealizationType' name='RealizationType'>
+			<ownedLiteral xmi:type='uml:EnumerationLiteral' xmi:id='_lit_RT_hardware' name='hardware'/>
+			<ownedLiteral xmi:type='uml:EnumerationLiteral' xmi:id='_lit_RT_software' name='software'/>
+			<ownedLiteral xmi:type='uml:EnumerationLiteral' xmi:id='_lit_RT_hybrid' name='hybrid'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Enumeration' xmi:id='_enum_SustainabilityOperator' name='SustainabilityOperator'>
+			<ownedLiteral xmi:type='uml:EnumerationLiteral' xmi:id='_lit_SO_lessThan' name='lessThan'/>
+			<ownedLiteral xmi:type='uml:EnumerationLiteral' xmi:id='_lit_SO_lessOrEqual' name='lessOrEqual'/>
+			<ownedLiteral xmi:type='uml:EnumerationLiteral' xmi:id='_lit_SO_equal' name='equal'/>
+			<ownedLiteral xmi:type='uml:EnumerationLiteral' xmi:id='_lit_SO_greaterOrEqual' name='greaterOrEqual'/>
+			<ownedLiteral xmi:type='uml:EnumerationLiteral' xmi:id='_lit_SO_greaterThan' name='greaterThan'/>
+		</packagedElement>
+
+		<!-- ================================================================ -->
+		<!-- R - Requirements                                                  -->
+		<!-- ================================================================ -->
+
+		<!-- Customer Need: extends Comment (not Class) - a need is captured   -->
+		<!-- as an annotation in the original profile, not a full requirement  -->
+		<!-- classifier.                                                       -->
+		<packagedElement xmi:type='uml:Stereotype' xmi:id='_st_CustomerNeed' name='Customer Need'>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_CustNeed'>
+				<general href='http://www.omg.org/spec/SysML/20181001/SysML.xmi#SysML.Requirement'/>
+			</generalization>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_CustNeed_baseComment' name='base_Comment' association='_ext_CustomerNeed'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_CustomerNeed'>
+			<memberEnd xmi:idref='_prop_CustNeed_baseComment'/>
+			<memberEnd xmi:idref='_ext_CustomerNeed_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_CustomerNeed_end' name='extension_CustomerNeed' aggregation='composite' type='_st_CustomerNeed' association='_ext_CustomerNeed'/>
+		</packagedElement>
+
+		<!-- Customer Requirement -->
+		<packagedElement xmi:type='uml:Stereotype' xmi:id='_st_CustomerRequirement' name='Customer Requirement'>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_CustReq'>
+				<general href='http://www.omg.org/spec/SysML/20181001/SysML.xmi#SysML.Requirement'/>
+			</generalization>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_CustReq_baseClass' name='base_Class' association='_ext_CustomerRequirement'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_CustReq_priority' name='requirementPriority' type='_type_Real'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_CustReq_valueType' name='requirementValueType' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_CustReq_mainFeature' name='Mainfeature' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_CustReq_parameter' name='requirementParameter' type='_type_Real'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_CustReq_source' name='source' type='_type_String'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_CustomerRequirement'>
+			<memberEnd xmi:idref='_prop_CustReq_baseClass'/>
+			<memberEnd xmi:idref='_ext_CustomerRequirement_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_CustomerRequirement_end' name='extension_CustomerRequirement' aggregation='composite' type='_st_CustomerRequirement' association='_ext_CustomerRequirement'/>
+		</packagedElement>
+
+		<!-- System Requirement (+ 5 new sustainability tags) -->
+		<packagedElement xmi:type='uml:Stereotype' xmi:id='_st_SystemRequirement' name='System Requirement'>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_SysReq'>
+				<general href='http://www.omg.org/spec/SysML/20181001/SysML.xmi#SysML.Requirement'/>
+			</generalization>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_SysReq_baseClass' name='base_Class' association='_ext_SystemRequirement'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_SysReq_priority' name='requirementPriority' type='_type_Real'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_SysReq_parameter' name='requirementParameter' type='_type_Real'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_SysReq_sustIndicator' name='sustainabilityIndicatorRef' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_SysReq_sustThreshold' name='sustainabilityThreshold' type='_type_Real'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_SysReq_sustOperator' name='sustainabilityOperator' type='_enum_SustainabilityOperator'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_SysReq_sustUnit' name='sustainabilityUnit' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_SysReq_sustScope' name='sustainabilityScope' type='_type_String'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_SystemRequirement'>
+			<memberEnd xmi:idref='_prop_SysReq_baseClass'/>
+			<memberEnd xmi:idref='_ext_SystemRequirement_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_SystemRequirement_end' name='extension_SystemRequirement' aggregation='composite' type='_st_SystemRequirement' association='_ext_SystemRequirement'/>
+		</packagedElement>
+
+		<!-- ================================================================ -->
+		<!-- Shared metaclass placeholders (Class/Behavior/Operation/Dependency) -->
+		<!-- ================================================================ -->
+
+
+
+
+		<!-- ================================================================ -->
+		<!-- F - Function                                                      -->
+		<!-- ================================================================ -->
+		<packagedElement xmi:type='uml:Stereotype' xmi:id='_st_Function' name='Function'>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_Function'>
+				<general href='http://www.omg.org/spec/SysML/20181001/SysML.xmi#SysML.Block'/>
+			</generalization>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Func_baseClass' name='base_Class' association='_ext_Function'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Func_id' name='functionID' type='_type_String' isID='true'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Func_type' name='functionType' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Func_variantTag' name='variantTag' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Func_safetyCritical' name='safetyCritical' type='_type_Boolean'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_Function'>
+			<memberEnd xmi:idref='_prop_Func_baseClass'/>
+			<memberEnd xmi:idref='_ext_Function_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_Function_end' name='extension_Function' aggregation='composite' type='_st_Function' association='_ext_Function'/>
+		</packagedElement>
+
+		<!-- ================================================================ -->
+		<!-- L - Logical Element                                               -->
+		<!-- ================================================================ -->
+		<packagedElement xmi:type='uml:Stereotype' xmi:id='_st_LogicalElement' name='Logical Element'>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_LogElem'>
+				<general href='http://www.omg.org/spec/SysML/20181001/SysML.xmi#SysML.Block'/>
+			</generalization>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_LogElem_baseClass' name='base_Class' association='_ext_LogicalElement'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_LogElem_id' name='logicalID' type='_type_String' isID='true'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_LogElem_type' name='logicalType' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_LogElem_variantTag' name='variantTag' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_LogElem_parameter' name='logicalParameter' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_LogElem_parameterType' name='logicalParameterType' type='_type_String'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_LogicalElement'>
+			<memberEnd xmi:idref='_prop_LogElem_baseClass'/>
+			<memberEnd xmi:idref='_ext_LogicalElement_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_LogicalElement_end' name='extension_LogicalElement' aggregation='composite' type='_st_LogicalElement' association='_ext_LogicalElement'/>
+		</packagedElement>
+
+		<!-- ================================================================ -->
+		<!-- P - Product Element (renamed from Physical Element)               -->
+		<!-- ================================================================ -->
+		<packagedElement xmi:type='uml:Stereotype' xmi:id='_st_ProductElement' name='Product Element'>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_ProdElem'>
+				<general href='http://www.omg.org/spec/SysML/20181001/SysML.xmi#SysML.Block'/>
+			</generalization>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_ProdElem_baseClass' name='base_Class' association='_ext_ProductElement'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_ProdElem_id' name='productID' type='_type_String' isID='true'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_ProdElem_type' name='productType' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_ProdElem_variantTag' name='variantTag' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_ProdElem_parameter' name='productParameter' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_ProdElem_parameterType' name='productParameterType' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_ProdElem_owner' name='elementOwner' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_ProdElem_discipline' name='discipline' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_ProdElem_costs' name='costs' type='_type_Real'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_ProdElem_material' name='materialRef' type='_type_String'>
+				<lowerValue xmi:type='uml:LiteralInteger' xmi:id='_lv_material' value='0'/>
+				<upperValue xmi:type='uml:LiteralUnlimitedNatural' xmi:id='_uv_material' value='*'/>
+			</ownedAttribute>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_ProdElem_realizationType' name='realizationType' type='_enum_RealizationType'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_ProductElement'>
+			<memberEnd xmi:idref='_prop_ProdElem_baseClass'/>
+			<memberEnd xmi:idref='_ext_ProductElement_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_ProductElement_end' name='extension_ProductElement' aggregation='composite' type='_st_ProductElement' association='_ext_ProductElement'/>
+		</packagedElement>
+
+		<!-- Process Element (new, part of this extension, not the original profile) -->
+		<packagedElement xmi:type='uml:Stereotype' xmi:id='_st_ProcessElement' name='Process Element'>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_ProcElem'>
+				<general href='http://www.omg.org/spec/SysML/20181001/SysML.xmi#SysML.Block'/>
+			</generalization>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_ProcElem_baseClass' name='base_Class' association='_ext_ProcessElement'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_ProcElem_id' name='processID' type='_type_String' isID='true'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_ProcElem_type' name='processType' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_ProcElem_lifecycleModule' name='lifecycleModule' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_ProcElem_ref' name='processRef' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_ProcElem_variantTag' name='variantTag' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_ProcElem_parameter' name='processParameter' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_ProcElem_parameterType' name='processParameterType' type='_type_String'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_ProcessElement'>
+			<memberEnd xmi:idref='_prop_ProcElem_baseClass'/>
+			<memberEnd xmi:idref='_ext_ProcessElement_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_ProcessElement_end' name='extension_ProcessElement' aggregation='composite' type='_st_ProcessElement' association='_ext_ProcessElement'/>
+		</packagedElement>
+
+		<!-- ================================================================ -->
+		<!-- V - Verification / Validation base stereotypes.                   -->
+		<!-- Each applies to BOTH Behavior and Operation - this needs TWO      -->
+		<!-- separate Extension relationships (one per metaclass), not one     -->
+		<!-- Extension with two base_X properties. A single Extension with two -->
+		<!-- unassociated base_X properties is what produced the broken,       -->
+		<!-- empty-typed "base_Operation" tag seen after the first import.     -->
+		<!-- ================================================================ -->
+		<packagedElement xmi:type='uml:Stereotype' xmi:id='_st_Verification' name='Verification'>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_Verif'>
+				<general href='http://www.omg.org/spec/SysML/20181001/SysML.xmi#SysML.TestCase'/>
+			</generalization>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Verif_baseBehavior' name='base_Behavior' association='_ext_Verification_b'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Verif_baseOperation' name='base_Operation' association='_ext_Verification_o'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Verif_id' name='verificationID' type='_type_String' isID='true'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Verif_parameter' name='verificationParameter' type='_type_Real'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_Verification_b'>
+			<memberEnd xmi:idref='_prop_Verif_baseBehavior'/>
+			<memberEnd xmi:idref='_ext_Verification_b_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_Verification_b_end' name='extension_Verification_Behavior' aggregation='composite' type='_st_Verification' association='_ext_Verification_b'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_Verification_o'>
+			<memberEnd xmi:idref='_prop_Verif_baseOperation'/>
+			<memberEnd xmi:idref='_ext_Verification_o_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_Verification_o_end' name='extension_Verification_Operation' aggregation='composite' type='_st_Verification' association='_ext_Verification_o'/>
+		</packagedElement>
+
+		<packagedElement xmi:type='uml:Stereotype' xmi:id='_st_Validation' name='Validation'>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_Valid'>
+				<general href='http://www.omg.org/spec/SysML/20181001/SysML.xmi#SysML.TestCase'/>
+			</generalization>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Valid_baseBehavior' name='base_Behavior' association='_ext_Validation_b'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Valid_baseOperation' name='base_Operation' association='_ext_Validation_o'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Valid_id' name='validationID' type='_type_String' isID='true'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Valid_parameter' name='validationParameter' type='_type_Real'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Valid_method' name='validationMethod' type='_type_String'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_Validation_b'>
+			<memberEnd xmi:idref='_prop_Valid_baseBehavior'/>
+			<memberEnd xmi:idref='_ext_Validation_b_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_Validation_b_end' name='extension_Validation_Behavior' aggregation='composite' type='_st_Validation' association='_ext_Validation_b'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_Validation_o'>
+			<memberEnd xmi:idref='_prop_Valid_baseOperation'/>
+			<memberEnd xmi:idref='_ext_Validation_o_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_Validation_o_end' name='extension_Validation_Operation' aggregation='composite' type='_st_Validation' association='_ext_Validation_o'/>
+		</packagedElement>
+
+		<!-- Test / Inspection / Demonstration / Simulation: verification       -->
+		<!-- methods, each generalizing SysML.TestCase + local Verification +   -->
+		<!-- local Validation (multi-generalization, matches original exactly). -->
+		<packagedElement xmi:type='uml:Stereotype' xmi:id='_st_Test' name='Test'>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_Test_tc'>
+				<general href='http://www.omg.org/spec/SysML/20181001/SysML.xmi#SysML.TestCase'/>
+			</generalization>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_Test_verif' general='_st_Verification'/>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_Test_valid' general='_st_Validation'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Test_baseBehavior' name='base_Behavior' association='_ext_Test_b'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Test_baseOperation' name='base_Operation' association='_ext_Test_o'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_Test_b'>
+			<memberEnd xmi:idref='_prop_Test_baseBehavior'/>
+			<memberEnd xmi:idref='_ext_Test_b_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_Test_b_end' name='extension_Test_Behavior' aggregation='composite' type='_st_Test' association='_ext_Test_b'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_Test_o'>
+			<memberEnd xmi:idref='_prop_Test_baseOperation'/>
+			<memberEnd xmi:idref='_ext_Test_o_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_Test_o_end' name='extension_Test_Operation' aggregation='composite' type='_st_Test' association='_ext_Test_o'/>
+		</packagedElement>
+
+		<packagedElement xmi:type='uml:Stereotype' xmi:id='_st_Inspection' name='Inspection'>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_Insp_tc'>
+				<general href='http://www.omg.org/spec/SysML/20181001/SysML.xmi#SysML.TestCase'/>
+			</generalization>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_Insp_verif' general='_st_Verification'/>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_Insp_valid' general='_st_Validation'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Insp_baseBehavior' name='base_Behavior' association='_ext_Insp_b'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Insp_baseOperation' name='base_Operation' association='_ext_Insp_o'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_Insp_b'>
+			<memberEnd xmi:idref='_prop_Insp_baseBehavior'/>
+			<memberEnd xmi:idref='_ext_Insp_b_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_Insp_b_end' name='extension_Inspection_Behavior' aggregation='composite' type='_st_Inspection' association='_ext_Insp_b'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_Insp_o'>
+			<memberEnd xmi:idref='_prop_Insp_baseOperation'/>
+			<memberEnd xmi:idref='_ext_Insp_o_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_Insp_o_end' name='extension_Inspection_Operation' aggregation='composite' type='_st_Inspection' association='_ext_Insp_o'/>
+		</packagedElement>
+
+		<packagedElement xmi:type='uml:Stereotype' xmi:id='_st_Demonstration' name='Demonstration'>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_Demo_tc'>
+				<general href='http://www.omg.org/spec/SysML/20181001/SysML.xmi#SysML.TestCase'/>
+			</generalization>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_Demo_verif' general='_st_Verification'/>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_Demo_valid' general='_st_Validation'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Demo_baseBehavior' name='base_Behavior' association='_ext_Demo_b'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Demo_baseOperation' name='base_Operation' association='_ext_Demo_o'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_Demo_b'>
+			<memberEnd xmi:idref='_prop_Demo_baseBehavior'/>
+			<memberEnd xmi:idref='_ext_Demo_b_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_Demo_b_end' name='extension_Demonstration_Behavior' aggregation='composite' type='_st_Demonstration' association='_ext_Demo_b'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_Demo_o'>
+			<memberEnd xmi:idref='_prop_Demo_baseOperation'/>
+			<memberEnd xmi:idref='_ext_Demo_o_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_Demo_o_end' name='extension_Demonstration_Operation' aggregation='composite' type='_st_Demonstration' association='_ext_Demo_o'/>
+		</packagedElement>
+
+		<packagedElement xmi:type='uml:Stereotype' xmi:id='_st_Simulation' name='Simulation'>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_Sim_tc'>
+				<general href='http://www.omg.org/spec/SysML/20181001/SysML.xmi#SysML.TestCase'/>
+			</generalization>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_Sim_verif' general='_st_Verification'/>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_Sim_valid' general='_st_Validation'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Sim_baseBehavior' name='base_Behavior' association='_ext_Sim_b'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Sim_baseOperation' name='base_Operation' association='_ext_Sim_o'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_Sim_b'>
+			<memberEnd xmi:idref='_prop_Sim_baseBehavior'/>
+			<memberEnd xmi:idref='_ext_Sim_b_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_Sim_b_end' name='extension_Simulation_Behavior' aggregation='composite' type='_st_Simulation' association='_ext_Sim_b'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_Sim_o'>
+			<memberEnd xmi:idref='_prop_Sim_baseOperation'/>
+			<memberEnd xmi:idref='_ext_Sim_o_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_Sim_o_end' name='extension_Simulation_Operation' aggregation='composite' type='_st_Simulation' association='_ext_Sim_o'/>
+		</packagedElement>
+
+		<!-- Test Case / Test Case Description / Test Scenario (new, this      -->
+		<!-- extension - after Ebel/Pottebaum/Graessler 2024) -->
+		<packagedElement xmi:type='uml:Stereotype' xmi:id='_st_TestCase' name='Test Case'>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_TestCase' general='_st_Verification'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_TestCase_baseBehavior' name='base_Behavior' association='_ext_TestCase_b'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_TestCase_baseOperation' name='base_Operation' association='_ext_TestCase_o'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_TestCase_owner' name='testCaseOwner' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_TestCase_systemLevel' name='systemLevel' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_TestCase_dataAnalysisType' name='dataAnalysisType' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_TestCase_testMethod' name='testMethod' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_TestCase_sustResult' name='sustainabilityResult' type='_type_Real'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_TestCase_sustStatus' name='sustainabilityStatus' type='_type_String'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_TestCase_b'>
+			<memberEnd xmi:idref='_prop_TestCase_baseBehavior'/>
+			<memberEnd xmi:idref='_ext_TestCase_b_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_TestCase_b_end' name='extension_TestCase_Behavior' aggregation='composite' type='_st_TestCase' association='_ext_TestCase_b'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_TestCase_o'>
+			<memberEnd xmi:idref='_prop_TestCase_baseOperation'/>
+			<memberEnd xmi:idref='_ext_TestCase_o_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_TestCase_o_end' name='extension_TestCase_Operation' aggregation='composite' type='_st_TestCase' association='_ext_TestCase_o'/>
+		</packagedElement>
+
+		<packagedElement xmi:type='uml:Stereotype' xmi:id='_st_TestCaseDescription' name='Test Case Description'>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_TCDesc_baseClass' name='base_Class' association='_ext_TestCaseDescription'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_TCDesc_envConditions' name='environmentalConditions' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_TCDesc_systemState' name='systemState' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_TCDesc_user' name='user' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_TCDesc_expectedResults' name='expectedResults' type='_type_String'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_TestCaseDescription'>
+			<memberEnd xmi:idref='_prop_TCDesc_baseClass'/>
+			<memberEnd xmi:idref='_ext_TestCaseDescription_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_TestCaseDescription_end' name='extension_TestCaseDescription' aggregation='composite' type='_st_TestCaseDescription' association='_ext_TestCaseDescription'/>
+		</packagedElement>
+
+		<packagedElement xmi:type='uml:Stereotype' xmi:id='_st_TestScenario' name='Test Scenario'>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_TestScenario' general='_st_Verification'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_TestScenario_baseBehavior' name='base_Behavior' association='_ext_TestScenario_b'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_TestScenario_baseOperation' name='base_Operation' association='_ext_TestScenario_o'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_TestScenario_owner' name='testScenarioOwner' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_TestScenario_items' name='testItems' type='_type_String'/>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_TestScenario_envParams' name='testScenarioEnvironmentalParameters' type='_type_String'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_TestScenario_b'>
+			<memberEnd xmi:idref='_prop_TestScenario_baseBehavior'/>
+			<memberEnd xmi:idref='_ext_TestScenario_b_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_TestScenario_b_end' name='extension_TestScenario_Behavior' aggregation='composite' type='_st_TestScenario' association='_ext_TestScenario_b'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_TestScenario_o'>
+			<memberEnd xmi:idref='_prop_TestScenario_baseOperation'/>
+			<memberEnd xmi:idref='_ext_TestScenario_o_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_TestScenario_o_end' name='extension_TestScenario_Operation' aggregation='composite' type='_st_TestScenario' association='_ext_TestScenario_o'/>
+		</packagedElement>
+
+		<!-- ================================================================ -->
+		<!-- Relationship stereotypes - two families:                          -->
+		<!-- Trace-based: Realizes, Affects, Verifies, Satisfies, Validates,   -->
+		<!--              Specifies, Derives (7)                               -->
+		<!-- Allocate-based: Requires, Refines (2)                             -->
+		<!-- All extend Dependency, none carry extra tags beyond base_Dependency. -->
+		<!-- ================================================================ -->
+		<packagedElement xmi:type='uml:Stereotype' xmi:id='_st_Realizes' name='Realizes'>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_Realizes'>
+				<general href='http://www.omg.org/spec/SysML/20181001/SysML.xmi#SysML.Trace'/>
+			</generalization>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Realizes_baseDep' name='base_Dependency' association='_ext_Realizes'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_Realizes'>
+			<memberEnd xmi:idref='_prop_Realizes_baseDep'/>
+			<memberEnd xmi:idref='_ext_Realizes_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_Realizes_end' name='extension_Realizes' aggregation='composite' type='_st_Realizes' association='_ext_Realizes'/>
+		</packagedElement>
+
+		<packagedElement xmi:type='uml:Stereotype' xmi:id='_st_Affects' name='Affects'>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_Affects'>
+				<general href='http://www.omg.org/spec/SysML/20181001/SysML.xmi#SysML.Trace'/>
+			</generalization>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Affects_baseDep' name='base_Dependency' association='_ext_Affects'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_Affects'>
+			<memberEnd xmi:idref='_prop_Affects_baseDep'/>
+			<memberEnd xmi:idref='_ext_Affects_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_Affects_end' name='extension_Affects' aggregation='composite' type='_st_Affects' association='_ext_Affects'/>
+		</packagedElement>
+
+		<packagedElement xmi:type='uml:Stereotype' xmi:id='_st_Verifies' name='Verifies'>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_Verifies'>
+				<general href='http://www.omg.org/spec/SysML/20181001/SysML.xmi#SysML.Trace'/>
+			</generalization>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Verifies_baseDep' name='base_Dependency' association='_ext_Verifies'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_Verifies'>
+			<memberEnd xmi:idref='_prop_Verifies_baseDep'/>
+			<memberEnd xmi:idref='_ext_Verifies_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_Verifies_end' name='extension_Verifies' aggregation='composite' type='_st_Verifies' association='_ext_Verifies'/>
+		</packagedElement>
+
+		<packagedElement xmi:type='uml:Stereotype' xmi:id='_st_Satisfies' name='Satisfies'>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_Satisfies'>
+				<general href='http://www.omg.org/spec/SysML/20181001/SysML.xmi#SysML.Trace'/>
+			</generalization>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Satisfies_baseDep' name='base_Dependency' association='_ext_Satisfies'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_Satisfies'>
+			<memberEnd xmi:idref='_prop_Satisfies_baseDep'/>
+			<memberEnd xmi:idref='_ext_Satisfies_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_Satisfies_end' name='extension_Satisfies' aggregation='composite' type='_st_Satisfies' association='_ext_Satisfies'/>
+		</packagedElement>
+
+		<packagedElement xmi:type='uml:Stereotype' xmi:id='_st_Validates' name='Validates'>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_Validates'>
+				<general href='http://www.omg.org/spec/SysML/20181001/SysML.xmi#SysML.Trace'/>
+			</generalization>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Validates_baseDep' name='base_Dependency' association='_ext_Validates'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_Validates'>
+			<memberEnd xmi:idref='_prop_Validates_baseDep'/>
+			<memberEnd xmi:idref='_ext_Validates_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_Validates_end' name='extension_Validates' aggregation='composite' type='_st_Validates' association='_ext_Validates'/>
+		</packagedElement>
+
+		<packagedElement xmi:type='uml:Stereotype' xmi:id='_st_Specifies' name='Specifies'>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_Specifies'>
+				<general href='http://www.omg.org/spec/SysML/20181001/SysML.xmi#SysML.Trace'/>
+			</generalization>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Specifies_baseDep' name='base_Dependency' association='_ext_Specifies'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_Specifies'>
+			<memberEnd xmi:idref='_prop_Specifies_baseDep'/>
+			<memberEnd xmi:idref='_ext_Specifies_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_Specifies_end' name='extension_Specifies' aggregation='composite' type='_st_Specifies' association='_ext_Specifies'/>
+		</packagedElement>
+
+		<packagedElement xmi:type='uml:Stereotype' xmi:id='_st_Derives' name='Derives'>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_Derives'>
+				<general href='http://www.omg.org/spec/SysML/20181001/SysML.xmi#SysML.Trace'/>
+			</generalization>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Derives_baseDep' name='base_Dependency' association='_ext_Derives'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_Derives'>
+			<memberEnd xmi:idref='_prop_Derives_baseDep'/>
+			<memberEnd xmi:idref='_ext_Derives_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_Derives_end' name='extension_Derives' aggregation='composite' type='_st_Derives' association='_ext_Derives'/>
+		</packagedElement>
+
+		<packagedElement xmi:type='uml:Stereotype' xmi:id='_st_Requires' name='Requires'>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_Requires'>
+				<general href='http://www.omg.org/spec/SysML/20181001/SysML.xmi#SysML.Allocate'/>
+			</generalization>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Requires_baseDep' name='base_Dependency' association='_ext_Requires'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_Requires'>
+			<memberEnd xmi:idref='_prop_Requires_baseDep'/>
+			<memberEnd xmi:idref='_ext_Requires_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_Requires_end' name='extension_Requires' aggregation='composite' type='_st_Requires' association='_ext_Requires'/>
+		</packagedElement>
+
+		<packagedElement xmi:type='uml:Stereotype' xmi:id='_st_Refines' name='Refines'>
+			<generalization xmi:type='uml:Generalization' xmi:id='_gen_Refines'>
+				<general href='http://www.omg.org/spec/SysML/20181001/SysML.xmi#SysML.Allocate'/>
+			</generalization>
+			<ownedAttribute xmi:type='uml:Property' xmi:id='_prop_Refines_baseDep' name='base_Dependency' association='_ext_Refines'/>
+		</packagedElement>
+		<packagedElement xmi:type='uml:Extension' xmi:id='_ext_Refines'>
+			<memberEnd xmi:idref='_prop_Refines_baseDep'/>
+			<memberEnd xmi:idref='_ext_Refines_end'/>
+			<ownedEnd xmi:type='uml:ExtensionEnd' xmi:id='_ext_Refines_end' name='extension_Refines' aggregation='composite' type='_st_Refines' association='_ext_Refines'/>
+		</packagedElement>
+
+	</uml:Profile>
+</xmi:XMI>

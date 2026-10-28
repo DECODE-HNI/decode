@@ -49,6 +49,7 @@ flowchart LR
 | `rflpv2_merge_test.xml` | Hand-built XMI fixture (real Ned2 business keys) used to verify the merge-onto-existing-node path. |
 | `ea_new_labels_constraints.cypher` | Uniqueness constraints for the labels this pipeline introduces (`CustomerNeed`, `TestCase`, `TestCaseDescription`, `TestScenario`, `Validation`, `Verification`). |
 | `ea_to_neo4j_mapping.md` | The living specification: every stereotype→label mapping, every relationship rule, every empirically-discovered EA quirk, and the reasoning behind each decision. |
+| `profile_spec/` | Tool-neutral specification of the RFLPV² sustainability extension (German; English pending), the early XMI draft of the profile and an example instance model — see its [README](profile_spec/README.md). |
 
 ## Setup: getting the profile into EA
 
