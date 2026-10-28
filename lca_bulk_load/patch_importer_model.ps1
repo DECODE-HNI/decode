@@ -2,43 +2,43 @@
 ============================================================
 patch_importer_model.ps1  (Phase 3)
 
-Klont die bestehende neo4j_importer_model.json und wendet gezielte Deltas an
-(kein Neuaufbau von Grund auf -- das interne $ref/#p:N/#nl:N/#r:N-Nummerierungs-
-schema ist ein nicht dokumentiertes Tool-internes Format, ein Delta-Patch auf
-Basis von Inhalts-Matching (token/name) ist risikoaermer als ein Rebuild).
+Clones the existing neo4j_importer_model.json and applies targeted deltas
+(no rebuild from scratch -- the internal $ref/#p:N/#nl:N/#r:N numbering
+scheme is an undocumented tool-internal format; a delta patch based on
+content matching (token/name) is less risky than a rebuild).
 
-Aenderungen:
-1. Entfernt vollstaendig: nodeLabel "Exchange", relationshipTypes
-   "HAS_EXCHANGE" und "REFERS_TO_FLOW" (samt ihrer Properties), sowie die
-   zugehoerigen node-/relationshipMappings.
-2. Entfernt HAS_FLOW und CHARACTERIZES VOLLSTAENDIG aus dem Kanal-A-Schema
-   (Typ + relationshipObjectType + Mapping) -- Kanal B (Python/Bolt)
-   uebernimmt deren Laden, da der Data Importer Parallel-Kanten zwischen
-   gleichen Knoten strukturell nicht korrekt mergen kann. URSPRUENGLICH war
-   geplant, die Typ-Definition als reine Dokumentation ohne Mapping im
-   Schema zu belassen -- das schlaegt fehl: der Data Importer laedt ein
-   Modell nur, wenn JEDER deklarierte relationshipType eine vollstaendige,
-   gemappte CSV hat ("Your data model has errors", vom Nutzer per Screenshot
-   bestaetigt). Daher jetzt vollstaendige Entfernung, keine Doku im Schema.
-3. Ergaenzt neue Properties: Process.source/sourceDatabase/referenceYear,
-   Flow.source/sourceDatabase -- inkl. propertyMappings in den bestehenden
-   Process-/Flow-nodeMappings (liest die neuen Spalten aus den gemergten
+Changes:
+1. Removes completely: nodeLabel "Exchange", relationshipTypes
+   "HAS_EXCHANGE" and "REFERS_TO_FLOW" (including their properties), as well as the
+   associated node/relationship mappings.
+2. Removes HAS_FLOW and CHARACTERIZES COMPLETELY from the channel A schema
+   (type + relationshipObjectType + mapping) -- channel B (Python/Bolt)
+   takes over loading them, because the Data Importer structurally cannot merge
+   parallel edges between the same nodes correctly. ORIGINALLY the plan was
+   to leave the type definition in the schema as pure documentation without a
+   mapping -- that fails: the Data Importer only loads a model if EVERY
+   declared relationshipType has a complete, mapped CSV
+   ("Your data model has errors", confirmed empirically in the UI). Hence complete
+   removal now, no documentation in the schema.
+3. Adds new properties: Process.source/sourceDatabase/referenceYear,
+   Flow.source/sourceDatabase -- including propertyMappings in the existing
+   Process/Flow nodeMappings (reads the new columns from the merged
    CSVs).
-4. Bereinigt dataSourceSchema.tableSchemas: entfernt Eintraege fuer
-   entfallene CSVs, ergaenzt neue Felder fuer Process.csv/Flow.csv.
+4. Cleans up dataSourceSchema.tableSchemas: removes entries for
+   dropped CSVs, adds new fields for Process.csv/Flow.csv.
 
-WICHTIGE LEKTION (2. gescheiterter Versuch): eine neue Property auf einen
-GETEILTEN relationshipType (z.B. HAS_DATA, von mehreren Label-Paaren genutzt)
-zu setzen, bricht ALLE anderen Mappings dieses Typs, die die Spalte nicht
-haben ("Must be specified"). Neue relationship-spezifische Properties nur
-auf frisch angelegte, alleinig genutzte Typen setzen (z.B. DERIVED_FROM),
-niemals auf geteilte Typen.
+IMPORTANT LESSON (2nd failed attempt): setting a new property on a
+SHARED relationshipType (e.g. HAS_DATA, used by several label pairs)
+breaks ALL other mappings of that type that do not have the column
+("Must be specified"). Set new relationship-specific properties only
+on freshly created, exclusively used types (e.g. DERIVED_FROM),
+never on shared types.
 
-NICHT enthalten (bewusste Scope-Entscheidung, siehe Statusbericht): neue
-DataSource-Knoten + FROM_SOURCE-Relationship fuer Sphera/IDEMAT-Provenienz.
-Die Process/Flow-Properties source/sourceDatabase erfuellen die Provenienz-
-Anforderung bereits (Abschnitt 14 der urspruenglichen Spezifikation nennt
-Properties UND/ODER DataSource-Strukturen als gleichwertige Optionen).
+NOT included (deliberate scope decision): new
+DataSource nodes + FROM_SOURCE relationship for Sphera/IDEMAT provenance.
+The Process/Flow properties source/sourceDatabase already satisfy the provenance
+requirement (section 14 of the original specification lists
+properties AND/OR DataSource structures as equivalent options).
 ============================================================
 #>
 
@@ -55,7 +55,7 @@ $raw = Get-Content $ExistingJson -Raw
 $model = $raw | ConvertFrom-Json
 
 # ------------------------------------------------------------
-# Hilfsfunktion: naechste freie p:N-ID ermitteln (max aktuell verwendeter + 1)
+# Helper function: find the next free p:N id (current maximum in use + 1)
 # ------------------------------------------------------------
 $maxP = ([regex]::Matches($raw, '"\$id":\s*"p:(\d+)"') | ForEach-Object { [int]$_.Groups[1].Value } | Measure-Object -Maximum).Maximum
 $nextP = $maxP + 1
@@ -65,53 +65,52 @@ $graphSchema = $model.dataModel.graphSchemaRepresentation.graphSchema
 $graphMapping = $model.dataModel.graphMappingRepresentation
 
 # ------------------------------------------------------------
-# 1) Exchange vollstaendig entfernen -- als Graph-Traversal, nicht als Liste
-#    hart codierter Token. Grund: Exchange ist nicht nur ueber HAS_EXCHANGE/
-#    REFERS_TO_FLOW verbunden, sondern taucht als Endpunkt AUCH bei
-#    wiederverwendeten Relationship-Typen auf (HAS_DATA: Exchange->DataItem,
-#    DERIVED_FROM: ImpactResult->Exchange -- beide erst durch Nachschauen im
-#    JSON gefunden, ein Token-basierter Ansatz haette sie uebersehen). Daher:
-#    1. nodeLabel Exchange (nl:N) entfernen
-#    2. alle nodeObjectTypes (n:N), deren labels NUR auf Exchange verweisen,
-#       entfernen
-#    3. alle relationshipObjectTypes (r:N), deren from/to auf ein entferntes
-#       n:N verweisen, entfernen
-#    4. relationshipTypes (rt:N), die dadurch KEINE verbleibende
-#       relationshipObjectType-Nutzung mehr haben, ebenfalls entfernen (z.B.
-#       DERIVED_FROM war nur fuer Exchange da -> weg; HAS_DATA hat 4 weitere
-#       Nutzungen -> bleibt)
-#    5. abhaengige Eintraege bereinigen: constraints, nodeKeyProperties,
+# 1) Remove Exchange completely -- as a graph traversal, not as a list
+#    of hard-coded tokens. Reason: Exchange is not only connected via HAS_EXCHANGE/
+#    REFERS_TO_FLOW, but also appears as an endpoint in
+#    reused relationship types (HAS_DATA: Exchange->DataItem,
+#    DERIVED_FROM: ImpactResult->Exchange -- both found only by inspecting the
+#    JSON, a token-based approach would have missed them). Therefore:
+#    1. remove nodeLabel Exchange (nl:N)
+#    2. remove all nodeObjectTypes (n:N) whose labels refer ONLY to Exchange
+#    3. remove all relationshipObjectTypes (r:N) whose from/to refer to a removed
+#       n:N
+#    4. also remove relationshipTypes (rt:N) that consequently have NO remaining
+#       relationshipObjectType usage (e.g.
+#       DERIVED_FROM existed only for Exchange -> gone; HAS_DATA has 4 more
+#       usages -> stays)
+#    5. clean up dependent entries: constraints, nodeKeyProperties,
 #       relationshipKeyProperties, visualisation.nodes, nodeMappings,
 #       relationshipMappings
 # ------------------------------------------------------------
 $exchangeLabel = $graphSchema.nodeLabels | Where-Object { $_.token -eq "Exchange" }
-if (-not $exchangeLabel) { throw "nodeLabel 'Exchange' nicht gefunden -- Abbruch (Skript setzt sein Vorhandensein voraus)." }
+if (-not $exchangeLabel) { throw "nodeLabel 'Exchange' not found -- aborting (the script requires it to exist)." }
 $exchangeLabelId = $exchangeLabel.'$id'
 $exchangeLabelRef = "#$exchangeLabelId"
 $graphSchema.nodeLabels = @($graphSchema.nodeLabels | Where-Object { $_.token -ne "Exchange" })
-Write-Output "[OK] nodeLabel 'Exchange' ($exchangeLabelId) entfernt ($($exchangeLabel.properties.Count) Properties mitentfernt)."
+Write-Output "[OK] nodeLabel 'Exchange' ($exchangeLabelId) removed ($($exchangeLabel.properties.Count) properties removed with it)."
 
-# Schritt 2: nodeObjectTypes mit AUSSCHLIESSLICH Exchange-Label entfernen
+# Step 2: remove nodeObjectTypes with EXCLUSIVELY the Exchange label
 $removedNodeObjs = $graphSchema.nodeObjectTypes | Where-Object {
     (($_.labels | ForEach-Object { $_.'$ref' }) -contains $exchangeLabelRef) -and $_.labels.Count -eq 1
 }
 $removedNodeObjRefs = [System.Collections.Generic.HashSet[string]]::new([string[]]($removedNodeObjs | ForEach-Object { "#$($_.'$id')" }))
 $before = $graphSchema.nodeObjectTypes.Count
 $graphSchema.nodeObjectTypes = @($graphSchema.nodeObjectTypes | Where-Object { -not $removedNodeObjRefs.Contains("#$($_.'$id')") })
-Write-Output "[OK] nodeObjectTypes entfernt: $(($removedNodeObjs | ForEach-Object { $_.'$id' }) -join ', ') ($before -> $($graphSchema.nodeObjectTypes.Count))"
+Write-Output "[OK] nodeObjectTypes removed: $(($removedNodeObjs | ForEach-Object { $_.'$id' }) -join ', ') ($before -> $($graphSchema.nodeObjectTypes.Count))"
 
-# Schritt 3: relationshipObjectTypes mit from/to auf ein entferntes n:N entfernen
+# Step 3: remove relationshipObjectTypes whose from/to point to a removed n:N
 $exchangeRelatedRObjs = $graphSchema.relationshipObjectTypes | Where-Object {
     $removedNodeObjRefs.Contains($_.from.'$ref') -or $removedNodeObjRefs.Contains($_.to.'$ref')
 }
-# HAS_FLOW/CHARACTERIZES: der Data Importer laedt ein Modell nur, wenn JEDER
-# deklarierte relationshipType eine vollstaendige, aktive Mapping-Datei hat --
-# ein "Dokumentation ohne Mapping"-Zustand (urspruenglicher Ansatz) wird als
-# Modellfehler abgelehnt ("Your data model has errors", vom Nutzer per
-# Screenshot bestaetigt: HAS_DATA/CHARACTERIZES/HAS_FLOW zeigten alle Fehler).
-# Deshalb werden HAS_FLOW/CHARACTERIZES jetzt VOLLSTAENDIG aus dem Kanal-A-
-# Schema entfernt (wie HAS_EXCHANGE/REFERS_TO_FLOW) -- Kanal B bleibt die
-# alleinige Quelle fuer diese Daten, nur eben ohne Schema-Presenz in Kanal A.
+# HAS_FLOW/CHARACTERIZES: the Data Importer only loads a model if EVERY
+# declared relationshipType has a complete, active mapping file --
+# a "documentation without mapping" state (original approach) is rejected as
+# a model error ("Your data model has errors", confirmed in the UI:
+# HAS_DATA/CHARACTERIZES/HAS_FLOW all showed errors).
+# Therefore HAS_FLOW/CHARACTERIZES are now removed COMPLETELY from the channel A
+# schema (like HAS_EXCHANGE/REFERS_TO_FLOW) -- channel B remains the
+# sole source for this data, just without schema presence in channel A.
 $hasFlowRt = $graphSchema.relationshipTypes | Where-Object { $_.token -eq "HAS_FLOW" }
 $characterizesRt = $graphSchema.relationshipTypes | Where-Object { $_.token -eq "CHARACTERIZES" }
 $hfCfRtRefs = [System.Collections.Generic.HashSet[string]]::new([string[]](@($hasFlowRt, $characterizesRt) | Where-Object { $_ } | ForEach-Object { "#$($_.'$id')" }))
@@ -121,52 +120,52 @@ $removedRObjs = @($exchangeRelatedRObjs) + @($hfCfRObjs)
 $removedRObjRefs = [System.Collections.Generic.HashSet[string]]::new([string[]]($removedRObjs | ForEach-Object { "#$($_.'$id')" }))
 $allMappingRemoveRefs = $removedRObjRefs
 
-Write-Output "[INFO] relationshipObjectTypes komplett entfernt (Exchange-Endpunkt): $(($exchangeRelatedRObjs | ForEach-Object { "$($_.'$id')(type=$($_.type.'$ref'))" }) -join ', ')"
-Write-Output "[INFO] relationshipObjectTypes komplett entfernt (HAS_FLOW/CHARACTERIZES, Kanal B uebernimmt): $(($hfCfRObjs | ForEach-Object { $_.'$id' }) -join ', ')"
+Write-Output "[INFO] relationshipObjectTypes removed completely (Exchange endpoint): $(($exchangeRelatedRObjs | ForEach-Object { "$($_.'$id')(type=$($_.type.'$ref'))" }) -join ', ')"
+Write-Output "[INFO] relationshipObjectTypes removed completely (HAS_FLOW/CHARACTERIZES, channel B takes over): $(($hfCfRObjs | ForEach-Object { $_.'$id' }) -join ', ')"
 
 $before = $graphSchema.relationshipObjectTypes.Count
 $graphSchema.relationshipObjectTypes = @($graphSchema.relationshipObjectTypes | Where-Object { -not $removedRObjRefs.Contains("#$($_.'$id')") })
-Write-Output "[OK] relationshipObjectTypes entfernt: $before -> $($graphSchema.relationshipObjectTypes.Count)"
+Write-Output "[OK] relationshipObjectTypes removed: $before -> $($graphSchema.relationshipObjectTypes.Count)"
 
-# Schritt 4: relationshipTypes ohne verbleibende relationshipObjectType-Nutzung entfernen
+# Step 4: remove relationshipTypes without remaining relationshipObjectType usage
 $remainingTypeRefs = [System.Collections.Generic.HashSet[string]]::new([string[]]($graphSchema.relationshipObjectTypes | ForEach-Object { $_.type.'$ref' }))
 $candidateRtIds = ($removedRObjs | ForEach-Object { $_.type.'$ref' }) | Sort-Object -Unique
 $orphanedRt = $candidateRtIds | Where-Object { -not $remainingTypeRefs.Contains($_) }
 $orphanedTokens = $graphSchema.relationshipTypes | Where-Object { $orphanedRt -contains "#$($_.'$id')" } | ForEach-Object { $_.token }
-Write-Output "[INFO] Dadurch verwaiste relationshipTypes (keine Nutzung mehr): $($orphanedTokens -join ', ')"
+Write-Output "[INFO] relationshipTypes orphaned as a result (no usage left): $($orphanedTokens -join ', ')"
 $before = $graphSchema.relationshipTypes.Count
 $graphSchema.relationshipTypes = @($graphSchema.relationshipTypes | Where-Object { -not ($orphanedRt -contains "#$($_.'$id')") })
-Write-Output "[OK] relationshipTypes entfernt: $before -> $($graphSchema.relationshipTypes.Count)"
+Write-Output "[OK] relationshipTypes removed: $before -> $($graphSchema.relationshipTypes.Count)"
 
-# Schritt 5a: constraints auf Exchange entfernen
+# Step 5a: remove constraints on Exchange
 $graphSchema.constraints = @($graphSchema.constraints | Where-Object { $_.nodeLabel.'$ref' -ne $exchangeLabelRef })
-Write-Output "[OK] constraints bereinigt (Exchange_id_unique entfernt falls vorhanden)."
+Write-Output "[OK] constraints cleaned up (Exchange_id_unique removed if present)."
 
-# Schritt 5b: nodeKeyProperties / relationshipKeyProperties bereinigen
+# Step 5b: clean up nodeKeyProperties / relationshipKeyProperties
 $ext = $model.dataModel.graphSchemaExtensionsRepresentation
 $before = $ext.nodeKeyProperties.Count
 $ext.nodeKeyProperties = @($ext.nodeKeyProperties | Where-Object { -not $removedNodeObjRefs.Contains($_.node.'$ref') })
-Write-Output "[OK] nodeKeyProperties bereinigt: $before -> $($ext.nodeKeyProperties.Count)"
+Write-Output "[OK] nodeKeyProperties cleaned up: $before -> $($ext.nodeKeyProperties.Count)"
 if ($ext.relationshipKeyProperties -and $ext.relationshipKeyProperties.Count -gt 0) {
     $ext.relationshipKeyProperties = @($ext.relationshipKeyProperties | Where-Object { -not $removedRObjRefs.Contains($_.relationship.'$ref') })
 }
 
-# Schritt 5c: visualisation.nodes (Layout-Positionen, kosmetisch) bereinigen
+# Step 5c: clean up visualisation.nodes (layout positions, cosmetic)
 if ($model.visualisation -and $model.visualisation.nodes) {
     $removedNodeObjIds = [System.Collections.Generic.HashSet[string]]::new([string[]]($removedNodeObjs | ForEach-Object { $_.'$id' }))
     $before = $model.visualisation.nodes.Count
     $model.visualisation.nodes = @($model.visualisation.nodes | Where-Object { -not $removedNodeObjIds.Contains($_.id) })
-    Write-Output "[OK] visualisation.nodes bereinigt: $before -> $($model.visualisation.nodes.Count)"
+    Write-Output "[OK] visualisation.nodes cleaned up: $before -> $($model.visualisation.nodes.Count)"
 }
 
-# Schritt 5d: nodeMapping fuer Exchange.csv entfernen
+# Step 5d: remove the nodeMapping for Exchange.csv
 $before = $graphMapping.nodeMappings.Count
 $graphMapping.nodeMappings = @($graphMapping.nodeMappings | Where-Object { -not $removedNodeObjRefs.Contains($_.node.'$ref') })
-Write-Output "[OK] nodeMappings mit Exchange-Knoten entfernt: $before -> $($graphMapping.nodeMappings.Count)"
+Write-Output "[OK] nodeMappings with Exchange nodes removed: $before -> $($graphMapping.nodeMappings.Count)"
 
-# Schritt 5e: relationshipMappings entfernen -- alle komplett entfernten r:N
-# PLUS die HAS_FLOW/CHARACTERIZES-Mappings (deren r:N bleibt, nur die Mapping-
-# Datei entfaellt, da Kanal B das Laden uebernimmt).
+# Step 5e: remove relationshipMappings -- all completely removed r:N
+# PLUS the HAS_FLOW/CHARACTERIZES mappings (their r:N stays, only the mapping
+# file is dropped because channel B takes over loading).
 $removedMappingTables = @()
 $graphMapping.relationshipMappings | ForEach-Object {
     if ($allMappingRemoveRefs.Contains($_.relationship.'$ref')) { $removedMappingTables += $_.tableName }
@@ -175,10 +174,10 @@ $before = $graphMapping.relationshipMappings.Count
 $graphMapping.relationshipMappings = @($graphMapping.relationshipMappings | Where-Object {
     -not $allMappingRemoveRefs.Contains($_.relationship.'$ref')
 })
-Write-Output "[OK] relationshipMappings entfernt: $($removedMappingTables -join ', ') ($before -> $($graphMapping.relationshipMappings.Count))"
+Write-Output "[OK] relationshipMappings removed: $($removedMappingTables -join ', ') ($before -> $($graphMapping.relationshipMappings.Count))"
 
 # ------------------------------------------------------------
-# 2) Neue Properties: Process (source, sourceDatabase, referenceYear),
+# 2) New properties: Process (source, sourceDatabase, referenceYear),
 #    Flow (source, sourceDatabase)
 # ------------------------------------------------------------
 function Add-StringProperty {
@@ -196,19 +195,19 @@ function Add-StringProperty {
 
 $processLabel = $graphSchema.nodeLabels | Where-Object { $_.token -eq "Process" }
 $flowLabel = $graphSchema.nodeLabels | Where-Object { $_.token -eq "Flow" }
-if (-not $processLabel) { throw "nodeLabel 'Process' nicht gefunden -- Abbruch." }
-if (-not $flowLabel) { throw "nodeLabel 'Flow' nicht gefunden -- Abbruch." }
+if (-not $processLabel) { throw "nodeLabel 'Process' not found -- aborting." }
+if (-not $flowLabel) { throw "nodeLabel 'Flow' not found -- aborting." }
 
 $procSourceId = Add-StringProperty -NodeLabel $processLabel -Token "source"
 $procSourceDbId = Add-StringProperty -NodeLabel $processLabel -Token "sourceDatabase"
 $procRefYearId = Add-StringProperty -NodeLabel $processLabel -Token "referenceYear"
-Write-Output "[OK] Process: 3 neue Properties ($procSourceId, $procSourceDbId, $procRefYearId)"
+Write-Output "[OK] Process: 3 new properties ($procSourceId, $procSourceDbId, $procRefYearId)"
 
 $flowSourceId = Add-StringProperty -NodeLabel $flowLabel -Token "source"
 $flowSourceDbId = Add-StringProperty -NodeLabel $flowLabel -Token "sourceDatabase"
-Write-Output "[OK] Flow: 2 neue Properties ($flowSourceId, $flowSourceDbId)"
+Write-Output "[OK] Flow: 2 new properties ($flowSourceId, $flowSourceDbId)"
 
-# Property-Mappings in den bestehenden Process-/Flow-nodeMappings ergaenzen
+# Add property mappings to the existing Process/Flow nodeMappings
 function Add-PropertyMapping {
     param($NodeMapping, [string]$PropId, [string]$FieldName)
     $pm = [PSCustomObject]@{
@@ -220,24 +219,24 @@ function Add-PropertyMapping {
 
 $processMapping = $graphMapping.nodeMappings | Where-Object { $_.tableName -eq "Process.csv" }
 $flowMapping = $graphMapping.nodeMappings | Where-Object { $_.tableName -eq "Flow.csv" }
-if (-not $processMapping) { throw "nodeMapping fuer Process.csv nicht gefunden -- Abbruch." }
-if (-not $flowMapping) { throw "nodeMapping fuer Flow.csv nicht gefunden -- Abbruch." }
+if (-not $processMapping) { throw "nodeMapping for Process.csv not found -- aborting." }
+if (-not $flowMapping) { throw "nodeMapping for Flow.csv not found -- aborting." }
 
 Add-PropertyMapping -NodeMapping $processMapping -PropId $procSourceId -FieldName "source"
 Add-PropertyMapping -NodeMapping $processMapping -PropId $procSourceDbId -FieldName "sourceDatabase"
 Add-PropertyMapping -NodeMapping $processMapping -PropId $procRefYearId -FieldName "referenceYear"
 Add-PropertyMapping -NodeMapping $flowMapping -PropId $flowSourceId -FieldName "source"
 Add-PropertyMapping -NodeMapping $flowMapping -PropId $flowSourceDbId -FieldName "sourceDatabase"
-Write-Output "[OK] propertyMappings fuer Process.csv (+3) und Flow.csv (+2) ergaenzt."
+Write-Output "[OK] propertyMappings for Process.csv (+3) and Flow.csv (+2) added."
 
 # ------------------------------------------------------------
-# 3) dataSourceSchema.tableSchemas bereinigen
+# 3) clean up dataSourceSchema.tableSchemas
 # ------------------------------------------------------------
 $tableSchemas = $model.dataModel.graphMappingRepresentation.dataSourceSchema.tableSchemas
 $removedTableNames = [System.Collections.Generic.HashSet[string]]::new([string[]](@("Exchange.csv") + $removedMappingTables))
 $before = $tableSchemas.Count
 $tableSchemas = @($tableSchemas | Where-Object { -not $removedTableNames.Contains($_.name) })
-Write-Output "[OK] tableSchemas bereinigt (entfernt: $($removedTableNames -join ', ')): $before -> $($tableSchemas.Count)"
+Write-Output "[OK] tableSchemas cleaned up (removed: $($removedTableNames -join ', ')): $before -> $($tableSchemas.Count)"
 
 function Add-FieldSchema {
     param($TableSchema, [string]$Name, [string]$Sample)
@@ -259,27 +258,27 @@ if ($flowTs) {
     Add-FieldSchema -TableSchema $flowTs -Name "sourceDatabase" -Sample "Sphera Managed LCA Content (MLC)"
 }
 $model.dataModel.graphMappingRepresentation.dataSourceSchema.tableSchemas = $tableSchemas
-Write-Output "[OK] Process.csv/Flow.csv Feldschema ergaenzt."
+Write-Output "[OK] Process.csv/Flow.csv field schema extended."
 
 # ------------------------------------------------------------
-# 4) Legacy-Exchange-Regression beheben: DERIVED_FROM (ImpactResult->Exchange,
-#    166 echte Zeilen) und HAS_DATA (Exchange->DataItem, 1 Zeile) verweisen auf
-#    Exchange als Ziel/Quelle -- ohne Ersatz waeren diese beim Entfernen von
-#    Exchange stillschweigend verloren gegangen. Da eine Relationship kein
-#    Ziel einer anderen sein kann, werden beide auf den jeweiligen FLOW-Knoten
-#    umgebogen (siehe fix_legacy_exchange.ps1), mit der urspruenglichen
-#    Exchange-ID als neue exchangeId-Property (Praezision "von welchem
-#    Exchange" bleibt erhalten, ohne den Knoten wiederherzustellen).
-#    Beide Paarungen sind eindeutig auf (from,to) -- normaler Data-Importer-
-#    Import (Kanal A) ist hier unproblematisch, kein Kanal-B-Fall.
+# 4) Fix the legacy Exchange regression: DERIVED_FROM (ImpactResult->Exchange,
+#    166 real rows) and HAS_DATA (Exchange->DataItem, 1 row) refer to
+#    Exchange as target/source -- without a replacement they would have been silently
+#    lost when Exchange was removed. Since a relationship cannot be the
+#    target of another, both are redirected to the respective FLOW node
+#    (see fix_legacy_exchange.ps1), with the original
+#    Exchange id as a new exchangeId property (the precision "from which
+#    Exchange" is preserved without restoring the node).
+#    Both pairings are unique on (from,to) -- a normal Data Importer
+#    import (channel A) is unproblematic here, not a channel B case.
 # ------------------------------------------------------------
 function Find-NodeObjByLabel {
     param([string]$Token)
     $lbl = $graphSchema.nodeLabels | Where-Object { $_.token -eq $Token }
-    if (-not $lbl) { throw "nodeLabel '$Token' nicht gefunden." }
+    if (-not $lbl) { throw "nodeLabel '$Token' not found." }
     $lblRef = "#$($lbl.'$id')"
     $obj = $graphSchema.nodeObjectTypes | Where-Object { ($_.labels | ForEach-Object { $_.'$ref' }) -contains $lblRef }
-    if (-not $obj) { throw "nodeObjectType fuer '$Token' nicht gefunden." }
+    if (-not $obj) { throw "nodeObjectType for '$Token' not found." }
     return $obj
 }
 $impactResultNodeObj = Find-NodeObjByLabel -Token "ImpactResult"
@@ -294,7 +293,7 @@ function New-RId  { $v = "r:$script:nextR";  $script:nextR++;  return $v }
 function New-RtId { $v = "rt:$script:nextRt"; $script:nextRt++; return $v }
 function New-RpId { $v = "rp:$script:nextRp"; $script:nextRp++; return $v }
 
-# --- 4a) DERIVED_FROM neu anlegen: ImpactResult -> Flow, Properties: contribution + exchangeId ---
+# --- 4a) Recreate DERIVED_FROM: ImpactResult -> Flow, properties: contribution + exchangeId ---
 $dfRtId = New-RtId
 $dfContribId = New-RpId
 $dfExchangeIdId = New-RpId
@@ -315,7 +314,7 @@ $derivedFromRObj = [PSCustomObject]@{
     to = [PSCustomObject]@{ '$ref' = "#$($flowNodeObj.'$id')" }
 }
 $graphSchema.relationshipObjectTypes = @($graphSchema.relationshipObjectTypes) + $derivedFromRObj
-Write-Output "[OK] DERIVED_FROM neu angelegt: type=$dfRtId, relationshipObjectType=$dfRId (ImpactResult->Flow), Properties contribution=$dfContribId, exchangeId=$dfExchangeIdId"
+Write-Output "[OK] DERIVED_FROM recreated: type=$dfRtId, relationshipObjectType=$dfRId (ImpactResult->Flow), properties contribution=$dfContribId, exchangeId=$dfExchangeIdId"
 
 $derivedFromMapping = [PSCustomObject]@{
     relationship = [PSCustomObject]@{ '$ref' = "#$dfRId" }
@@ -327,8 +326,8 @@ $derivedFromMapping = [PSCustomObject]@{
     fromMappings = [PSCustomObject]@{}
     toMappings = [PSCustomObject]@{}
 }
-# fromMappings/toMappings referenzieren die jeweilige ID-Property des Knotens
-# (gleiches Muster wie bei HAS_FLOW/CHARACTERIZES: "#p:<idProperty>": "csv_spalte")
+# fromMappings/toMappings reference the respective ID property of the node
+# (same pattern as for HAS_FLOW/CHARACTERIZES: "#p:<idProperty>": "csv_column")
 $processIdProp = ($graphMapping.nodeMappings | Where-Object { $_.tableName -eq "Process.csv" }).propertyMappings | Where-Object { $_.fieldName -eq "id" } | Select-Object -First 1
 $impactResultMapping = $graphMapping.nodeMappings | Where-Object { $_.tableName -eq "ImpactResult.csv" }
 $impactResultIdProp = $impactResultMapping.propertyMappings | Where-Object { $_.fieldName -eq "id" } | Select-Object -First 1
@@ -339,21 +338,21 @@ $dataItemIdProp = $dataItemMapping.propertyMappings | Where-Object { $_.fieldNam
 $derivedFromMapping.fromMappings = [PSCustomObject]@{ ($impactResultIdProp.property.'$ref') = "from_id" }
 $derivedFromMapping.toMappings = [PSCustomObject]@{ ($flowIdProp.property.'$ref') = "to_id" }
 $graphMapping.relationshipMappings = @($graphMapping.relationshipMappings) + $derivedFromMapping
-Write-Output "[OK] relationshipMapping fuer DERIVED_FROM (ImpactResult->Flow) ergaenzt."
+Write-Output "[OK] relationshipMapping for DERIVED_FROM (ImpactResult->Flow) added."
 
-# --- 4b) HAS_DATA: neues Label-Paar Flow -> DataItem ---
-# WICHTIG: KEINE neue Property auf den GETEILTEN HAS_DATA-Typ setzen. HAS_DATA
-# wird von mehreren Label-Paaren genutzt (Material->DataItem, Process->DataItem,
-# ...); eine Property gehoert zum TYP, nicht zur einzelnen Paarung -- der Data
-# Importer verlangt dann fuer JEDES Mapping dieses Typs ein Feld dafuer ("Must
-# be specified"), auch fuer die bestehenden Paarungen, die diese Spalte gar
-# nicht haben. Genau das hat das Modell beim ersten Versuch zerschossen (vom
-# Nutzer per Screenshot bestaetigt: role/exchangeId auf Material->DataItem).
-# Fix: nur "role" mappen (wie alle anderen HAS_DATA-Paarungen auch). Die
-# exchangeId bleibt als Spalte in der CSV erhalten (menschlich nachvollziehbar),
-# wird aber bewusst nicht ins Schema/den Graphen gemappt.
+# --- 4b) HAS_DATA: new label pair Flow -> DataItem ---
+# IMPORTANT: do NOT set a new property on the SHARED HAS_DATA type. HAS_DATA
+# is used by several label pairs (Material->DataItem, Process->DataItem,
+# ...); a property belongs to the TYPE, not to the individual pairing -- the Data
+# Importer then demands a field for it in EVERY mapping of that type ("Must
+# be specified"), also for the existing pairings that do not have this column
+# at all. That is exactly what broke the model on the first attempt
+# (confirmed in the UI: role/exchangeId on Material->DataItem).
+# Fix: map only "role" (like all the other HAS_DATA pairings). The
+# exchangeId stays in the CSV as a column (human-readable),
+# but is deliberately not mapped into the schema/graph.
 $hasDataType = $graphSchema.relationshipTypes | Where-Object { $_.token -eq "HAS_DATA" }
-if (-not $hasDataType) { throw "relationshipType 'HAS_DATA' nicht gefunden -- Abbruch." }
+if (-not $hasDataType) { throw "relationshipType 'HAS_DATA' not found -- aborting." }
 
 $hdRId = New-RId
 $hasDataFlowRObj = [PSCustomObject]@{
@@ -363,7 +362,7 @@ $hasDataFlowRObj = [PSCustomObject]@{
     to = [PSCustomObject]@{ '$ref' = "#$($dataItemNodeObj.'$id')" }
 }
 $graphSchema.relationshipObjectTypes = @($graphSchema.relationshipObjectTypes) + $hasDataFlowRObj
-Write-Output "[OK] HAS_DATA neues Label-Paar Flow->DataItem: relationshipObjectType=$hdRId (keine neue Property auf dem geteilten Typ)"
+Write-Output "[OK] HAS_DATA new label pair Flow->DataItem: relationshipObjectType=$hdRId (no new property on the shared type)"
 
 $hasDataMapping = [PSCustomObject]@{
     relationship = [PSCustomObject]@{ '$ref' = "#$hdRId" }
@@ -375,9 +374,9 @@ $hasDataMapping = [PSCustomObject]@{
     toMappings = [PSCustomObject]@{ ($dataItemIdProp.property.'$ref') = "to_id" }
 }
 $graphMapping.relationshipMappings = @($graphMapping.relationshipMappings) + $hasDataMapping
-Write-Output "[OK] relationshipMapping fuer HAS_DATA (Flow->DataItem, nur role) ergaenzt."
+Write-Output "[OK] relationshipMapping for HAS_DATA (Flow->DataItem, role only) added."
 
-# --- 4c) tableSchemas fuer die zwei neuen CSVs ergaenzen ---
+# --- 4c) add tableSchemas for the two new CSVs ---
 $dfTableSchema = [PSCustomObject]@{
     name = "r_5_DERIVED_FROM_ImpactResult_TO_Flow.csv"; expanded = $true
     fields = @(
@@ -398,13 +397,13 @@ $hdTableSchema = [PSCustomObject]@{
 }
 $tableSchemas = @($tableSchemas) + $dfTableSchema + $hdTableSchema
 $model.dataModel.graphMappingRepresentation.dataSourceSchema.tableSchemas = $tableSchemas
-Write-Output "[OK] tableSchemas fuer die 2 neuen CSVs ergaenzt."
+Write-Output "[OK] tableSchemas for the 2 new CSVs added."
 
 # ------------------------------------------------------------
-# Schreiben (BOM-frei)
+# Write (without BOM)
 # ------------------------------------------------------------
 $outJsonText = $model | ConvertTo-Json -Depth 100
 $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 [System.IO.File]::WriteAllText($OutJson, $outJsonText, $utf8NoBom)
 Write-Output ""
-Write-Output "Geschrieben: $OutJson"
+Write-Output "Written: $OutJson"

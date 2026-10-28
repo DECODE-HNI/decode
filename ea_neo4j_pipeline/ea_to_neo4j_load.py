@@ -1,39 +1,39 @@
 """
 ea_to_neo4j_load.py
 
-Zweiter Schritt der EA -> Neo4j Pipeline (siehe ea_to_neo4j_mapping.md).
-Laedt die von ea_xmi_extract.py erzeugten CSVs (ea_extract/ea_<Label>.csv fuer
-Knoten, ea_extract/ea_rel_<TYPE>.csv fuer Beziehungen) per Bolt-Treiber in die
-bestehende Neo4j-Instanz. Bewusst dumm gehalten -- alle Label-/Typ-Entscheidungen
-und die GUID-Aufloesung sind bereits im Extraktor passiert.
+Second step of the EA -> Neo4j pipeline (see ea_to_neo4j_mapping.md).
+Loads the CSVs produced by ea_xmi_extract.py (ea_extract/ea_<Label>.csv for
+nodes, ea_extract/ea_rel_<TYPE>.csv for relationships) into the existing
+Neo4j instance via the Bolt driver. Deliberately kept dumb -- all label/type
+decisions and the GUID resolution already happened in the extractor.
 
-Zugangsdaten NUR ueber Umgebungsvariablen (nie als Skript-Argument, nie
-hartkodiert), analog zu load_has_flow_characterizes.py:
-    NEO4J_URI       z.B. bolt://localhost:7687
-    NEO4J_USER      z.B. neo4j
+Credentials ONLY via environment variables (never as a script argument, never
+hard-coded), analogous to load_has_flow_characterizes.py:
+    NEO4J_URI       e.g. bolt://localhost:7687
+    NEO4J_USER      e.g. neo4j
     NEO4J_PASSWORD
 
-MERGE-Verhalten:
-- Knoten: MERGE auf (Label, id), danach SET n += row (nur nicht-leere Properties
-  sind im CSV enthalten, siehe ea_xmi_extract.py) -- bestehende Knoten (z.B.
-  FUNC_GRASP) werden angereichert, nicht ersetzt.
-- Process Element (-> :Process): zusaetzliche :REFERENCES-Kante, wenn processRef
-  gesetzt ist und vom eigenen id abweicht (siehe Mapping-Doku Abschnitt 4).
-- Product Element auf Part-Ebene: :USES_MATERIAL-Kante zum in materialRef
-  genannten Material, wenn gesetzt (Ziel-Material muss bereits existieren --
-  kein Auto-Anlegen, MATCH statt MERGE). Ersetzt dabei jede zuvor bestehende
-  :USES_MATERIAL-Kante des Parts zu einem ANDEREN Material -- ein Part
-  besteht nicht aus zwei Materialien gleichzeitig, materialRef ist die
-  alleinige Quelle der Wahrheit fuer diese Zuordnung, nicht additiv.
-- Beziehungen aus ea_rel_*.csv: MERGE auf (from_id, to_id, Typ) -- fuer
-  EA-Traces ohne bekannte Parallelkanten-Problematik ausreichend (anders als
-  HAS_FLOW/CHARACTERIZES in Kanal B, siehe HANDOFF_CONTEXT_V2.md Abschnitt 4).
+MERGE behaviour:
+- Nodes: MERGE on (label, id), then SET n += row (the CSV only contains
+  non-empty properties, see ea_xmi_extract.py) -- existing nodes (e.g.
+  FUNC_GRASP) are enriched, not replaced.
+- Process Element (-> :Process): additional :REFERENCES edge if processRef
+  is set and differs from the node's own id (see mapping doc, section 4).
+- Product Element at part level: :USES_MATERIAL edge to the material named in
+  materialRef, if set (the target material must already exist -- no
+  auto-creation, MATCH instead of MERGE). This replaces any existing
+  :USES_MATERIAL edge of the part to a DIFFERENT material -- a part does not
+  consist of two materials at once, materialRef is the sole source of truth
+  for this assignment, not additive.
+- Relationships from ea_rel_*.csv: MERGE on (from_id, to_id, type) -- sufficient
+  for EA traces without known parallel-edge issues (unlike HAS_FLOW/CHARACTERIZES
+  in channel B, see ../lca_bulk_load/README.md).
 
-Es werden NUR Knoten/Kanten aus den CSVs gemerged -- nichts wird geloescht.
-Ein Full-Rebuild wie bei Kanal B ist hier bewusst nicht vorgesehen, da EA-Daten
-inkrementell aus einem laufenden SysML-Modell kommen.
+ONLY nodes/edges from the CSVs are merged -- nothing is deleted.
+A full rebuild as in channel B is deliberately not provided here, because EA data
+arrives incrementally from a running SysML model.
 
-Aufruf:
+Usage:
     pip install neo4j
     $env:NEO4J_URI = "bolt://localhost:7687"
     $env:NEO4J_USER = "neo4j"
@@ -48,8 +48,8 @@ import os
 import sys
 import time
 
-# Tags mit Typ "Real" bzw. "Boolean" im RFLPV2-Profil -- werden vor dem Laden
-# konvertiert, damit sie nicht als String im Graphen landen.
+# Tags of type "Real" or "Boolean" in the RFLPV2 profile -- converted before loading
+# so that they do not end up as strings in the graph.
 REAL_PROPERTIES = {
     "requirementParameter", "requirementPriority", "sustainabilityThreshold",
     "costs", "validationParameter", "verificationParameter",
@@ -74,7 +74,7 @@ def get_driver():
     password = os.environ.get("NEO4J_PASSWORD")
     missing = [n for n, v in [("NEO4J_URI", uri), ("NEO4J_USER", user), ("NEO4J_PASSWORD", password)] if not v]
     if missing:
-        print(f"Fehlende Umgebungsvariablen: {', '.join(missing)}", file=sys.stderr)
+        print(f"Missing environment variables: {', '.join(missing)}", file=sys.stderr)
         sys.exit(1)
     return GraphDatabase.driver(uri, auth=(user, password))
 
@@ -94,7 +94,7 @@ def coerce_row(row):
             try:
                 out[k] = float(v)
             except ValueError:
-                print(f"WARNUNG: {k}={v!r} nicht als Zahl parsbar, bleibt String.", file=sys.stderr)
+                print(f"WARNING: {k}={v!r} cannot be parsed as a number, stays a string.", file=sys.stderr)
                 out[k] = v
         elif k in BOOLEAN_PROPERTIES:
             out[k] = str(v).strip().lower() == "true"
@@ -118,7 +118,7 @@ def run_batches(driver, database, query, rows, batch_size, label):
         for batch in chunked(rows, batch_size):
             session.run(query, rows=batch).consume()
             done += len(batch)
-    print(f"  [{label}] {done}/{total} Zeilen in {time.time()-t0:.1f}s")
+    print(f"  [{label}] {done}/{total} rows in {time.time()-t0:.1f}s")
 
 
 NODE_MERGE_QUERY = """
@@ -164,7 +164,7 @@ SET r.sourceStereotype = row.sourceStereotype,
 def load_nodes(driver, database, extract_dir, batch_size):
     node_files = sorted(glob.glob(os.path.join(extract_dir, "ea_*.csv")))
     node_files = [f for f in node_files if "ea_rel_" not in os.path.basename(f)]
-    id_index = {}  # label -> set(ids), fuer die Abschlusskontrolle
+    id_index = {}  # label -> set(ids), for the final check
 
     for path in node_files:
         label = os.path.basename(path)[len("ea_"):-len(".csv")]
@@ -181,9 +181,9 @@ def load_nodes(driver, database, extract_dir, batch_size):
                 for batch in chunked(rows, batch_size):
                     result = session.run(PART_USES_MATERIAL_QUERY, rows=batch)
                     for record in result:
-                        print(f"  WARNUNG: materialRef={record['missing_material_ref']!r} auf "
-                              f"Part {record['part_id']} verweist auf kein bestehendes "
-                              f":Material -- Kante nicht angelegt.", file=sys.stderr)
+                        print(f"  WARNING: materialRef={record['missing_material_ref']!r} on "
+                              f"part {record['part_id']} points to no existing "
+                              f":Material -- edge not created.", file=sys.stderr)
     return id_index
 
 
@@ -216,12 +216,12 @@ def main():
     args = ap.parse_args()
 
     if not os.path.isdir(args.extract_dir):
-        print(f"FEHLER: {args.extract_dir} existiert nicht -- erst ea_xmi_extract.py laufen lassen.", file=sys.stderr)
+        print(f"ERROR: {args.extract_dir} does not exist -- run ea_xmi_extract.py first.", file=sys.stderr)
         sys.exit(1)
 
     driver = get_driver()
     driver.verify_connectivity()
-    print("Verbindung zu Neo4j hergestellt.")
+    print("Connected to Neo4j.")
 
     if not args.skip_constraints:
         ensure_constraints(driver, args.database)
@@ -235,7 +235,7 @@ def main():
             "RETURN labels(n) AS labels, n.sourceStereotype AS stereotype, count(*) AS n "
             "ORDER BY labels, stereotype"
         )
-        print("\nKontrollzaehlung (nur EA-importierte Knoten, per sourceStereotype erkennbar):")
+        print("\nControl count (EA-imported nodes only, identified by sourceStereotype):")
         for record in result:
             print(f"  {record['labels']} <- {record['stereotype']}: {record['n']}")
 

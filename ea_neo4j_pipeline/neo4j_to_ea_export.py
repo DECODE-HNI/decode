@@ -1,76 +1,76 @@
 """
 neo4j_to_ea_export.py
 
-Dritte Komponente der EA <-> Neo4j Pipeline (siehe ea_to_neo4j_mapping.md,
-Abschnitt 7 -- "Ruecklauf: Neo4j -> EA"). Liest den AKTUELLEN Stand des
-bestehenden Neo4j-Wissensgraphen rein lesend aus und erzeugt daraus eine
-XMI-2.1-Datei im selben Dialekt, den ea_xmi_extract.py einliest und der gegen
-den echten EA-Export rflpv2_package.xml verifiziert wurde. Die Datei ist zum
-Import in EA gedacht ueber Project > Model Exchange > Import Package from XMI.
+Third component of the EA <-> Neo4j pipeline (see ea_to_neo4j_mapping.md,
+section 7 -- "Return path: Neo4j -> EA"). Reads the CURRENT state of the
+existing Neo4j knowledge graph (read-only) and generates an XMI 2.1 file from it
+in the same dialect that ea_xmi_extract.py reads and that was verified against
+the real EA export rflpv2_package.xml. The file is meant to be imported into EA
+via Project > Model Exchange > Import Package from XMI.
 
-Richtung: Neo4j -> EA (Bootstrap/Spiegelung des Ist-Zustands). Das ist NICHT
-die Umkehrung von ea_to_neo4j_load.py -- es wird nichts in Neo4j veraendert.
+Direction: Neo4j -> EA (bootstrap/mirroring of the current state). This is NOT
+the inverse of ea_to_neo4j_load.py -- nothing in Neo4j is changed.
 
-Zugangsdaten NUR ueber Umgebungsvariablen (nie als Skript-Argument, nie
-hartkodiert), wie bei den anderen Skripten dieser Pipeline:
-    NEO4J_URI       z.B. bolt://localhost:7687
-    NEO4J_USER      z.B. neo4j
+Credentials ONLY via environment variables (never as a script argument, never
+hard-coded), as with the other scripts of this pipeline:
+    NEO4J_URI       e.g. bolt://localhost:7687
+    NEO4J_USER      e.g. neo4j
     NEO4J_PASSWORD
 
-WICHTIG -- vor dem Import in EA lesen:
-- EAs XMI-Import matched Elemente nur ueber ihre GUID (xmi:id), nicht ueber
-  Business-Keys/Namen. Dieses Skript vergibt deterministische IDs
-  ("EAID_<BusinessKey>"), die bei erneutem Lauf stabil bleiben. Euer
-  bestehendes rflpv2.qea-Projekt hat aber FUNC_GRASP, SP_PARALLEL,
-  ART_CUSTOM/ASSY_CUSTOM/PART_CUSTOM_CONTACT, REQ_COMPAT bereits von Hand
-  angelegt, mit eigenen, ZUFAELLIGEN GUIDs. Ein Import dieser Datei in
-  DASSELBE Projekt legt fuer diese Elemente DUPLIKATE an statt sie zu mergen.
-  Empfehlung: Import in ein NEUES, leeres EA-Projekt (mit importiertem
-  RFLPV2-Profil), um den echten Ist-Zustand des Graphen sauber zu spiegeln.
-  rflpv2.qea bleibt euer separates Hand-Testprojekt.
-- Umfang (28.08.2026 im Chat entschieden): voller Graph, keine Filterung.
-- Requirement-Level: alle bestehenden :Requirement-Knoten werden als
-  System Requirement exportiert -- strukturell begruendet, nicht geraten:
-  alle 24 haben eine SPECIFIED_BY-Kante zu einer quantifizierten/technischen
-  Specification (valueNumber+unit+toleranceMin/Max bzw. "engineering
-  target/criterion"-Rollentext), das ist die Signatur bereits formalisierter,
-  abgeleiteter Requirements -- nicht die von rohen, unformalisierten
-  Kundenwuenschen (:CustomerNeed gibt es im Bestand ohnehin noch nicht,
-  0 Knoten). Siehe ea_to_neo4j_mapping.md Abschnitt 7 fuer die Herleitung.
-- Bekannte, bewusste Luecken (Neo4j-Properties ohne Tag im RFLPV2-Profil,
-  werden NICHT exportiert, gehen also beim Roundtrip nicht "verloren" im
-  Sinne von geloescht -- sie bleiben in Neo4j, tauchen nur in EA nicht auf):
+IMPORTANT -- read before importing into EA:
+- EA's XMI import matches elements only via their GUID (xmi:id), not via
+  business keys/names. This script assigns deterministic IDs
+  ("EAID_<BusinessKey>") that stay stable on re-runs. An existing hand-built
+  EA project, however, contains elements such as FUNC_GRASP, SP_PARALLEL,
+  ART_CUSTOM/ASSY_CUSTOM/PART_CUSTOM_CONTACT, REQ_COMPAT created by hand with
+  their own, RANDOM GUIDs. Importing this file into the SAME project creates
+  DUPLICATES for those elements instead of merging them.
+  Recommendation: import into a NEW, empty EA project (with the imported
+  RFLPV2 profile) to mirror the graph's actual current state cleanly.
+  The reference project rflpv2.qea remains a separate hand-built test project.
+- Scope (decided 2026-08-28): full graph, no filtering.
+- Requirement level: all existing :Requirement nodes are exported as
+  System Requirement -- structurally justified, not guessed:
+  all 24 have a SPECIFIED_BY edge to a quantified/technical
+  Specification (valueNumber+unit+toleranceMin/Max or an "engineering
+  target/criterion" role text), which is the signature of already formalised,
+  derived requirements -- not of raw, unformalised
+  customer wishes (:CustomerNeed does not exist in the data yet,
+  0 nodes). See ea_to_neo4j_mapping.md section 7 for the derivation.
+- Known, deliberate gaps (Neo4j properties without a tag in the RFLPV2 profile,
+  NOT exported, so they are not "lost" on a round trip in the sense of
+  deleted -- they stay in Neo4j, they just do not show up in EA):
   Function.input/output/constraintText, SolutionPrinciple.physicalPrinciple/
   status, Process.technology/geographicalLocation/dataAcquisition/status/
   source/sourceDatabase/referenceYear, Artifact/Assembly/Part.variant(Family)/
   manufacturer/mass_g/opening_mm/tcp_mm/evidenceLevel/validationRequired/
   description/status, Requirement.requirementType/statement/priority/status
-  (priority ist in Neo4j ein String-Enum "must"/"should", das Profil-Tag
-  requirementPriority ist aber vom Typ Real -- keine verlustfreie 1:1-
-  Umwandlung ohne erfundene Skala, deshalb bewusst leer gelassen statt
-  geraten). Freitext (z.B. Requirement.statement) hat aktuell KEIN
-  verifiziertes Ziel im XMI-Dialekt (EA-Notes-Encoding beim Schreiben wurde
-  in dieser Pipeline noch nie empirisch geprueft) -- absichtlich ausgelassen
-  statt einer ungetesteten XML-Struktur geraten.
+  (priority is a string enum "must"/"should" in Neo4j, but the profile tag
+  requirementPriority is of type Real -- no lossless 1:1
+  conversion without an invented scale, hence deliberately left empty instead of
+  guessed). Free text (e.g. Requirement.statement) currently has NO
+  verified target in the XMI dialect (EA's notes encoding on write
+  has never been checked empirically in this pipeline) -- deliberately omitted
+  rather than guessing an untested XML structure.
 
-Diagramm (28.08.2026 ergaenzt, auf ausdruecklichen Wunsch -- "auch wenn das
-etwas unuebersichtlich erscheint, brauchen wir auch einmal das ganze
-Diagramm in EA"): erzeugt zusaetzlich zu den nackten Modellelementen ein
-einziges Diagramm mit JEDEM Knoten und JEDER Kante, in einem einfachen
-Zeilen-Raster je Stereotyp-Kategorie (Function/Logical Element/Process
-Element/Product Element/System Requirement/...). Kein Anspruch auf huebsches
-Layout -- Ausgangspunkt zum Weiterbearbeiten per EAs eigenem "Layout
-Diagram". Das XML-Format des Diagramm-Blocks (<xmi:Extension>/<diagrams>,
-DUID-basierte Element-zu-Kante-Verknuepfung) wurde Zeichen fuer Zeichen
-gegen einen echten EA-Export (rflpv2_package.xml) verifiziert -- siehe
-build_diagram_xml() fuer die Herleitung. NICHT verifiziert ist bisher, ob
-der <diagrams>-Block *ohne* die begleitenden <elements>/<connectors>-
-Bloecke, die EAs eigener Exporter zusaetzlich schreibt, beim Import genuegt;
-einfache Elementerzeugung ganz ohne <xmi:Extension> funktioniert nachweislich
-(rflpv2_merge_test.xml), das Diagramm ist der noch ungetestete Teil. Mit
---no-diagram abschaltbar, falls der Import ohne Diagramm sauberer laeuft.
+Diagram (added 2026-08-28 on explicit request -- even if it looks somewhat
+cluttered, the whole graph is wanted on a diagram in EA at least once):
+in addition to the bare model elements this generates a
+single diagram with EVERY node and EVERY edge, in a simple
+row grid per stereotype category (Function/Logical Element/Process
+Element/Product Element/System Requirement/...). No claim to a pretty
+layout -- a starting point for further work with EA's own "Layout
+Diagram". The XML format of the diagram block (<xmi:Extension>/<diagrams>,
+DUID-based element-to-edge linking) was verified character by character
+against a real EA export (rflpv2_package.xml) -- see
+build_diagram_xml() for the derivation. NOT yet verified is whether
+the <diagrams> block *without* the accompanying <elements>/<connectors>
+blocks that EA's own exporter additionally writes suffices on import;
+plain element creation without any <xmi:Extension> demonstrably works
+(rflpv2_merge_test.xml), the diagram is the still untested part. Can be
+switched off with --no-diagram if the import runs cleaner without a diagram.
 
-Aufruf:
+Usage:
     pip install neo4j
     $env:NEO4J_URI = "bolt://localhost:7687"
     $env:NEO4J_USER = "neo4j"
@@ -89,9 +89,9 @@ from xml.sax.saxutils import quoteattr
 NAMESPACE_PREFIX = "RFLPV2_Sustainability_Process_Extension"
 NAMESPACE_URI = f"http://www.sparxsystems.com/profiles/{NAMESPACE_PREFIX}/1.0"
 
-# Neo4j-Label -> Export-Spezifikation. "query" liefert je Zeile mindestens
-# id/name; alles unter "tag" ist ein zusaetzliches Tagged-Value-Attribut auf
-# der Stereotyp-Anwendung (EA-Tag-Name -> Cypher-Alias in derselben Zeile).
+# Neo4j label -> export specification. "query" returns at least id/name per row;
+# everything under "tag" is an additional tagged-value attribute on
+# the stereotype application (EA tag name -> Cypher alias in the same row).
 NODE_SPECS = [
     {
         "neo4j_label": "Function",
@@ -139,7 +139,7 @@ NODE_SPECS = [
         "id_tag": "productID",
         "query": "MATCH (n:Part) RETURN n.id AS id, n.name AS name, "
                  "n.partType AS productType ORDER BY n.id",
-        "tags": ["productType"],  # materialRef wird separat ergaenzt, siehe load_materials()
+        "tags": ["productType"],  # materialRef is added separately, see load_materials()
     },
     {
         "neo4j_label": "Requirement",
@@ -148,8 +148,8 @@ NODE_SPECS = [
         "query": "MATCH (n:Requirement) RETURN n.id AS id, n.name AS name ORDER BY n.id",
         "tags": [],
     },
-    # Neue Labels -- aktuell 0 Knoten im Bestand (nur ueber EA neu angelegt),
-    # hier vorbereitet, damit kuenftige Daten ohne Skriptaenderung mitlaufen.
+    # New labels -- currently 0 nodes in the data (only created via EA),
+    # prepared here so that future data flows through without script changes.
     {
         "neo4j_label": "CustomerNeed",
         "stereotype": "Customer Need",
@@ -227,7 +227,7 @@ def get_driver():
     password = os.environ.get("NEO4J_PASSWORD")
     missing = [n for n, v in [("NEO4J_URI", uri), ("NEO4J_USER", user), ("NEO4J_PASSWORD", password)] if not v]
     if missing:
-        print(f"Fehlende Umgebungsvariablen: {', '.join(missing)}", file=sys.stderr)
+        print(f"Missing environment variables: {', '.join(missing)}", file=sys.stderr)
         sys.exit(1)
     return GraphDatabase.driver(uri, auth=(user, password))
 
@@ -249,8 +249,8 @@ def dep_id(stereotype, source_key, target_key):
 
 
 def attr(name, value):
-    """Liefert ' name="wert"' oder '' bei leerem Wert -- nur nicht-leere
-    Tagged Values erscheinen als Attribute, analog zum echten EA-Export."""
+    """Returns ' name="value"' or '' for an empty value -- only non-empty
+    tagged values appear as attributes, analogous to the real EA export."""
     if value is None or value == "":
         return ""
     return f' {name}={quoteattr(str(value))}'
@@ -268,8 +268,8 @@ def stereotype_app_xml(stereotype_name, base_attr_name, base_id, tag_attrs):
 
 
 def fetch_nodes(session):
-    """Liest alle Knoten je NODE_SPECS-Eintrag. Rueckgabe:
-    nodes_by_spec[i] = [ {id, name, ...tags} ], business_id_set (fuer Duplikat-Check)."""
+    """Reads all nodes per NODE_SPECS entry. Returns:
+    nodes_by_spec[i] = [ {id, name, ...tags} ], business_id_set (for the duplicate check)."""
     nodes_by_spec = []
     seen_ids = {}
     for spec in NODE_SPECS:
@@ -278,9 +278,9 @@ def fetch_nodes(session):
         for r in rows:
             bid = r["id"]
             if bid in seen_ids and seen_ids[bid] != spec["neo4j_label"]:
-                print(f"WARNUNG: Business-Key {bid!r} taucht sowohl unter "
-                      f"{seen_ids[bid]} als auch {spec['neo4j_label']} auf -- "
-                      f"Kollision, zweites Vorkommen wird trotzdem exportiert.",
+                print(f"WARNING: business key {bid!r} appears under both "
+                      f"{seen_ids[bid]} and {spec['neo4j_label']} -- "
+                      f"collision, second occurrence is exported anyway.",
                       file=sys.stderr)
             seen_ids[bid] = spec["neo4j_label"]
             parsed.append(dict(r))
@@ -293,17 +293,17 @@ def fetch_composition(session):
     edges = []
     for q in COMPOSITION_QUERIES:
         edges.extend((r["parent_id"], r["child_id"]) for r in session.run(q))
-    # Baum-Annahme pruefen: jedes Kind sollte genau einen Elternteil haben.
+    # Check the tree assumption: every child should have exactly one parent.
     parent_of = {}
     for parent_id, child_id in edges:
         if child_id in parent_of and parent_of[child_id] != parent_id:
-            print(f"WARNUNG: {child_id!r} hat mehr als einen Komposition-Elternteil "
-                  f"({parent_of[child_id]!r} und {parent_id!r}) -- nur der erste wird "
-                  f"als Komposition exportiert, keine Baum-Annahme mehr erfuellt.",
+            print(f"WARNING: {child_id!r} has more than one composition parent "
+                  f"({parent_of[child_id]!r} and {parent_id!r}) -- only the first is "
+                  f"exported as composition, the tree assumption no longer holds.",
                   file=sys.stderr)
             continue
         parent_of[child_id] = parent_id
-    print(f"  Komposition (HAS_COMPONENT): {len(parent_of)} Eltern-Kind-Kanten")
+    print(f"  Composition (HAS_COMPONENT): {len(parent_of)} parent-child edges")
     return parent_of
 
 
@@ -315,13 +315,13 @@ def fetch_materials(session):
     material_ref = {}
     for part_id, mats in by_part.items():
         if len(mats) > 1:
-            print(f"WARNUNG: Part {part_id!r} hat {len(mats)} USES_MATERIAL-Kanten "
-                  f"({mats}) -- Datenqualitaetsproblem (ein Part sollte genau ein "
-                  f"Material haben), materialRef wird NICHT gesetzt statt zu raten.",
+            print(f"WARNING: part {part_id!r} has {len(mats)} USES_MATERIAL edges "
+                  f"({mats}) -- data quality problem (a part should have exactly one "
+                  f"material), materialRef is NOT set instead of guessing.",
                   file=sys.stderr)
             continue
         material_ref[part_id] = mats[0]
-    print(f"  USES_MATERIAL: {len(material_ref)} Parts mit eindeutigem Material")
+    print(f"  USES_MATERIAL: {len(material_ref)} parts with a unique material")
     return material_ref
 
 
@@ -334,10 +334,10 @@ def fetch_dependencies(session):
     return deps
 
 
-# --- Diagramm-Layout: einfaches Zeilen-Raster je Stereotyp-Kategorie -------
-# Box-Groesse (90x70) und Spaltenabstand sind exakt aus einem echten
-# EA-Diagramm (rflpv2_package.xml, alle 15 Test-Elemente waren 90x70)
-# uebernommen, nicht erfunden.
+# --- Diagram layout: simple row grid per stereotype category ---------------
+# Box size (90x70) and column spacing are taken exactly from a real
+# EA diagram (rflpv2_package.xml, all 15 test elements were 90x70),
+# not invented.
 DIAGRAM_BOX_W, DIAGRAM_BOX_H = 90, 70
 DIAGRAM_COL_GAP, DIAGRAM_ROW_GAP = 40, 40
 DIAGRAM_COL_PITCH = DIAGRAM_BOX_W + DIAGRAM_COL_GAP
@@ -345,10 +345,10 @@ DIAGRAM_ROW_PITCH = DIAGRAM_BOX_H + DIAGRAM_ROW_GAP
 DIAGRAM_COLS_PER_BAND = 22
 DIAGRAM_BAND_GAP = 150
 
-# Verbatim aus einem echten EA-XMI-2.1-Export kopierte Diagramm-Stil-Blobs
-# (rflpv2_package.xml, Diagramm "Package1") -- opake, EA-interne
-# Anzeigeeinstellungen ohne Bezug zu konkreten Elementen, deshalb unveraendert
-# fuer jedes selbst erzeugte Diagramm wiederverwendbar.
+# Diagram style blobs copied verbatim from a real EA XMI 2.1 export
+# (rflpv2_package.xml, diagram "Package1") -- opaque, EA-internal
+# display settings unrelated to concrete elements, hence reusable unchanged
+# for every generated diagram.
 _DIAGRAM_STYLE1 = (
     "ShowPrivate=1;ShowProtected=1;ShowPublic=1;HideRelationships=0;Locked=0;"
     "Border=1;HighlightForeign=1;PackageContents=1;SequenceNotes=0;"
@@ -393,12 +393,12 @@ _DIAGRAM_PERSISTENTSTYLE = (
 
 
 def duid_for(business_key, used):
-    """8-Hex-Zeichen 'Display Unit ID', wie EA sie diagrammintern vergibt, um
-    Kanten mit ihren beiden Endpunkt-Shapes zu verknuepfen (siehe style=
-    "DUID=..." auf Shapes bzw. "EOID=...;SOID=..." auf Kanten in
-    rflpv2_package.xml). Muss nur innerhalb des Diagramms eindeutig sein,
-    nicht mit der echten xmi:id uebereinstimmen -- deterministisch aus dem
-    Business-Key abgeleitet (CRC32), mit Kollisions-Fallback."""
+    """8-hex-character 'display unit ID', as EA assigns them inside a diagram to link
+    edges with their two endpoint shapes (see style=
+    "DUID=..." on shapes and "EOID=...;SOID=..." on edges in
+    rflpv2_package.xml). Only has to be unique within the diagram,
+    need not match the real xmi:id -- derived deterministically from the
+    business key (CRC32), with a collision fallback."""
     base = zlib.crc32(business_key.encode("utf-8")) & 0xFFFFFFFF
     bump = 0
     while True:
@@ -411,7 +411,7 @@ def duid_for(business_key, used):
 
 def _diagram_connector_xml(connector_xid, source_duid, target_duid):
     if source_duid is None or target_duid is None:
-        return ""  # Endpunkt nicht auf dem Diagramm platziert -- sollte nicht vorkommen
+        return ""  # endpoint not placed on the diagram -- should not happen
     return (
         '\t\t\t\t\t<element geometry="SX=0;SY=0;EX=0;EY=0;EDGE=4;$LLB=;LLT=;LMT=;'
         'LMB=;LRT=;LRB=;IRHS=;ILHS=;Path=;" '
@@ -420,18 +420,18 @@ def _diagram_connector_xml(connector_xid, source_duid, target_duid):
     )
 
 
-# Sieben Diagramme statt einem (28.08.2026, auf Wunsch): ein
-# Requirements-Diagramm plus sechs BDD-Diagramme, je eins pro
-# NODE_SPECS-Kategorie (aufgeteilt nach Sparx-Skizze -- Req./Fun./Log./
-# Prod./Proc./TestC./TestScr., durch Relationstabellen statt In-Diagramm-
-# Kanten verbunden, siehe README). "neo4j_labels" waehlt, welche
-# NODE_SPECS-Eintraege (in Emission-Reihenfolge, je ein eigenes Band) auf
-# diesem Diagramm landen; "internal_composition" schaltet fuer das Product-
-# Element-Diagramm die HAS_COMPONENT-Kompositionskanten dazu (die einzigen
-# Kanten in diesem Datenmodell, die vollstaendig INNERHALB einer Kategorie
-# liegen -- alle Dependencies wie Realizes/Satisfies sind kategorieuebergreifend
-# und werden deshalb bewusst NICHT auf eines dieser Diagramme gezeichnet,
-# siehe ea_to_neo4j_mapping.md).
+# Seven diagrams instead of one (2026-08-28, on request): one
+# requirements diagram plus six BDD diagrams, one per
+# NODE_SPECS category (split following the Sparx sketch -- Req./Fun./Log./
+# Prod./Proc./TestC./TestScr., connected by relationship tables instead of in-diagram
+# edges, see README). "neo4j_labels" chooses which
+# NODE_SPECS entries (in emission order, one band each) land on
+# this diagram; "internal_composition" switches on the HAS_COMPONENT
+# composition edges for the product element diagram (the only
+# edges in this data model that lie entirely WITHIN one category --
+# all dependencies such as Realizes/Satisfies cross categories
+# and are therefore deliberately NOT drawn on any of these diagrams,
+# see ea_to_neo4j_mapping.md).
 DIAGRAM_SPECS = [
     ("EAID_DIAGRAM_REQUIREMENTS", "Requirements", ["Requirement"], False),
     ("EAID_DIAGRAM_FUNCTIONS", "Functions (BDD)", ["Function"], False),
@@ -444,8 +444,8 @@ DIAGRAM_SPECS = [
 
 
 def _one_diagram_xml(xmi_id, name, node_rows_by_label, parent_of, internal_composition):
-    """Elemente + (fuer das Product-Element-Diagramm) Kompositionskanten fuer
-    EIN Diagramm. node_rows_by_label: [(neo4j_label, rows)], je ein Band."""
+    """Elements + (for the product element diagram) composition edges for
+    ONE diagram. node_rows_by_label: [(neo4j_label, rows)], one band each."""
     used_duids = set()
     duid_by_id = {}
     shape_elements = []
@@ -477,7 +477,7 @@ def _one_diagram_xml(xmi_id, name, node_rows_by_label, parent_of, internal_compo
         placed = set(duid_by_id.keys())
         for child_id, parent_id in parent_of.items():
             if child_id not in placed or parent_id not in placed:
-                continue  # Elternteil/Kind nicht auf diesem Diagramm -- ueberspringen
+                continue  # parent/child not on this diagram -- skip
             aid = assoc_id(parent_id, child_id)
             connector_elements.append(
                 _diagram_connector_xml(aid, duid_by_id.get(child_id), duid_by_id.get(parent_id))
@@ -504,29 +504,28 @@ def _one_diagram_xml(xmi_id, name, node_rows_by_label, parent_of, internal_compo
 
 
 def build_diagram_xml(nodes_by_spec, parent_of, deps):
-    """Baut den <xmi:Extension>/<diagrams>-Block mit den 7 Diagrammen aus
-    DIAGRAM_SPECS (siehe dort). Jedes Diagramm bekommt sein eigenes,
-    unabhaengiges Zeilen-Raster-Layout (Baender je NODE_SPECS-Kategorie
-    innerhalb des Diagramms, z.B. Artifact/Assembly/Part als 3 Baender im
-    Product-Element-Diagramm). Kein Anspruch auf ein huebsches Layout, nur
-    ein reproduzierbarer Ausgangspunkt (in EA per "Layout Diagram"
-    weiter verfeinerbar).
+    """Builds the <xmi:Extension>/<diagrams> block with the 7 diagrams from
+    DIAGRAM_SPECS (see there). Each diagram gets its own,
+    independent row-grid layout (bands per NODE_SPECS category
+    within the diagram, e.g. Artifact/Assembly/Part as 3 bands in the
+    product element diagram). No claim to a pretty layout, just
+    a reproducible starting point (can be refined further in EA via "Layout Diagram").
 
-    `deps` wird entgegengenommen, aber bewusst NICHT auf eines der 7
-    Diagramme gezeichnet -- alle Dependency-Beziehungen in diesem
-    Datenmodell verbinden zwei verschiedene Kategorien (z.B. Realizes:
-    Logical Element -> Function), koennen also auf keinem der strikt
-    einkategorigen Diagramme ueberhaupt beide Endpunkte haben. Die Kanten
-    existieren weiterhin vollstaendig im Modell (ueber build_xmi()) und sind
-    in EA jederzeit ueber die Relationships eines Elements oder eine
-    Relationship-Matrix sichtbar -- nur eben nicht als Linie auf einem
-    dieser Diagramme.
+    `deps` is accepted but deliberately NOT drawn on any of the 7
+    diagrams -- all dependency relationships in this
+    data model connect two different categories (e.g. Realizes:
+    Logical Element -> Function), so on none of the strictly
+    single-category diagrams can both endpoints exist. The edges
+    still exist completely in the model (via build_xmi()) and are
+    visible in EA at any time via an element's relationships or a
+    relationship matrix -- just not as a line on one of
+    these diagrams.
 
-    Kanten-Richtung fuer die (einzige gezeichnete) Kantenart, Komposition:
-    SOID=Kind (das Ende mit aggregation="composite"), EOID=Elternteil --
-    dieselbe Regel wie bei den ownedEnd/ownedAttribute-Enden in build_xmi(),
-    empirisch an rflpv2_package.xml verifiziert (dortige Komposition
-    Block5->Block6->Block7: <connectors>-Quelle war jeweils das Kind)."""
+    Edge direction for the (only drawn) edge kind, composition:
+    SOID=child (the end with aggregation="composite"), EOID=parent --
+    the same rule as for the ownedEnd/ownedAttribute ends in build_xmi(),
+    empirically verified on rflpv2_package.xml (there the composition
+    Block5->Block6->Block7: the <connectors> source was always the child)."""
     rows_by_label = {spec["neo4j_label"]: rows for spec, rows in zip(NODE_SPECS, nodes_by_spec)}
 
     diagram_blocks = []
@@ -646,18 +645,18 @@ def main():
     ap.add_argument("--out", default="rflpv2_from_neo4j.xml", help="Ausgabedatei (XMI 2.1)")
     ap.add_argument("--database", default="neo4j")
     ap.add_argument("--no-diagram", action="store_true",
-                     help="Kein EA-Diagramm erzeugen, nur die nackten Modellelemente "
-                          "(z.B. falls der Import mit Diagramm-Block Probleme macht)")
+                     help="Do not generate an EA diagram, only the bare model elements "
+                          "(e.g. if the import with a diagram block causes problems)")
     args = ap.parse_args()
 
     driver = get_driver()
     driver.verify_connectivity()
-    print("Verbindung zu Neo4j hergestellt.\n")
+    print("Connected to Neo4j.\n")
 
     with driver.session(database=args.database) as session:
-        print("Lese Knoten:")
+        print("Reading nodes:")
         nodes_by_spec = fetch_nodes(session)
-        print("\nLese Komposition/Material/Beziehungen:")
+        print("\nReading composition/material/relationships:")
         parent_of = fetch_composition(session)
         material_ref = fetch_materials(session)
         deps = fetch_dependencies(session)
@@ -670,12 +669,12 @@ def main():
 
     total_nodes = sum(len(rows) for rows in nodes_by_spec)
     total_deps = sum(len(pairs) for _, pairs in deps)
-    print(f"\nFertig: {args.out}")
-    print(f"  {total_nodes} Knoten, {len(parent_of)} Kompositionskanten, {total_deps} Beziehungen")
+    print(f"\nDone: {args.out}")
+    print(f"  {total_nodes} nodes, {len(parent_of)} composition edges, {total_deps} relationships")
     if not args.no_diagram:
-        print(f"  + {len(DIAGRAM_SPECS)} Diagramme (Requirements, Functions, Logical Elements, "
-              f"Product Structure inkl. Kompositionskanten, Processes, Test Cases, Test Scenarios) "
-              f"(--no-diagram zum Abschalten)")
+        print(f"  + {len(DIAGRAM_SPECS)} diagrams (Requirements, Functions, Logical Elements, "
+              f"Product Structure incl. composition edges, Processes, Test Cases, Test Scenarios) "
+              f"(--no-diagram to switch off)")
 
 
 if __name__ == "__main__":

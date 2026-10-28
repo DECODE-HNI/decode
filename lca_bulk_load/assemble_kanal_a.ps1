@@ -13,11 +13,11 @@ $buildDir = "./scratch/rebuild/build"
 if (Test-Path $buildDir) { Remove-Item -Recurse -Force $buildDir }
 New-Item -ItemType Directory -Path $buildDir | Out-Null
 
-# JSON wurde bereits von patch_importer_model.ps1 direkt in $buildDir geschrieben,
-# bleibt unangetastet. Nur nochmal sicherstellen, dass es vorhanden ist.
+# The JSON was already written directly to $buildDir by patch_importer_model.ps1 and
+# stays untouched. Only make sure once more that it is present.
 $jsonInBuild = Join-Path $buildDir "neo4j_importer_model.json"
 
-# 1) Alle bestehenden CSVs kopieren, AUSSER den entfernten/ersetzten
+# 1) Copy all existing CSVs EXCEPT the removed/replaced ones
 $excluded = [System.Collections.Generic.HashSet[string]]::new([string[]]@(
     "Exchange.csv",
     "r_5_DERIVED_FROM_ImpactResult_TO_Exchange.csv",
@@ -35,18 +35,18 @@ foreach ($f in (Get-ChildItem $existingDir -Filter "*.csv")) {
     Copy-Item $f.FullName (Join-Path $buildDir $f.Name)
     $copied++
 }
-Write-Output "[OK] $copied unveraenderte CSVs aus dem bestehenden Modell kopiert."
+Write-Output "[OK] $copied unchanged CSVs copied from the existing model."
 
-# 2) Gemergte Process.csv/Flow.csv/ImpactCategory.csv einsetzen
+# 2) Insert the merged Process.csv/Flow.csv/ImpactCategory.csv
 foreach ($name in @("Process.csv", "Flow.csv", "ImpactCategory.csv")) {
     Copy-Item (Join-Path $mergedDir $name) (Join-Path $buildDir $name)
 }
-Write-Output "[OK] gemergte Process.csv/Flow.csv/ImpactCategory.csv eingesetzt."
+Write-Output "[OK] merged Process.csv/Flow.csv/ImpactCategory.csv inserted."
 
-# 3) Re-run patch_importer_model.ps1 damit die JSON sicher aktuell in $buildDir liegt
+# 3) Re-run patch_importer_model.ps1 so the JSON is certainly current in $buildDir
 & "./scratch/rebuild/patch_importer_model.ps1" | Out-Null
-Write-Output "[OK] neo4j_importer_model.json (gepatcht) liegt in $buildDir"
+Write-Output "[OK] neo4j_importer_model.json (patched) is in $buildDir"
 
 Write-Output ""
-Write-Output "Kanal-A-Build-Verzeichnis fertig: $buildDir"
-Get-ChildItem $buildDir | Measure-Object | ForEach-Object { Write-Output "Dateien total: $($_.Count)" }
+Write-Output "Channel A build directory ready: $buildDir"
+Get-ChildItem $buildDir | Measure-Object | ForEach-Object { Write-Output "Files in total: $($_.Count)" }

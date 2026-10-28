@@ -2,21 +2,21 @@
 ============================================================
 fix_legacy_exchange.ps1
 
-Behebt eine beim Entfernen von Exchange uebersehene Regression: die 9
-"Candidate"-Fertigungsprozesse (PROC_MJF, PROC_SLS, PROC_FFF, PROC_CNC,
-PROC_LASER, PROC_BEND, PROC_SILCAST, PROC_RUBBER, PROC_OVERMOLD) hatten
-36 echte HAS_EXCHANGE/REFERS_TO_FLOW-Verbindungen (Material-/Energie-Input,
-Bauteil-/Abfall-Output) -- ohne Migration waeren diese 9 Prozesse und ihre
-10 Flows (FLOW_PA12 etc.) isoliert geblieben.
+Fixes a regression overlooked when Exchange was removed: the 9
+"candidate" manufacturing processes (PROC_MJF, PROC_SLS, PROC_FFF, PROC_CNC,
+PROC_LASER, PROC_BEND, PROC_SILCAST, PROC_RUBBER, PROC_OVERMOLD) had
+36 real HAS_EXCHANGE/REFERS_TO_FLOW connections (material/energy input,
+part/waste output) -- without a migration these 9 processes and their
+10 flows (FLOW_PA12 etc.) would have remained isolated.
 
-Zusaetzlich: ImpactResult -[:DERIVED_FROM]-> Exchange (165 Zeilen, echte
-Hotspot-Provenienz-Verknuepfungen) und Exchange -[:HAS_DATA]-> DataItem
-(1 Zeile) haetten beim Entfernen von Exchange ebenfalls stillschweigend
-Daten verloren. Da eine Relationship in Neo4j nicht Ziel einer anderen
-Relationship sein kann (Exchange existiert nur noch als HAS_FLOW-Property,
-nicht mehr als Knoten), werden beide auf den jeweiligen FLOW-Knoten
-umgebogen, mit der urspruenglichen Exchange-ID als neue exchangeId-Property
--- die Praezision "von welchem Exchange" bleibt damit erhalten.
+In addition: ImpactResult -[:DERIVED_FROM]-> Exchange (165 rows, real
+hotspot provenance links) and Exchange -[:HAS_DATA]-> DataItem
+(1 row) would likewise have silently lost data when Exchange was removed.
+Since a relationship in Neo4j cannot be the target of another
+relationship (Exchange now exists only as a HAS_FLOW property,
+no longer as a node), both are redirected to the respective FLOW node,
+with the original Exchange id as a new exchangeId property
+-- so the precision "from which Exchange" is preserved.
 ============================================================
 #>
 
@@ -40,7 +40,7 @@ function Write-UnquotedCsv {
     end { [System.IO.File]::WriteAllLines($Path, $lines, (New-Object System.Text.UTF8Encoding($false))) }
 }
 
-# --- Lookups aus den alten (jetzt entfernten) Exchange-Strukturen ---
+# --- Lookups from the old (now removed) Exchange structures ---
 $exchanges = Import-Csv (Join-Path $v7 "Exchange.csv")
 $hasExchange = Import-Csv (Join-Path $v7 "r_20_HAS_EXCHANGE_Process_TO_Exchange.csv")
 $refersToFlow = Import-Csv (Join-Path $v7 "r_31_REFERS_TO_FLOW_Exchange_TO_Flow.csv")
@@ -50,14 +50,14 @@ foreach ($row in $hasExchange) { $exchangeToProcess[$row.to_id] = $row.from_id }
 $exchangeToFlow = @{}
 foreach ($row in $refersToFlow) { $exchangeToFlow[$row.from_id] = $row.to_id }
 
-Write-Output "[INFO] $($exchanges.Count) Exchanges, $($exchangeToProcess.Count) Process-Zuordnungen, $($exchangeToFlow.Count) Flow-Zuordnungen geladen."
+Write-Output "[INFO] $($exchanges.Count) exchanges, $($exchangeToProcess.Count) process assignments, $($exchangeToFlow.Count) flow assignments loaded."
 
-# --- 1) 36 legacy HAS_FLOW-Zeilen erzeugen (exchangeId = Original-Exchange-ID) ---
+# --- 1) Create 36 legacy HAS_FLOW rows (exchangeId = original exchange id) ---
 $hfCols = @('exchangeId','from_id','to_id','amount','unit','direction','location','quantitativeReference','ratioToReference','dataMaturity','referenceYear','uncertainty','comment')
 $legacyHasFlow = foreach ($ex in $exchanges) {
     $procId = $exchangeToProcess[$ex.id]
     $flowId = $exchangeToFlow[$ex.id]
-    if (-not $procId -or -not $flowId) { Write-Output "[WARNUNG] Keine vollstaendige Zuordnung fuer $($ex.id) -- uebersprungen."; continue }
+    if (-not $procId -or -not $flowId) { Write-Output "[WARNING] No complete assignment for $($ex.id) -- skipped."; continue }
     [PSCustomObject]@{
         exchangeId = $ex.id
         from_id = $procId
@@ -74,40 +74,40 @@ $legacyHasFlow = foreach ($ex in $exchanges) {
         comment = $ex.comment
     }
 }
-Write-Output "[OK] $($legacyHasFlow.Count) legacy HAS_FLOW-Zeilen erzeugt (fuer die 9 Candidate-Fertigungsprozesse)."
+Write-Output "[OK] $($legacyHasFlow.Count) legacy HAS_FLOW rows created (for the 9 candidate manufacturing processes)."
 
-# An die gemergte HAS_FLOW.csv anhaengen (Kanal B)
+# Append to the merged HAS_FLOW.csv (channel B)
 $existingMergedHf = Import-Csv (Join-Path $mergedDir "r_HAS_FLOW_Process_TO_Flow.csv")
 $combinedHf = @($existingMergedHf) + @($legacyHasFlow)
 $dupCheck = $combinedHf | Group-Object exchangeId | Where-Object { $_.Count -gt 1 }
-if ($dupCheck.Count -gt 0) { throw "exchangeId-Duplikate nach Anhaengen der legacy HAS_FLOW-Zeilen: $($dupCheck.Name -join ', ')" }
+if ($dupCheck.Count -gt 0) { throw "exchangeId duplicates after appending the legacy HAS_FLOW rows: $($dupCheck.Name -join ', ')" }
 $combinedHf | Write-UnquotedCsv -Path (Join-Path $mergedDir "r_HAS_FLOW_Process_TO_Flow.csv") -Columns $hfCols
 $combinedHf | Write-UnquotedCsv -Path (Join-Path $kanalBDir "HAS_FLOW.csv") -Columns $hfCols
-Write-Output "[OK] HAS_FLOW.csv aktualisiert: $($combinedHf.Count) Zeilen total (vorher $($existingMergedHf.Count))."
+Write-Output "[OK] HAS_FLOW.csv updated: $($combinedHf.Count) rows in total (before: $($existingMergedHf.Count))."
 
-# --- 2) DERIVED_FROM: Exchange -> Flow umbiegen, exchangeId als neue Property ---
+# --- 2) DERIVED_FROM: redirect Exchange -> Flow, exchangeId as a new property ---
 $derivedFrom = Import-Csv (Join-Path $v7 "r_5_DERIVED_FROM_ImpactResult_TO_Exchange.csv")
 $dfCols = @('from_id','to_id','exchangeId','contribution')
 $newDerivedFrom = foreach ($row in $derivedFrom) {
     $flowId = $exchangeToFlow[$row.to_id]
-    if (-not $flowId) { Write-Output "[WARNUNG] DERIVED_FROM: keine Flow-Zuordnung fuer $($row.to_id) -- uebersprungen."; continue }
+    if (-not $flowId) { Write-Output "[WARNING] DERIVED_FROM: no flow assignment for $($row.to_id) -- skipped."; continue }
     [PSCustomObject]@{ from_id = $row.from_id; to_id = $flowId; exchangeId = $row.to_id; contribution = $row.contribution }
 }
 $newDerivedFrom | Write-UnquotedCsv -Path (Join-Path $buildDir "r_5_DERIVED_FROM_ImpactResult_TO_Flow.csv") -Columns $dfCols
-Write-Output "[OK] r_5_DERIVED_FROM_ImpactResult_TO_Flow.csv erzeugt: $($newDerivedFrom.Count) Zeilen (Exchange->Flow umgebogen, exchangeId erhalten)."
+Write-Output "[OK] r_5_DERIVED_FROM_ImpactResult_TO_Flow.csv created: $($newDerivedFrom.Count) rows (Exchange->Flow redirected, exchangeId preserved)."
 
-# --- 3) HAS_DATA (Exchange->DataItem): Exchange -> Flow umbiegen ---
+# --- 3) HAS_DATA (Exchange->DataItem): redirect Exchange -> Flow ---
 $hasDataEx = Import-Csv (Join-Path $v7 "r_15_HAS_DATA_Exchange_TO_DataItem.csv")
 $hdCols = @('from_id','to_id','exchangeId','role')
 $newHasDataFlow = foreach ($row in $hasDataEx) {
     $flowId = $exchangeToFlow[$row.from_id]
-    if (-not $flowId) { Write-Output "[WARNUNG] HAS_DATA: keine Flow-Zuordnung fuer $($row.from_id) -- uebersprungen."; continue }
+    if (-not $flowId) { Write-Output "[WARNING] HAS_DATA: no flow assignment for $($row.from_id) -- skipped."; continue }
     [PSCustomObject]@{ from_id = $flowId; to_id = $row.to_id; exchangeId = $row.from_id; role = $row.role }
 }
 $newHasDataFlow | Write-UnquotedCsv -Path (Join-Path $buildDir "r_15b_HAS_DATA_Flow_TO_DataItem.csv") -Columns $hdCols
-Write-Output "[OK] r_15b_HAS_DATA_Flow_TO_DataItem.csv erzeugt: $($newHasDataFlow.Count) Zeile(n)."
+Write-Output "[OK] r_15b_HAS_DATA_Flow_TO_DataItem.csv created: $($newHasDataFlow.Count) row(s)."
 
 Write-Output ""
-Write-Output "Fertig. Naechster Schritt: patch_importer_model.ps1 um die zwei neuen"
-Write-Output "relationshipMappings ergaenzen (DERIVED_FROM ImpactResult->Flow mit neuer"
-Write-Output "exchangeId-Property, HAS_DATA zusaetzliches Label-Paar Flow->DataItem)."
+Write-Output "Done. Next step: extend patch_importer_model.ps1 with the two new"
+Write-Output "relationshipMappings (DERIVED_FROM ImpactResult->Flow with a new"
+Write-Output "exchangeId property, HAS_DATA additional label pair Flow->DataItem)."

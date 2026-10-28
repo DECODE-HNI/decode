@@ -1,44 +1,44 @@
 <#
 .SYNOPSIS
-  Rueckrichtung AAS -> Neo4j: liest eine unserer drei AAS-Environment-JSON-Dateien
-  (White/Grey/Black Box, siehe AAS-Boxenmodell-Dokument Abschnitt 4-6) und erzeugt
-  daraus ein Cypher-Skript, das die passenden Knoten/Kanten importiert.
+  Reverse direction AAS -> Neo4j: reads one of our three AAS environment JSON files
+  (white/grey/black box, see README.md in this folder) and generates from it a
+  Cypher script that imports the matching nodes/edges.
 
-  Designentscheidung (siehe Abschnitt 7 "Mapping zu Neo4j" im Artifact):
-  - Importierte Process-/Assessment-Knoten bekommen ein "EXT_"-Praefix und
-    sourceAAS/traceabilityLevel-Properties -- sie werden NICHT stillschweigend
-    mit den internen PROC_CNC/ASS_PREC_AL7075-Knoten verschmolzen. Ein von
-    aussen per AAS empfangener Datensatz ist nicht automatisch identisch mit
-    der eigenen internen Modellierung, auch wenn er denselben Sachverhalt
-    beschreibt -- Abgleich waere ein eigener, spaeterer Schritt.
-  - Flow-Knoten (UUIDs wie "ae206e6f-...") werden dagegen unveraendert
-    wiederverwendet -- das sind global geteilte Referenzidentitaeten, kein
-    organisationsinternes Konstrukt.
-  - White Box: volle Process/Flow/HAS_FLOW-Rekonstruktion + Assessment/
-    ImpactResult aus CarbonFootprintSummary, traceabilityLevel='white'.
-  - Grey Box: Assessment/ImpactResult aus der PCF-Deklaration,
-    traceabilityLevel='grey', PLUS Versuch, jede FragmentReference gegen die
-    tatsaechlich vorhandenen HAS_FLOW.exchangeId-Werte im GRAPH aufzuloesen
-    (das ist die eigentliche Grey-Box-Nutzung: partielle Verifizierbarkeit).
-  - Black Box: Assessment-Knoten + je Indikator eine :DECLARES-Kante zu dem
-    entsprechenden ImpactCategory-Knoten (traceabilityLevel='black' auf der
-    Kante). Bewusst NICHT :CHARACTERIZES, obwohl strukturell identisch --
-    :CHARACTERIZES ist aus echten Elementarfluessen berechnet, :DECLARES ist
-    eine unverifizierte Lieferantenangabe. Getrennter Kantentyp macht diesen
-    Unterschied sichtbar, erlaubt aber trotzdem einheitliche Graph-Traversal-
-    Queries ueber ImpactCategory hinweg -- wichtig, sobald mehrere Bauteile
-    im Graph verglichen werden sollen. Angehaengte Datei nur als
-    unverarbeiteter String, keine Aufloesungsversuche.
-  - Alle drei Boxen: die komplette Roh-JSON des importierten Submodells wird
-    zusaetzlich als String-Property auf dem jeweiligen Ergebnisknoten
-    gespeichert (rawSubmodelJson) -- Dekomposition fuer Abfragbarkeit, Blob
-    fuer exakte Audit-Spur, was der Lieferant wortwoertlich deklariert hat.
+  Design decision (see the mapping-to-Neo4j section of README.md):
+  - Imported Process/Assessment nodes get an "EXT_" prefix and
+    sourceAAS/traceabilityLevel properties -- they are NOT silently
+    merged with the internal PROC_CNC/ASS_PREC_AL7075 nodes. A dataset
+    received from outside via AAS is not automatically identical to
+    one's own internal modelling, even if it describes the same facts --
+    reconciliation would be a separate, later step.
+  - Flow nodes (UUIDs such as "ae206e6f-...") on the other hand are reused
+    unchanged -- they are globally shared reference identities, not an
+    organisation-internal construct.
+  - White box: full Process/Flow/HAS_FLOW reconstruction + Assessment/
+    ImpactResult from CarbonFootprintSummary, traceabilityLevel='white'.
+  - Grey box: Assessment/ImpactResult from the PCF declaration,
+    traceabilityLevel='grey', PLUS an attempt to resolve every FragmentReference
+    against the HAS_FLOW.exchangeId values actually present in the GRAPH
+    (that is the real grey-box use: partial verifiability).
+  - Black box: Assessment node + one :DECLARES edge per indicator to the
+    corresponding ImpactCategory node (traceabilityLevel='black' on the
+    edge). Deliberately NOT :CHARACTERIZES, although structurally identical --
+    :CHARACTERIZES is computed from real elementary flows, :DECLARES is
+    an unverified supplier statement. A separate edge type makes this
+    difference visible, but still allows uniform graph traversal
+    queries across ImpactCategory -- important as soon as several parts
+    are to be compared in the graph. The attached file is stored only as an
+    unprocessed string, no resolution attempts.
+  - All three boxes: the complete raw JSON of the imported submodel is
+    additionally stored as a string property on the respective result node
+    (rawSubmodelJson) -- decomposition for queryability, blob
+    for an exact audit trail of what the supplier declared verbatim.
 
 .PARAMETER JsonPath
-  Pfad zur AAS-Environment-JSON-Datei.
+  Path to the AAS environment JSON file.
 
 .PARAMETER OutCypher
-  Zielpfad fuer das generierte Cypher-Skript. Default: <JsonPath-Basisname>_import.cypher
+  Target path for the generated Cypher script. Default: <JsonPath base name>_import.cypher
 
 .EXAMPLE
   .\aas_to_neo4j_import.ps1 -JsonPath .\aas_instance_whitebox_prec_al7075_contact.json
@@ -53,7 +53,7 @@ if (-not $OutCypher) {
   $OutCypher = Join-Path (Split-Path $JsonPath -Parent) "$base`_import.cypher"
 }
 
-# --- Hilfsfunktionen: AAS-JSON-Elemente per idShort finden -------------------
+# --- Helper functions: find AAS JSON elements by idShort -------------------
 function Get-Elem($elements, [string]$idShort) {
   return $elements | Where-Object { $_.idShort -eq $idShort } | Select-Object -First 1
 }
@@ -62,20 +62,20 @@ function Get-PropRaw($elements, [string]$idShort) {
   if ($null -eq $e) { return $null }
   return $e.value
 }
-# Wandelt AAS-idShorts wie "GWPTotal"/"ODP"/"EPFreshwater" in saubere camelCase-
-# Property-Namen ("gwpTotal"/"odp"/"epFreshwater") statt nur den ersten
-# Buchstaben kleinzuschreiben (was "gWPTotal" ergaebe).
+# Converts AAS idShorts such as "GWPTotal"/"ODP"/"EPFreshwater" into clean camelCase
+# property names ("gwpTotal"/"odp"/"epFreshwater") instead of only lowercasing
+# the first letter (which would give "gWPTotal").
 function ConvertTo-CamelCaseProp([string]$idShort) {
-  # -cmatch (case-sensitive!) ist hier zwingend -- das normale -match ist
-  # case-insensitive, wodurch [A-Z]/[a-z] beide Faelle akzeptieren wuerden
-  # und die Gross-/Kleinschreibungs-Logik wirkungslos machen wuerde.
+  # -cmatch (case-sensitive!) is mandatory here -- the normal -match is
+  # case-insensitive, so [A-Z]/[a-z] would both accept either case
+  # and make the upper/lower-case logic ineffective.
   if ($idShort -cmatch '^([A-Z]+)([A-Z][a-z].*)$') {
     return $Matches[1].ToLower() + $Matches[2]
   }
   return $idShort.ToLower()
 }
 
-# Fuer Cypher: numerische valueTypes unquoted einsetzen, alles andere als String escapen.
+# For Cypher: insert numeric valueTypes unquoted, escape everything else as a string.
 function Format-CypherValue($elements, [string]$idShort) {
   $e = Get-Elem $elements $idShort
   if ($null -eq $e) { return $null }
@@ -86,18 +86,18 @@ function Format-CypherValue($elements, [string]$idShort) {
   return "'$escaped'"
 }
 
-# Beliebiges PowerShell-Objekt kompakt zu JSON und Cypher-sicher als String-
-# Literal escapen (fuer die Roh-JSON-Blob-Speicherung, Mischmodell aus
-# Dekomposition + Audit-Blob).
+# Compactly serialise any PowerShell object to JSON and escape it Cypher-safely as a string
+# literal (for the raw JSON blob storage, mixed model of
+# decomposition + audit blob).
 function Format-CypherJsonBlob($obj) {
   $json = $obj | ConvertTo-Json -Depth 20 -Compress
   $escaped = $json -replace '\\', '\\\\' -replace "'", "\'"
   return "'$escaped'"
 }
 
-# Schlanke Zuordnung AAS-Indikator-idShort -> reale ImpactCategory.id im Graphen
-# (fuer die Black-Box :DECLARES-Kanten). Nur die zehn Kernindikatoren, die
-# aas_instance_blackbox_*.json aktuell nutzt -- bei neuen Indikatoren ergaenzen.
+# Slim mapping AAS indicator idShort -> real ImpactCategory.id in the graph
+# (for the black-box :DECLARES edges). Only the ten core indicators that
+# aas_instance_blackbox_*.json currently uses -- extend when adding new indicators.
 $IndicatorToImpactCategory = @{
   'GWPTotal'      = 'IC_CLIMATE'
   'ODP'           = 'IC_EF_OZONE_DEPLETION'
@@ -111,7 +111,7 @@ $IndicatorToImpactCategory = @{
   'WDP'           = 'IC_EF_WATER_USE'
 }
 
-Write-Output "Lese: $JsonPath"
+Write-Output "Reading: $JsonPath"
 $envJson = Get-Content -Raw $JsonPath | ConvertFrom-Json
 $shell = $envJson.assetAdministrationShells[0]
 $submodels = $envJson.submodels
@@ -132,7 +132,7 @@ $cfSummarySm = $submodels | Where-Object { $_.idShort -eq 'CarbonFootprintSummar
 # WHITE BOX
 # ==============================================================
 if ($whiteSm) {
-  Write-Output "Erkannt: WHITE BOX (ILCDProcessDataset gefunden)"
+  Write-Output "Detected: WHITE BOX (ILCDProcessDataset found)"
   $cypherLines.Add("// ================= WHITE BOX: Process/Flow/HAS_FLOW =================")
 
   $mfgListElem = Get-Elem $whiteSm.submodelElements 'ManufacturingProcesses'
@@ -164,10 +164,10 @@ if ($whiteSm) {
         $flowId = Get-PropRaw $exElems 'FlowId'
         $flowName = Get-PropRaw $exElems 'FlowName'
 
-        # exchangeId traegt einen GLOBALEN Unique-Constraint (has_flow_exchangeid_unique).
-        # Der String aus der AAS ist der von PROC_CNCs EIGENER interner Kante --
-        # den unveraendert wiederzuverwenden wuerde mit genau dieser Kante kollidieren.
-        # Praefix wie bei Process/ImpactResult, Original bleibt als sourceExchangeId erhalten.
+        # exchangeId carries a GLOBAL unique constraint (has_flow_exchangeid_unique).
+        # The string from the AAS is that of PROC_CNC's OWN internal edge --
+        # reusing it unchanged would collide with exactly that edge.
+        # Prefix as with Process/ImpactResult, the original is kept as sourceExchangeId.
         $extExchangeId = "EXT_$exchangeId"
         $cypherLines.Add("MERGE (f:Flow {id:'$flowId'})")
         $cypherLines.Add("  ON CREATE SET f.name = $(Format-CypherValue $exElems 'FlowName');")
@@ -204,7 +204,7 @@ if ($whiteSm) {
 # GREY BOX
 # ==============================================================
 if ($greySm) {
-  Write-Output "Erkannt: GREY BOX (CarbonFootprintGrey gefunden)"
+  Write-Output "Detected: GREY BOX (CarbonFootprintGrey found)"
   $cypherLines.Add("// ================= GREY BOX: Assessment + FragmentReference-Aufloesung =================")
 
   $pcfElems = (Get-Elem $greySm.submodelElements 'ProductCarbonFootprint').value
@@ -250,7 +250,7 @@ if ($greySm) {
 # BLACK BOX
 # ==============================================================
 if ($blackSm) {
-  Write-Output "Erkannt: BLACK BOX (EnvironmentalFootprintBlack gefunden)"
+  Write-Output "Detected: BLACK BOX (EnvironmentalFootprintBlack found)"
   $cypherLines.Add("// ================= BLACK BOX: Assessment + :DECLARES-Kanten zu ImpactCategory =================")
 
   $indElems = (Get-Elem $blackSm.submodelElements 'EnvironmentalIndicators').value
@@ -284,14 +284,14 @@ if ($blackSm) {
 }
 
 if (-not $whiteSm -and -not $greySm -and -not $blackSm) {
-  Write-Output "WARNUNG: Kein bekanntes Box-Submodell gefunden (ILCDProcessDataset / CarbonFootprintGrey / EnvironmentalFootprintBlack) -- nichts generiert."
+  Write-Output "WARNING: No known box submodel found (ILCDProcessDataset / CarbonFootprintGrey / EnvironmentalFootprintBlack) -- nothing generated."
   exit 1
 }
 
-# Set-Content -Encoding UTF8 wuerde unter Windows PowerShell 5.1 ein BOM
-# voranstellen, an dem cypher-shell mit einem Syntaxfehler scheitert -- daher
-# explizit BOM-freies UTF-8.
+# Set-Content -Encoding UTF8 would prepend a BOM under Windows PowerShell 5.1,
+# on which cypher-shell fails with a syntax error -- hence
+# explicitly BOM-free UTF-8.
 $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 [System.IO.File]::WriteAllLines($OutCypher, $cypherLines, $utf8NoBom)
 Write-Output ""
-Write-Output "Cypher-Skript geschrieben: $OutCypher ($($cypherLines.Count) Zeilen)"
+Write-Output "Cypher script written: $OutCypher ($($cypherLines.Count) lines)"

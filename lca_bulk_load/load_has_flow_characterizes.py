@@ -1,40 +1,39 @@
 """
 load_has_flow_characterizes.py
 
-Kanal B des Neo4j-Modell-Rebuilds: laedt HAS_FLOW und CHARACTERIZES direkt
-per Bolt-Treiber, weil der Neo4j Data Importer Relationships nur ueber
-(from, to, type) mergt und daher fachlich unterschiedliche Parallel-Kanten
-zwischen demselben Knotenpaar stillschweigend kollabiert (siehe Plan-Datei
-agile-sparking-cloud.md, Abschnitt "Zielarchitektur").
+Channel B of the Neo4j model rebuild: loads HAS_FLOW and CHARACTERIZES directly
+via the Bolt driver, because the Neo4j Data Importer merges relationships only on
+(from, to, type) and therefore silently collapses parallel edges that differ in
+substance between the same pair of nodes (see README.md in this folder,
+two-channel design).
 
-HAS_FLOW wird ueber die Property `exchangeId` gemergt (MERGE-Schluessel),
-CHARACTERIZES ueber die Kombination (Flow-Id, Kategorie-Id, location). Beide
-Eindeutigkeiten werden zusaetzlich per Neo4j-Constraint abgesichert:
-exchangeId ist bereits global eindeutig; fuer CHARACTERIZES wird dafuer eine
-synthetische characterizesId = "<flowId>|<categoryId>|<location>" mitgeschrieben,
-da ein Relationship-Constraint nur eigene Properties pruefen kann, keine
-Endknoten-Kombinationen.
+HAS_FLOW is merged on the property `exchangeId` (MERGE key),
+CHARACTERIZES on the combination (flow id, category id, location). Both
+uniqueness rules are additionally enforced by a Neo4j constraint:
+exchangeId is already globally unique; for CHARACTERIZES a synthetic
+characterizesId = "<flowId>|<categoryId>|<location>" is written along,
+because a relationship constraint can only check its own properties, not
+end-node combinations.
 
-Voraussetzung: Kanal A (Data-Importer-ZIP) wurde bereits importiert --
-alle Process/Flow/ImpactCategory-Knoten muessen existieren, sonst schlagen
-die MATCH-Klauseln fehl (kein automatisches Anlegen fehlender Knoten).
+Prerequisite: channel A (Data Importer ZIP) has already been imported --
+all Process/Flow/ImpactCategory nodes must exist, otherwise the MATCH clauses
+fail (missing nodes are not created automatically).
 
-Zugangsdaten NUR ueber Umgebungsvariablen (nie als Skript-Argument, nie
-hartkodiert):
-    NEO4J_URI       z.B. neo4j+s://xxxx.databases.neo4j.io
-    NEO4J_USER      z.B. neo4j
+Credentials ONLY via environment variables (never as a script argument, never
+hard-coded):
+    NEO4J_URI       e.g. neo4j+s://xxxx.databases.neo4j.io
+    NEO4J_USER      e.g. neo4j
     NEO4J_PASSWORD
 
-Aufruf:
+Usage:
     pip install neo4j
     export NEO4J_URI=...        (PowerShell: $env:NEO4J_URI = "...")
     export NEO4J_USER=neo4j
     export NEO4J_PASSWORD=...
     python load_has_flow_characterizes.py --has-flow r_40_HAS_FLOW_Process_TO_Flow.csv --characterizes r_41_CHARACTERIZES_Flow_TO_ImpactCategory.csv
 
-Vor dem eigentlichen Laden werden ALLE bestehenden HAS_FLOW- und
-CHARACTERIZES-Kanten geloescht (Full-Rebuild, vom Nutzer bestaetigt) --
-Knoten bleiben unberuehrt. Mit --no-wipe kann das uebersprungen werden.
+Before the actual load, ALL existing HAS_FLOW and CHARACTERIZES edges are
+deleted (full rebuild) -- nodes stay untouched. Use --no-wipe to skip this.
 """
 
 import argparse
@@ -52,7 +51,7 @@ def get_driver():
     password = os.environ.get("NEO4J_PASSWORD")
     missing = [n for n, v in [("NEO4J_URI", uri), ("NEO4J_USER", user), ("NEO4J_PASSWORD", password)] if not v]
     if missing:
-        print(f"Fehlende Umgebungsvariablen: {', '.join(missing)}", file=sys.stderr)
+        print(f"Missing environment variables: {', '.join(missing)}", file=sys.stderr)
         sys.exit(1)
     return GraphDatabase.driver(uri, auth=(user, password))
 
@@ -97,11 +96,11 @@ SET r.factor = toFloat(row.factor),
 WIPE_HAS_FLOW = "MATCH ()-[r:HAS_FLOW]->() CALL (r) { DELETE r } IN TRANSACTIONS OF 2000 ROWS"
 WIPE_CHARACTERIZES = "MATCH ()-[r:CHARACTERIZES]->() CALL (r) { DELETE r } IN TRANSACTIONS OF 2000 ROWS"
 
-# Eindeutigkeits-Constraints: HAS_FLOW.exchangeId ist per Konstruktion global
-# eindeutig. CHARACTERIZES ist nur ueber (Flow,ImpactCategory,location)
-# eindeutig -- dafuer die synthetische characterizesId oben mitschreiben und
-# DARAUF constrainen (ein Relationship-Constraint kann nur eigene Properties
-# pruefen, keine Endknoten-Kombinationen).
+# Uniqueness constraints: HAS_FLOW.exchangeId is globally unique by
+# construction. CHARACTERIZES is only unique via (flow, impact category,
+# location) -- so write the synthetic characterizesId above and constrain
+# ON THAT (a relationship constraint can only check its own properties,
+# not end-node combinations).
 CREATE_CONSTRAINTS = [
     "CREATE CONSTRAINT has_flow_exchangeid_unique IF NOT EXISTS "
     "FOR ()-[r:HAS_FLOW]-() REQUIRE r.exchangeId IS UNIQUE",
@@ -130,12 +129,12 @@ def main():
     ap.add_argument("--characterizes", required=True, help="Pfad zur konsolidierten r_CHARACTERIZES_Flow_TO_ImpactCategory.csv")
     ap.add_argument("--database", default="neo4j", help="Zieldatenbank (Default: neo4j)")
     ap.add_argument("--batch-size", type=int, default=500)
-    ap.add_argument("--no-wipe", action="store_true", help="Bestehende HAS_FLOW/CHARACTERIZES-Kanten NICHT vorher loeschen")
+    ap.add_argument("--no-wipe", action="store_true", help="Do NOT delete existing HAS_FLOW/CHARACTERIZES edges beforehand")
     args = ap.parse_args()
 
     driver = get_driver()
     driver.verify_connectivity()
-    print("Verbindung zu Neo4j hergestellt.")
+    print("Connected to Neo4j.")
 
     with driver.session(database=args.database) as session:
         for stmt in CREATE_CONSTRAINTS:
@@ -147,9 +146,9 @@ def main():
         with driver.session(database=args.database) as session:
             session.run(WIPE_HAS_FLOW).consume()
             session.run(WIPE_CHARACTERIZES).consume()
-        print("Geloescht.")
+        print("Deleted.")
     else:
-        print("--no-wipe gesetzt: bestehende Kanten bleiben erhalten (nur MERGE, keine vorherige Loeschung).")
+        print("--no-wipe set: existing edges are kept (MERGE only, no prior deletion).")
 
     has_flow_rows = read_rows(args.has_flow)
     print(f"HAS_FLOW: {len(has_flow_rows)} Zeilen aus {args.has_flow} gelesen.")
@@ -164,7 +163,7 @@ def main():
             "MATCH ()-[r]->() WHERE type(r) IN ['HAS_FLOW','CHARACTERIZES'] "
             "RETURN type(r) AS relType, count(r) AS n ORDER BY relType"
         )
-        print("\nKontrollzaehlung nach Abschluss:")
+        print("\nControl count after completion:")
         for record in result:
             print(f"  {record['relType']}: {record['n']}")
 

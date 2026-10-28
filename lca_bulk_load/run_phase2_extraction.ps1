@@ -35,11 +35,11 @@ function Extract-ZipSubset {
 }
 
 # ============================================================
-# Quellen-Definition
+# Source definition
 # ============================================================
 $sources = @()
 
-# --- Bereits vorhandene Quellen (Sphera/GaBi + IDEMAT), volle Wiederverarbeitung ---
+# --- Already existing sources (Sphera/GaBi + IDEMAT), full reprocessing ---
 $sources += [PSCustomObject]@{
     Name = "existing_alu"
     IlcdDir = Join-Path $oldScratch "ilcd_alu"
@@ -80,7 +80,7 @@ $sources += [PSCustomObject]@{
     OnlyProcessUuids = @()
 }
 
-# --- Neue Pakete (nur die vom Nutzer bestaetigten 17 Prozesse) ---
+# --- New packages (only the 17 processes confirmed as in scope) ---
 $sources += [PSCustomObject]@{
     Name = "new_screws"; ZipName = "Meine_Professional_Datenbank_EN_D4E EF3.1 2026_08_25_screws.zip"
     Source = "Sphera"; SourceDatabase = "Sphera Managed LCA Content (MLC)"
@@ -153,19 +153,19 @@ $sources += [PSCustomObject]@{
 }
 
 # ============================================================
-# Verarbeitung
+# Processing
 # ============================================================
 foreach ($src in $sources) {
     Write-Output ""
     Write-Output "=============================================="
-    Write-Output "Quelle: $($src.Name)"
+    Write-Output "Source: $($src.Name)"
     Write-Output "=============================================="
 
     $ilcdDir = $src.IlcdDir
     if (-not $ilcdDir) {
         $zipPath = Join-Path $zipDir $src.ZipName
         $extractDir = Join-Path $staging "_extracted_$($src.Name)"
-        Write-Output "Extrahiere $($src.ZipName) ..."
+        Write-Output "Extracting $($src.ZipName) ..."
         Extract-ZipSubset -ZipPath $zipPath -DestDir $extractDir
         $ilcdDir = $extractDir
     }
@@ -181,5 +181,5 @@ foreach ($src in $sources) {
 
 Write-Output ""
 Write-Output "=============================================="
-Write-Output "Alle Quellen verarbeitet. Staging-Ordner: $staging"
+Write-Output "All sources processed. Staging folder: $staging"
 Write-Output "=============================================="

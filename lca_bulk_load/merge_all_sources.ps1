@@ -2,32 +2,32 @@
 ============================================================
 merge_all_sources.ps1  (Stage B)
 
-Fuehrt alle Stage-A-Staging-Ordner + das bestehende Modell (v7_verify) zu
-EINEM konsistenten CSV-Satz zusammen. Ersetzt ilcd_import_pipeline.ps1
-(keine Process-Dedup, kein CHARACTERIZES-Dedup ueber mehrere Quellen,
-kollidierende Chunk-Dateinamen -- siehe Plan-Datei).
+Merges all Stage A staging folders + the existing model (v7_verify) into
+ONE consistent CSV set. Replaces ilcd_import_pipeline.ps1
+(no process dedup, no CHARACTERIZES dedup across several sources,
+colliding chunk file names).
 
-Dedup-Regeln:
-- Process: Baseline = bestehendes Process.csv. Fuer IDs in $expectedRefresh
-  (PROC_ALU_EXTRUSION_EF + 22 Metall-IDs) ueberschreibt die frisch
-  aufbereitete Version die alte Zeile (neue Provenienz-Spalten). Andere
-  Kollisionen (sollte nicht vorkommen, da neue IDs bewusst eindeutig
-  vergeben wurden) werden als WARNUNG geloggt, alte Zeile bleibt erhalten.
-- Flow: Baseline = bestehendes Flow.csv, danach first-write-wins ueber alle
-  Quellen (echte inhaltliche Dedup durch UUID-Gleichheit).
-- HAS_FLOW: bestehende Zeilen der 24 alten Prozesse werden VERWORFEN
-  (durch die frisch generierten mit exchangeId ersetzt) -- ausser
-  PROC_WASTE_INCINERATION_MSW (kein Rohmaterial verfuegbar, siehe Plan) --
-  dafuer Sonderbehandlung: bestehende Zeilen uebernehmen, Komma-Dezimalen
-  fixen, exchangeId aus stabiler Zeilenposition ableiten. Alle anderen
-  bestehenden HAS_FLOW-Zeilen (falls vorhanden) bleiben unveraendert.
-- CHARACTERIZES: Baseline = bestehendes CHARACTERIZES.csv, gemergt mit
-  allen frischen r_CHARACTERIZES-Dateien. Dedup-Schluessel (from_id,to_id,
-  location). Bei widersspruechlichem factor fuer denselben Schluessel:
-  Konflikt loggen, ERSTEN Wert behalten (nicht stillschweigend
-  ueberschreiben).
-- ImpactCategory: Baseline = bestehendes ImpactCategory.csv, gemergt mit
-  allen ImpactCategory_neu.csv, dedupe nach id.
+Dedup rules:
+- Process: baseline = existing Process.csv. For IDs in $expectedRefresh
+  (PROC_ALU_EXTRUSION_EF + 22 metal IDs) the freshly prepared version
+  overwrites the old row (new provenance columns). Other
+  collisions (should not occur, since new IDs were deliberately assigned
+  uniquely) are logged as WARNING, the old row is kept.
+- Flow: baseline = existing Flow.csv, then first-write-wins across all
+  sources (true content-based dedup via UUID equality).
+- HAS_FLOW: existing rows of the 24 old processes are DISCARDED
+  (replaced by the freshly generated ones with exchangeId) -- except
+  PROC_WASTE_INCINERATION_MSW (no raw material available) --
+  special handling for that one: keep existing rows, fix comma decimals,
+  derive exchangeId from the stable row position. All other
+  existing HAS_FLOW rows (if any) stay unchanged.
+- CHARACTERIZES: built exclusively from the fresh r_CHARACTERIZES files (the
+  old baseline is deliberately NOT taken over, see the comment further down).
+  Dedup key (from_id,to_id,location). On a contradictory factor for the same
+  key: log the conflict, KEEP THE FIRST value (do not silently
+  overwrite).
+- ImpactCategory: baseline = existing ImpactCategory.csv, merged with
+  all ImpactCategory_neu.csv, deduplicated by id.
 ============================================================
 #>
 
@@ -81,19 +81,19 @@ foreach ($row in (Import-Csv (Join-Path $existingDir "Process.csv"))) {
     foreach ($c in $procCols) { $obj[$c] = if ($row.PSObject.Properties.Name -contains $c) { $row.$c } else { "" } }
     $processes[$row.id] = [PSCustomObject]$obj
 }
-Log "Baseline (bestehendes Modell): $($processes.Count) Prozesse geladen."
+Log "Baseline (existing model): $($processes.Count) processes loaded."
 
 $refreshed = 0; $added = 0; $unexpectedCollisions = 0
 foreach ($srcName in $sourceOrder) {
     $srcProcCsv = Join-Path $stagingDir "$srcName\Process.csv"
-    if (-not (Test-Path $srcProcCsv)) { Log "WARNUNG: $srcProcCsv fehlt, ueberspringe."; continue }
+    if (-not (Test-Path $srcProcCsv)) { Log "WARNING: $srcProcCsv is missing, skipping."; continue }
     foreach ($row in (Import-Csv $srcProcCsv)) {
         if ($processes.Contains($row.id)) {
             if ($expectedRefresh.Contains($row.id)) {
                 $processes[$row.id] = $row
                 $refreshed++
             } else {
-                Log "UNERWARTETE KOLLISION Process.id=$($row.id) aus $srcName -- behalte bestehende Zeile."
+                Log "UNEXPECTED COLLISION Process.id=$($row.id) from $srcName -- keeping the existing row."
                 $unexpectedCollisions++
             }
         } else {
@@ -102,9 +102,9 @@ foreach ($srcName in $sourceOrder) {
         }
     }
 }
-Log "Process: $refreshed aufgefrischt, $added neu hinzugefuegt, $unexpectedCollisions unerwartete Kollisionen."
+Log "Process: $refreshed refreshed, $added newly added, $unexpectedCollisions unexpected collisions."
 $processes.Values | Write-UnquotedCsv -Path (Join-Path $outDir "Process.csv") -Columns $procCols
-Log "-> $($processes.Count) Prozesse total in Process.csv"
+Log "-> $($processes.Count) processes in total in Process.csv"
 
 Log ""
 Log "==================== FLOW ===================="
@@ -115,7 +115,7 @@ foreach ($row in (Import-Csv (Join-Path $existingDir "Flow.csv"))) {
     foreach ($c in $flowCols) { $obj[$c] = if ($row.PSObject.Properties.Name -contains $c) { $row.$c } else { "" } }
     $flows[$row.id] = [PSCustomObject]$obj
 }
-Log "Baseline: $($flows.Count) Flows geladen."
+Log "Baseline: $($flows.Count) flows loaded."
 $flowAdded = 0; $flowDeduped = 0
 foreach ($srcName in $sourceOrder) {
     $srcFlowCsv = Join-Path $stagingDir "$srcName\Flow.csv"
@@ -124,18 +124,18 @@ foreach ($srcName in $sourceOrder) {
         if ($flows.Contains($row.id)) { $flowDeduped++ } else { $flows[$row.id] = $row; $flowAdded++ }
     }
 }
-Log "Flow: $flowAdded neu hinzugefuegt, $flowDeduped als Duplikat erkannt (bereits vorhanden)."
+Log "Flow: $flowAdded newly added, $flowDeduped recognised as duplicates (already present)."
 $flows.Values | Write-UnquotedCsv -Path (Join-Path $outDir "Flow.csv") -Columns $flowCols
-Log "-> $($flows.Count) Flows total in Flow.csv"
+Log "-> $($flows.Count) flows in total in Flow.csv"
 
 Log ""
 Log "==================== HAS_FLOW ===================="
 $hfCols = @('exchangeId','from_id','to_id','amount','unit','direction','location','quantitativeReference','ratioToReference','dataMaturity','referenceYear','uncertainty','comment')
 $hasFlowRows = New-Object System.Collections.Generic.List[object]
 
-# Bestehende HAS_FLOW-Zeilen: alles behalten AUSSER den 23 (jetzt frisch generierten
-# Alu/Metall-Prozessen). PROC_WASTE_INCINERATION_MSW bleibt (Sonderbehandlung unten:
-# separat neu geschrieben mit Fix + exchangeId, hier NICHT aus der alten Datei uebernehmen).
+# Existing HAS_FLOW rows: keep everything EXCEPT the 23 (now freshly generated
+# aluminium/metal processes). PROC_WASTE_INCINERATION_MSW stays (special handling below:
+# rewritten separately with fix + exchangeId, do NOT take it over from the old file here).
 $dropFromExisting = [System.Collections.Generic.HashSet[string]]::new([string[]]$expectedRefresh)
 $dropFromExisting.Add($waste_id) | Out-Null
 $existingHfCount = 0; $keptFromExisting = 0
@@ -147,13 +147,13 @@ foreach ($row in (Import-Csv (Join-Path $existingDir "r_38_HAS_FLOW_Process_TO_F
     $hasFlowRows.Add([PSCustomObject]$obj)
     $keptFromExisting++
 }
-Log "Bestehende HAS_FLOW.csv: $existingHfCount Zeilen gelesen, $keptFromExisting behalten (Rest durch Frischverarbeitung ersetzt)."
+Log "Existing HAS_FLOW.csv: $existingHfCount rows read, $keptFromExisting kept (rest replaced by the fresh processing)."
 
-# Manche Prozess-UUIDs kommen in mehreren Quellen vor (z.B. PROC_ALU_EXTRUSION_EF
-# sowohl in existing_alu als auch erneut in new_alu, da das Sphera-Paket den
-# Prozess einfach mitbuendelt). Ein Prozess darf seine HAS_FLOW-Zeilen nur EINMAL
-# beitragen -- sonst entstehen doppelte exchangeId-Werte (from_id+internalId
-# wiederholt sich exakt). Erste Quelle in $sourceOrder gewinnt, pro Prozess-ID.
+# Some process UUIDs occur in several sources (e.g. PROC_ALU_EXTRUSION_EF
+# both in existing_alu and again in new_alu, because the Sphera package
+# simply bundles the process). A process may contribute its HAS_FLOW rows only ONCE
+# -- otherwise duplicate exchangeId values arise (from_id+internalId
+# repeats exactly). The first source in $sourceOrder wins, per process id.
 $processIdsWithHasFlow = [System.Collections.Generic.HashSet[string]]::new()
 foreach ($srcName in $sourceOrder) {
     $srcHfCsv = Join-Path $stagingDir "$srcName\r_HAS_FLOW_Process_TO_Flow.csv"
@@ -165,16 +165,16 @@ foreach ($srcName in $sourceOrder) {
     }
     foreach ($row in (Import-Csv $srcHfCsv | Select-Object -ExpandProperty from_id -Unique)) { $processIdsWithHasFlow.Add($row) | Out-Null }
     if ($skipped -gt 0) {
-        Log "  + $n HAS_FLOW-Zeilen aus $srcName ($skipped uebersprungen -- Prozess bereits durch frueheres Quelle abgedeckt)"
+        Log "  + $n HAS_FLOW rows from $srcName ($skipped skipped -- process already covered by an earlier source)"
     } else {
-        Log "  + $n HAS_FLOW-Zeilen aus $srcName"
+        Log "  + $n HAS_FLOW rows from $srcName"
     }
 }
 
-# Sonderbehandlung PROC_WASTE_INCINERATION_MSW: kein Roh-XML verfuegbar (nur ein
-# PowerShell-serialisiertes Cache-Objekt + eine gequotete CSV mit Dezimalkomma-Bug).
-# Deterministische exchangeId aus stabiler Zeilenposition (Fallback-Schema gemaess
-# ursprnglicher Anforderung Abschnitt 8, da keine ILCD dataSetInternalID rekonstruierbar ist).
+# Special handling PROC_WASTE_INCINERATION_MSW: no raw XML available (only a
+# PowerShell-serialised cache object + a quoted CSV with a decimal-comma bug).
+# Deterministic exchangeId from the stable row position (fallback scheme per the
+# original requirement section 8, since no ILCD dataSetInternalID can be reconstructed).
 $eolSrc = "./scratch/regen_eol/r_HAS_FLOW_Process_TO_Flow.csv"
 $eolRows = Import-Csv $eolSrc
 $idx = 0
@@ -185,31 +185,31 @@ foreach ($row in $eolRows) {
         from_id = $row.from_id; to_id = $row.to_id; amount = $row.amount; unit = $row.unit
         direction = $row.direction; location = $row.location
         quantitativeReference = $row.quantitativeReference; ratioToReference = $ratioFixed
-        dataMaturity = $row.dataMaturity; referenceYear = ""; uncertainty = ""; comment = "exchangeId technisch generiert (Rohquelle nicht verfuegbar, siehe merge_report.txt)"
+        dataMaturity = $row.dataMaturity; referenceYear = ""; uncertainty = ""; comment = "exchangeId technically generated (raw source not available, see merge_report.txt)"
     })
     $idx++
 }
-Log "  + $($eolRows.Count) HAS_FLOW-Zeilen aus regen_eol ($waste_id, exchangeId technisch generiert aus Zeilenposition, KEIN echtes ILCD dataSetInternalID verfuegbar)."
+Log "  + $($eolRows.Count) HAS_FLOW rows from regen_eol ($waste_id, exchangeId technically generated from the row position, NO real ILCD dataSetInternalID available)."
 
-# Eindeutigkeitscheck exchangeId (muss laut Konstruktion immer eindeutig sein)
+# Uniqueness check on exchangeId (must always be unique by construction)
 $dupExchangeIds = $hasFlowRows | Group-Object exchangeId | Where-Object { $_.Count -gt 1 }
 if ($dupExchangeIds.Count -gt 0) {
-    Log "FEHLER: $($dupExchangeIds.Count) doppelte exchangeId-Werte gefunden!"
-    foreach ($d in $dupExchangeIds | Select-Object -First 10) { Log "  DUPLIKAT: $($d.Name) ($($d.Count)x)" }
+    Log "ERROR: $($dupExchangeIds.Count) duplicate exchangeId values found!"
+    foreach ($d in $dupExchangeIds | Select-Object -First 10) { Log "  DUPLICATE: $($d.Name) ($($d.Count)x)" }
 } else {
-    Log "exchangeId-Eindeutigkeit: OK, keine Duplikate unter $($hasFlowRows.Count) Zeilen."
+    Log "exchangeId uniqueness: OK, no duplicates among $($hasFlowRows.Count) rows."
 }
 
 $hasFlowRows | Write-UnquotedCsv -Path (Join-Path $outDir "r_HAS_FLOW_Process_TO_Flow.csv") -Columns $hfCols
-Log "-> $($hasFlowRows.Count) HAS_FLOW-Zeilen total"
+Log "-> $($hasFlowRows.Count) HAS_FLOW rows in total"
 
 Log ""
-Log "==================== IMPACT CATEGORY (zuerst, liefert UUID->id-Map fuer CHARACTERIZES) ===================="
-# Frische Extraktionen liefern ImpactCategory-IDs als rohe lciamethod-UUIDs,
-# das bestehende Modell nutzt sprechende IDs (IC_EF_CLIMATE_TOTAL etc.). Ohne
-# Remapping wuerden pro Kategorie zwei Knoten nebeneinander existieren (alter
-# sprechender + neuer UUID-Knoten) und CHARACTERIZES faelschlich nie gegen den
-# Bestand kollidieren. Mapping ueber Namensabgleich (wie bei Process/UUID).
+Log "==================== IMPACT CATEGORY (first, provides the UUID->id map for CHARACTERIZES) ===================="
+# Fresh extractions deliver ImpactCategory ids as raw lciamethod UUIDs,
+# the existing model uses descriptive ids (IC_EF_CLIMATE_TOTAL etc.). Without
+# remapping there would be two nodes side by side per category (old
+# descriptive + new UUID node) and CHARACTERIZES would wrongly never collide with the
+# existing data. Mapping via name matching (as for Process/UUID).
 $icCols = @('id','name','indicator','unit')
 $categories = [ordered]@{}
 foreach ($row in (Import-Csv (Join-Path $existingDir "ImpactCategory.csv"))) {
@@ -245,16 +245,16 @@ foreach ($srcName in $sourceOrder) {
         }
     }
 }
-Log "ImpactCategory: $icMatched frische UUIDs auf bestehende sprechende IDs gemappt, $icAdded echte neue Kategorien angelegt, $($categories.Count) total."
+Log "ImpactCategory: $icMatched fresh UUIDs mapped to existing descriptive ids, $icAdded genuinely new categories created, $($categories.Count) in total."
 $categories.Values | Write-UnquotedCsv -Path (Join-Path $outDir "ImpactCategory.csv") -Columns $icCols
 
 Log ""
 Log "==================== CHARACTERIZES ===================="
 function Resolve-CatId($rawId) { if ($catUuidToId.ContainsKey($rawId)) { return $catUuidToId[$rawId] } else { return $rawId } }
 
-# Numerisch tolerante Gleichheit statt String-Vergleich: dieselbe Zahl kann je
-# nach Exportlauf als "1" vs "1.0" oder mit abweichender Rundung auftauchen --
-# das ist kein fachlicher Konflikt, nur Formatierungsrauschen.
+# Numerically tolerant equality instead of string comparison: the same number can
+# appear as "1" vs "1.0" or with differing rounding depending on the export run --
+# that is not a substantive conflict, just formatting noise.
 function Factors-Equal($a, $b) {
     $da = 0.0; $db = 0.0
     $okA = [double]::TryParse($a, [System.Globalization.NumberStyles]::Float, [System.Globalization.CultureInfo]::InvariantCulture, [ref]$da)
@@ -267,27 +267,27 @@ function Factors-Equal($a, $b) {
 $cfKey = { param($fromId, $toId, $loc) "$fromId|$toId|$loc" }
 $cfDict = [ordered]@{}
 $cfConflicts = 0
-# KEINE Baseline-Uebernahme des alten r_37_CHARACTERIZES.csv (2921 Zeilen):
-# Stichprobenvergleich zeigt, dass die alte Datei aus einer nicht mehr
-# nachvollziehbaren fruehen Ad-hoc-Extraktion stammt und teils erheblich von
-# einer sauberen Neuextraktion DERSELBEN Rohquelle (ilcd_alu) abweicht (nicht
-# nur Rundung -- z.B. IC_EF_LAND_USE: -134 vs. -663, in einem Fall sogar
-# Vorzeichenwechsel). Konsistent mit der bereits fuer HAS_FLOW getroffenen
-# Entscheidung (voller Wipe+Rebuild aus Rohquellen) wird CHARACTERIZES daher
-# ausschliesslich aus den frischen Stage-A-Extraktionen aufgebaut -- die alte
-# Datei wird komplett verworfen, nicht nur teilweise ueberschrieben.
-Log "Baseline CHARACTERIZES: bewusst NICHT uebernommen (siehe Kommentar im Skript) -- vollstaendiger Rebuild aus frischen Quellen."
+# Do NOT take over the old r_37_CHARACTERIZES.csv as baseline (2921 rows):
+# a spot-check comparison shows that the old file stems from an early ad-hoc
+# extraction that can no longer be traced and in part deviates considerably from
+# a clean re-extraction of the SAME raw source (ilcd_alu) (not
+# just rounding -- e.g. IC_EF_LAND_USE: -134 vs. -663, in one case even a
+# sign change). Consistent with the decision already taken for HAS_FLOW
+# (full wipe + rebuild from raw sources), CHARACTERIZES is therefore built
+# exclusively from the fresh Stage A extractions -- the old
+# file is discarded completely, not just partly overwritten.
+Log "Baseline CHARACTERIZES: deliberately NOT taken over (see comment in the script) -- complete rebuild from fresh sources."
 
-# existing_alu (Rohquelle ilcd_alu) traegt selbst KEINE frischen CHARACTERIZES bei:
-# direkter XML-Vergleich bestaetigt, dass ihr lciamethods-Datensatz eine aeltere
-# Version ist (z.B. "Land use"-Methode dataSetVersion 01.00.009 / Flow-Referenz
-# 03.00.000) als alle 9 heute (2026-08-25) frisch exportierten Pakete (01.00.010 /
-# 03.00.004) -- die Sphera-Datenbank wurde zwischen den Exportzeitpunkten
-# aktualisiert. Vermischen wuerde stillschweigend veraltete mit aktuellen EF3.1-
-# Faktoren fuer dieselbe (Flow,Kategorie,Location)-Kombination. HAS_FLOW/Process/
-# Flow sind davon nicht betroffen (methodenversions-unabhaengige Rohinventardaten).
+# existing_alu (raw source ilcd_alu) itself contributes NO fresh CHARACTERIZES:
+# a direct XML comparison confirms that its lciamethods dataset is an older
+# version (e.g. "Land use" method dataSetVersion 01.00.009 / flow reference
+# 03.00.000) than all 9 packages freshly exported today (2026-08-25) (01.00.010 /
+# 03.00.004) -- the Sphera database was updated between the export times.
+# Mixing would silently combine outdated with current EF3.1
+# factors for the same (flow, category, location) combination. HAS_FLOW/Process/
+# Flow are not affected (raw inventory data independent of the method version).
 $cfSourceOrder = $sourceOrder | Where-Object { $_ -ne "existing_alu" }
-Log "CHARACTERIZES-Quellreihenfolge OHNE existing_alu (veraltete Methodenversion, siehe Kommentar): $($cfSourceOrder -join ', ')"
+Log "CHARACTERIZES source order WITHOUT existing_alu (outdated method version, see comment): $($cfSourceOrder -join ', ')"
 
 foreach ($srcName in $cfSourceOrder) {
     $srcCfCsv = Join-Path $stagingDir "$srcName\r_CHARACTERIZES_Flow_TO_ImpactCategory.csv"
@@ -299,7 +299,7 @@ foreach ($srcName in $cfSourceOrder) {
         if ($cfDict.Contains($k)) {
             $existingFactor = $cfDict[$k].factor
             if (-not (Factors-Equal $existingFactor $row.factor)) {
-                Log "  KONFLIKT $k : bestehender factor=$existingFactor vs. neuer factor=$($row.factor) aus $srcName -- behalte ersten Wert."
+                Log "  CONFLICT $k : existing factor=$existingFactor vs. new factor=$($row.factor) from $srcName -- keeping the first value."
                 $cfConflicts++; $nConflictHere++
             }
             $nDup++
@@ -308,13 +308,13 @@ foreach ($srcName in $cfSourceOrder) {
             $nAdd++
         }
     }
-    Log "  + $srcName : $nAdd neu, $nDup dedupliziert ($nConflictHere echte Wertkonflikte)"
+    Log "  + $srcName : $nAdd new, $nDup deduplicated ($nConflictHere genuine value conflicts)"
 }
-Log "CHARACTERIZES-Konflikte gesamt (gleicher Schluessel, numerisch abweichender factor): $cfConflicts"
+Log "CHARACTERIZES conflicts in total (same key, numerically differing factor): $cfConflicts"
 $cfCols = @('from_id','to_id','factor','location')
 $cfDict.Values | Write-UnquotedCsv -Path (Join-Path $outDir "r_CHARACTERIZES_Flow_TO_ImpactCategory.csv") -Columns $cfCols
-Log "-> $($cfDict.Count) CHARACTERIZES-Zeilen total"
+Log "-> $($cfDict.Count) CHARACTERIZES rows in total"
 
 [System.IO.File]::WriteAllLines($reportFile, $report, (New-Object System.Text.UTF8Encoding($false)))
 Write-Output ""
-Write-Output "Merge-Report gespeichert: $reportFile"
+Write-Output "Merge report saved: $reportFile"

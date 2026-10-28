@@ -1,52 +1,51 @@
 """
 ea_xmi_extract.py
 
-Erster Schritt der EA -> Neo4j Pipeline (siehe ea_to_neo4j_mapping.md fuer die
-vollstaendige Mapping-Spezifikation). Liest einen XMI-2.1-Export aus Enterprise
+First step of the EA -> Neo4j pipeline (see ea_to_neo4j_mapping.md for the
+complete mapping specification). Reads an XMI 2.1 export from Enterprise
 Architect (Project > Model Exchange > Export Package to Native/XMI File,
-Format "XMI: 2.1", NICHT "Native Format") und schreibt fuer jedes Ziel-
-Neo4j-Label bzw. jeden Beziehungstyp eine eigene CSV-Datei nach ea_extract/ --
-GUIDs sind darin bereits zu Business-Keys (den *ID-Tags aus dem RFLPV2-Profil)
-aufgeloest.
+format "XMI: 2.1", NOT "Native Format") and writes one CSV file per target
+Neo4j label or relationship type to ea_extract/ --
+GUIDs in them are already resolved to business keys (the *ID tags from the
+RFLPV2 profile).
 
-STATUS: Ab 28.08.2026 gegen einen ECHTEN EA-Export verifiziert (rflpv2_package.xml,
-ein Testmodell mit einem Element je Stereotyp + Kompositions- und
-Beziehungs-Kanten). Die tatsaechliche Struktur unterscheidet sich vom
-urspruenglich angenommenen Format (siehe Git-Historie fuer die alte Version):
+STATUS: Verified against a REAL EA export since 2026-08-28 (rflpv2_package.xml,
+a test model with one element per stereotype + composition and
+relationship edges). The actual structure differs from the originally
+assumed format (see the git history for the old version):
 
-- Stereotyp-Anwendungen sind KEINE <xmi:Extension>-Eintraege, sondern eigene
-  Elemente im Profil-eigenen XML-Namespace (deklariert am Root als
-  xmlns:<ProfilName>="http://www.sparxsystems.com/profiles/<ProfilName>/1.0"),
-  direkt als Geschwister der packagedElements innerhalb von <uml:Model>:
+- Stereotype applications are NOT <xmi:Extension> entries but separate
+  elements in the profile's own XML namespace (declared on the root as
+  xmlns:<ProfileName>="http://www.sparxsystems.com/profiles/<ProfileName>/1.0"),
+  placed directly as siblings of the packagedElements inside <uml:Model>:
 
       <RFLPV2_Sustainability_Process_Extension:Logical_Element
           base_Class="EAID_..." __EAStereoName="Logical Element"
           logicalID="SP_PARALLEL"/>
 
-  Der lokale Elementname ist der Stereotypname mit Leerzeichen->Unterstrich
-  (bei mehrwortigen Namen zusaetzlich per __EAStereoName mit echten
-  Leerzeichen zurueckgegeben). base_Class/base_Dependency/base_Activity
-  verweist auf die xmi:id des Basis-Elements. Alle uebrigen Attribute sind
-  die tatsaechlich gesetzten Tagged Values (leere Tags fehlen einfach, keine
-  leeren Strings).
+  The local element name is the stereotype name with spaces -> underscores
+  (for multi-word names, __EAStereoName additionally returns the real
+  spaces). base_Class/base_Dependency/base_Activity points to the xmi:id
+  of the base element. All other attributes are the tagged values that are
+  actually set (empty tags are simply absent, no empty strings).
 
-- Dependencies (fuer die 9 Beziehungs-Stereotypen) sind normale
+- Dependencies (for the 9 relationship stereotypes) are ordinary
   <packagedElement xmi:type="uml:Dependency" client="..." supplier="...">,
-  client = Source, supplier = Target. Das zugehoerige Stereotyp haengt separat
-  per base_Dependency dran.
+  client = source, supplier = target. The matching stereotype is attached
+  separately via base_Dependency.
 
-- Komposition (Artifact/Assembly/Part) laeuft ueber <uml:Association> mit zwei
-  Enden (memberEnd-Idrefs). WICHTIG, hier gab es eine falsche Annahme in der
-  Vorversion: das Ende mit aggregation="composite" zeigt auf das KIND (Part),
-  nicht auf den Elternteil -- das andere Ende (aggregation="none") zeigt auf
-  den Elternteil (Whole). Empirisch verifiziert an einer echten
-  Artifact->Assembly->Part-Kette.
+- Composition (Artifact/Assembly/Part) runs via <uml:Association> with two
+  ends (memberEnd idrefs). IMPORTANT, the previous version had a wrong
+  assumption here: the end with aggregation="composite" points to the CHILD
+  (part), not to the parent -- the other end (aggregation="none") points to
+  the parent (whole). Empirically verified on a real
+  Artifact->Assembly->Part chain.
 
-Der <xmi:Extension extender="Enterprise Architect">-Block (EAs interne
-Bookhaltung: xrefs, Diagrammstil, redundante Tag-Listen) wird NICHT
-ausgewertet -- alles Noetige steht bereits im <uml:Model>-Teil.
+The <xmi:Extension extender="Enterprise Architect"> block (EA's internal
+bookkeeping: xrefs, diagram style, redundant tag lists) is NOT
+evaluated -- everything needed is already in the <uml:Model> part.
 
-Aufruf:
+Usage:
     python ea_xmi_extract.py --input rflpv2_package.xml --out-dir ea_extract
     python ea_xmi_extract.py --input rflpv2_package.xml --out-dir ea_extract --debug
 """
@@ -61,7 +60,7 @@ from collections import defaultdict, deque
 NS_XMI = "http://schema.omg.org/spec/XMI/2.1"
 NS_UML = "http://schema.omg.org/spec/UML/2.1"
 
-# --- Mapping-Tabellen (siehe ea_to_neo4j_mapping.md, Abschnitt 2 & 3) --------
+# --- Mapping tables (see ea_to_neo4j_mapping.md, sections 2 & 3) --------
 
 NODE_STEREOTYPE_TO_LABEL = {
     "Customer Need": "CustomerNeed",
@@ -101,11 +100,11 @@ TAG_RENAME = {
     "Mainfeature": "mainFeature",
 }
 
-# Tags, die EA zusaetzlich zu unseren eigenen mitliefert (geerbt von der
-# darunterliegenden SysML-Generalisierung, z.B. "id"/"text" von SysML::requirement,
-# "isEncapsulated" von SysML::block) -- kein Bestandteil unseres Profils,
-# werden beim Import ignoriert, um das Neo4j-Schema nicht mit EA-internen
-# Zusatzfeldern zu verunreinigen.
+# Tags that EA supplies in addition to our own (inherited from the underlying
+# SysML generalization, e.g. "id"/"text" from SysML::requirement,
+# "isEncapsulated" from SysML::block) -- not part of our profile,
+# ignored on import so the Neo4j schema is not polluted with EA-internal
+# extra fields.
 IGNORE_TAGS = {"id", "text", "isEncapsulated"}
 
 DEPENDENCY_STEREOTYPES = {
@@ -126,9 +125,9 @@ def local_name(tag):
 
 
 def local_type_name(xmi_type_value):
-    """xmi:type-Attributwerte sind einfache 'prefix:LocalName'-Strings (z.B.
-    'uml:Class'), KEIN ElementTree-Tag mit {namespace}-Praefix -- deshalb
-    eigene Funktion statt local_name()."""
+    """xmi:type attribute values are plain 'prefix:LocalName' strings (e.g.
+    'uml:Class'), NOT an ElementTree tag with a {namespace} prefix -- hence a
+    separate function instead of local_name()."""
     return xmi_type_value.split(":", 1)[-1] if xmi_type_value else xmi_type_value
 
 
@@ -140,10 +139,10 @@ OMG_SCHEMA_PREFIX = "http://schema.omg.org/spec/"
 
 
 def detect_profile_namespaces(path):
-    """Liest alle xmlns:PREFIX-Deklarationen im gesamten Dokument, ausser
-    OMG-Standard-Namespaces (xmi/uml, auch bei abweichender Trailing-Slash-
-    Schreibweise an anderer Stelle im Dokument) und xsi -- das sind die
-    angewendeten Profil-Namespaces (i.d.R. genau einer)."""
+    """Reads all xmlns:PREFIX declarations in the whole document except
+    OMG standard namespaces (xmi/uml, also with a differing trailing-slash
+    spelling elsewhere in the document) and xsi -- these are the
+    applied profile namespaces (usually exactly one)."""
     uris = set()
     for event, ns in ET.iterparse(path, events=("start-ns",)):
         prefix, uri = ns
@@ -158,22 +157,22 @@ def parse_xmi(path, debug=False):
     root = tree.getroot()
     model = root.find("{%s}Model" % NS_UML)
     if model is None:
-        # Manche Exporte nutzen uml:Model ohne Praefix-Kollision -- Fallback
+        # Some exports use uml:Model without a prefix collision -- fallback
         for child in root:
             if local_name(child.tag) == "Model":
                 model = child
                 break
     if model is None:
-        print("FEHLER: kein <uml:Model> gefunden -- ist das eine gueltige XMI-2.1-Datei "
-              "(Export ueber 'Export Package to Native/XMI File', Format XMI 2.1)?", file=sys.stderr)
+        print("ERROR: no <uml:Model> found -- is this a valid XMI 2.1 file "
+              "(export via 'Export Package to Native/XMI File', format XMI 2.1)?", file=sys.stderr)
         sys.exit(1)
 
     profile_uris = detect_profile_namespaces(path)
     if debug:
         print(f"[debug] erkannte Profil-Namespace(s): {profile_uris}", file=sys.stderr)
     if not profile_uris:
-        print("WARNUNG: kein Profil-Namespace am Root gefunden -- vermutlich wurden im "
-              "exportierten Package gar keine RFLPV2-Stereotypen verwendet.", file=sys.stderr)
+        print("WARNING: no profile namespace found on the root -- probably no "
+              "RFLPV2 stereotypes were used in the exported package at all.", file=sys.stderr)
 
     base_elements = {}   # xmi:id -> {"name":.., "xmi_type":..}
     dependencies = []    # (dep_id, client_id, supplier_id)
@@ -200,7 +199,7 @@ def parse_xmi(path, debug=False):
             walk(child)
 
     for top_child in model:
-        # Stereotyp-Anwendungen sind direkte Kinder von <uml:Model> im Profil-Namespace
+        # Stereotype applications are direct children of <uml:Model> in the profile namespace
         uri = namespace_uri(top_child.tag)
         if uri in profile_uris:
             local = local_name(top_child.tag)
@@ -211,8 +210,8 @@ def parse_xmi(path, debug=False):
                     base_id = attr_val
                     break
             if base_id is None:
-                print(f"WARNUNG: Stereotyp-Element <{local}> ohne erkennbares base_*-Attribut "
-                      f"uebersprungen: {top_child.attrib}", file=sys.stderr)
+                print(f"WARNING: stereotype element <{local}> without a recognisable base_* attribute "
+                      f"skipped: {top_child.attrib}", file=sys.stderr)
                 continue
             tags = {
                 k: v for k, v in top_child.attrib.items()
@@ -222,10 +221,10 @@ def parse_xmi(path, debug=False):
         else:
             walk(top_child)
 
-    # Komposition: pro Association die beiden Enden ueber memberEnd aufloesen.
-    # Das Ende mit aggregation="composite" zeigt auf das KIND (Part), das
-    # andere Ende auf den Elternteil (Whole) -- empirisch verifiziert, siehe
-    # Docstring oben.
+    # Composition: resolve the two ends of each association via memberEnd.
+    # The end with aggregation="composite" points to the CHILD (part), the
+    # other end to the parent (whole) -- empirically verified, see the
+    # docstring above.
     composite_edges = []  # (parent_id, child_id)
     for assoc in associations:
         member_ids = [
@@ -238,15 +237,15 @@ def parse_xmi(path, debug=False):
         if composite_end and other_end and composite_end["type"] and other_end["type"]:
             composite_edges.append((other_end["type"], composite_end["type"]))
         elif debug:
-            print(f"[debug] Association {assoc.get('{%s}id' % NS_XMI)} nicht als "
-                  f"Komposition erkannt (ends={ends})", file=sys.stderr)
+            print(f"[debug] Association {assoc.get('{%s}id' % NS_XMI)} not recognised as a "
+                  f"composition (ends={ends})", file=sys.stderr)
 
     return base_elements, stereo_apps, dependencies, composite_edges
 
 
 def assign_product_element_labels(stereo_by_base_id, composite_edges):
-    """Root (keine eingehende Komposition) -> Artifact, Tiefe 1 -> Assembly,
-    Tiefe >=2 -> Part. Warnt bei Tiefe > 2."""
+    """Root (no incoming composition) -> Artifact, depth 1 -> Assembly,
+    depth >=2 -> Part. Warns for depth > 2."""
     product_ids = {
         base_id for base_id, app in stereo_by_base_id.items()
         if app["stereotype"] == "Product Element"
@@ -279,9 +278,9 @@ def assign_product_element_labels(stereo_by_base_id, composite_edges):
             label_by_id[pid] = "Assembly"
         else:
             if d > 2:
-                print(f"WARNUNG: Product-Element {pid} liegt in Kompositionstiefe {d} (>2) -- "
-                      f"wird trotzdem als Part eingestuft, bestehendes Schema ist strikt "
-                      f"dreistufig (Artifact/Assembly/Part).", file=sys.stderr)
+                print(f"WARNING: product element {pid} sits at composition depth {d} (>2) -- "
+                      f"classified as Part anyway, the existing schema is strictly "
+                      f"three-level (Artifact/Assembly/Part).", file=sys.stderr)
             label_by_id[pid] = "Part"
     return label_by_id
 
@@ -290,8 +289,8 @@ def resolve_node_id(base_id, stereotype, tags):
     tag_name = ID_TAG_BY_STEREOTYPE.get(stereotype)
     if tag_name and tags.get(tag_name):
         return tags[tag_name]
-    print(f"WARNUNG: kein Business-Key-Tag fuer Element {base_id} (Stereotyp={stereotype}) "
-          f"gesetzt -- verwende EA-GUID als id.", file=sys.stderr)
+    print(f"WARNING: no business-key tag set for element {base_id} (stereotype={stereotype}) "
+          f"-- using the EA GUID as id.", file=sys.stderr)
     return base_id
 
 
@@ -303,7 +302,7 @@ def build_node_rows(base_elements, stereo_apps, product_labels, stereo_by_base_i
         base_id = app["base_id"]
         stereotype = app["stereotype"]
         if stereotype in DEPENDENCY_STEREOTYPES:
-            continue  # Beziehungen werden separat behandelt
+            continue  # relationships are handled separately
 
         if stereotype == "Product Element":
             label = product_labels.get(base_id, "Artifact")
@@ -333,8 +332,8 @@ def build_node_rows(base_elements, stereo_apps, product_labels, stereo_by_base_i
         if stereotype in VERIFICATION_METHOD_STEREOTYPES:
             row["method"] = stereotype
         if stereotype == "Product Element" and label != "Part" and row.get("materialRef"):
-            print(f"WARNUNG: materialRef gesetzt auf {label}-Knoten {node_id} -- wird nur "
-                  f"fuer Part-Knoten als USES_MATERIAL-Kante umgesetzt, hier ignoriert.",
+            print(f"WARNING: materialRef set on {label} node {node_id} -- it is only "
+                  f"applied to Part nodes as a USES_MATERIAL edge, ignored here.",
                   file=sys.stderr)
 
         rows_by_label[label].append(row)
@@ -355,16 +354,16 @@ def classify_relationship(dep_stereotype, src_stereotype, tgt_stereotype):
 
 def build_relationship_rows(dependencies, dependency_apps, stereo_by_base_id, id_by_base_id):
     rows_by_type = defaultdict(list)
-    # base_id (der Dependency selbst) -> Stereotyp-Name, ueber base_Dependency
+    # base_id (of the dependency itself) -> stereotype name, via base_Dependency
     dep_stereotype_by_id = {app["base_id"]: app["stereotype"] for app in dependency_apps}
     for dep_id, client_id, supplier_id in dependencies:
         dep_stereotype = dep_stereotype_by_id.get(dep_id)
         if dep_stereotype not in DEPENDENCY_STEREOTYPES:
             continue
         if client_id not in id_by_base_id or supplier_id not in id_by_base_id:
-            print(f"WARNUNG: {dep_stereotype}-Connector {dep_id} verweist auf ein Element "
-                  f"ohne bekanntes Ziel-Label (client={client_id}, supplier={supplier_id}) "
-                  f"-- uebersprungen.", file=sys.stderr)
+            print(f"WARNING: {dep_stereotype} connector {dep_id} refers to an element "
+                  f"without a known target label (client={client_id}, supplier={supplier_id}) "
+                  f"-- skipped.", file=sys.stderr)
             continue
         src_label, from_id = id_by_base_id[client_id]
         tgt_label, to_id = id_by_base_id[supplier_id]
@@ -372,8 +371,8 @@ def build_relationship_rows(dependencies, dependency_apps, stereo_by_base_id, id
         tgt_stereo = stereo_by_base_id[supplier_id]["stereotype"] if supplier_id in stereo_by_base_id else tgt_label
         rel_type, is_fallback = classify_relationship(dep_stereotype, src_stereo, tgt_stereo)
         if is_fallback:
-            print(f"HINWEIS: {dep_stereotype} zwischen {src_stereo} und {tgt_stereo} passt zu "
-                  f"keiner bekannten Bestands-Zielregel -- lande auf Fallback-Typ :{rel_type}.",
+            print(f"NOTE: {dep_stereotype} between {src_stereo} and {tgt_stereo} matches "
+                  f"no known target rule of the existing graph -- lands on fallback type :{rel_type}.",
                   file=sys.stderr)
         rows_by_type[rel_type].append({
             "from_id": from_id, "to_id": to_id,
@@ -405,11 +404,11 @@ def main():
     os.makedirs(args.out_dir, exist_ok=True)
 
     base_elements, stereo_apps, dependencies, composite_edges = parse_xmi(args.input, args.debug)
-    print(f"{len(base_elements)} Basis-Elemente, {len(stereo_apps)} Stereotyp-Anwendungen, "
-          f"{len(dependencies)} Dependencies, {len(composite_edges)} Komposition-Kanten gelesen.")
+    print(f"Read {len(base_elements)} base elements, {len(stereo_apps)} stereotype applications, "
+          f"{len(dependencies)} dependencies, {len(composite_edges)} composition edges.")
 
-    # stereo_by_base_id: base_id -> stereo_app (fuer Knoten); Dependency-
-    # Anwendungen getrennt gefuehrt, da sie nicht per Knoten-base_id passen
+    # stereo_by_base_id: base_id -> stereo_app (for nodes); dependency
+    # applications are kept separately because they do not match by node base_id
     stereo_by_base_id = {}
     dependency_apps = []
     for app in stereo_apps:
@@ -435,7 +434,7 @@ def main():
         print(f"  :{rel_type}: {len(rows)} Zeilen -> {args.out_dir}/ea_rel_{rel_type}.csv")
 
     if not rows_by_label:
-        print("\nWARNUNG: keine Knoten extrahiert. Bitte mit --debug erneut laufen lassen.",
+        print("\nWARNING: no nodes extracted. Please re-run with --debug.",
               file=sys.stderr)
 
 
