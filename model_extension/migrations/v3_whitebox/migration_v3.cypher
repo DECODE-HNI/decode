@@ -6,9 +6,9 @@
 //   PRE-2  Process.lifecycleModule (EN 15804) + vocab + backfill + processType normalize
 //   PRE-3  Assessment functional-unit / system-boundary formalization
 //   PRE-4  AssessmentApproach taxonomy (3 paradigms / 7 groups / 23 methods) + links
-//          (the "lernende Ansätze" AI/ML branch -- 2 groups + 6 methods -- was
-//           removed 2026-08-29, see model_versions/consistency/remove_ki_stubs.cypher;
-//           APG_MODEL_TRANSPARENCY / APM_DPP / APM_ENV_KG under AP_LERNEND stay)
+//          (the "learning approaches" AI/ML branch -- 2 groups + 6 methods -- was
+//           removed 2026-08-29, see model_extension/migrations/consistency/remove_ki_stubs.cypher;
+//           APG_MODEL_TRANSPARENCY / APM_DPP / APM_ENV_KG under AP_LEARNING stay)
 //   (base query lca_generic.cypher replaces the hardwired lca_computed_ef31)
 //
 // Deferred to a v3 follow-up slice:
@@ -75,41 +75,41 @@ SET as.functionalUnit    = coalesce(as.functionalUnit, 'one gripper as delivered
 // ----------------------------------------------------------------------------
 UNWIND [
   // paradigms
-  {id:'AP_BILANZIEREND',   name:'bilanzierende Ansätze',  level:'paradigm', code:'1', parent:null},
-  {id:'AP_DATENBASIERT',   name:'datenbasierte Ansätze',  level:'paradigm', code:'2', parent:null},
-  {id:'AP_LERNEND',        name:'lernende Ansätze',        level:'paradigm', code:'3', parent:null},
+  {id:'AP_ACCOUNTING',                name:'Accounting approaches',                                       level:'paradigm',  code:'1',      parent:null},
+  {id:'AP_DATA_DRIVEN',               name:'Data-driven approaches',                                      level:'paradigm',  code:'2',      parent:null},
+  {id:'AP_LEARNING',                  name:'Learning approaches',                                         level:'paradigm',  code:'3',      parent:null},
   // groups
-  {id:'APG_LCA_BASED',          name:'lebenszyklusbasierte Umweltbewertung',              level:'group', code:'1.1', parent:'AP_BILANZIEREND'},
-  {id:'APG_SUBSTANCE_RESOURCE', name:'Stoff- und ressourcenbezogene Bilanzierung',        level:'group', code:'1.2', parent:'AP_BILANZIEREND'},
-  {id:'APG_ECO_ECONOMIC',       name:'integrierte ökologisch-ökonomische Bilanzierung',   level:'group', code:'1.3', parent:'AP_BILANZIEREND'},
-  {id:'APG_PROSPECTIVE_LCA',    name:'prospektive lebenszyklusbasierte Umweltbewertung',  level:'group', code:'2.1', parent:'AP_DATENBASIERT'},
-  {id:'APG_SCENARIO_BASED',     name:'szenariobasierte Umweltbewertung',                  level:'group', code:'2.2', parent:'AP_DATENBASIERT'},
-  {id:'APG_IMPACT_UNCERTAINTY', name:'Wirkungs- und Unsicherheitsanalysen',               level:'group', code:'2.3', parent:'AP_DATENBASIERT'},
-  {id:'APG_MODEL_TRANSPARENCY', name:'modellbasierte Produkt- und Lebenszyklustransparenz', level:'group', code:'3.2', parent:'AP_LERNEND'},
+  {id:'APG_LCA_BASED',                name:'Life-cycle-based environmental assessment',                   level:'group',     code:'1.1',    parent:'AP_ACCOUNTING'},
+  {id:'APG_SUBSTANCE_RESOURCE',       name:'Substance- and resource-related accounting',                  level:'group',     code:'1.2',    parent:'AP_ACCOUNTING'},
+  {id:'APG_ECO_ECONOMIC',             name:'Integrated ecological-economic accounting',                   level:'group',     code:'1.3',    parent:'AP_ACCOUNTING'},
+  {id:'APG_PROSPECTIVE_LCA',          name:'Prospective life-cycle-based environmental assessment',       level:'group',     code:'2.1',    parent:'AP_DATA_DRIVEN'},
+  {id:'APG_SCENARIO_BASED',           name:'Scenario-based environmental assessment',                     level:'group',     code:'2.2',    parent:'AP_DATA_DRIVEN'},
+  {id:'APG_IMPACT_UNCERTAINTY',       name:'Impact and uncertainty analyses',                             level:'group',     code:'2.3',    parent:'AP_DATA_DRIVEN'},
+  {id:'APG_MODEL_TRANSPARENCY',       name:'Model-based product and life-cycle transparency',             level:'group',     code:'3.2',    parent:'AP_LEARNING'},
   // methods
-  {id:'APM_LCA',                     name:'Ökobilanzierung',                       level:'method', code:'1.1.1', parent:'APG_LCA_BASED'},
-  {id:'APM_CF_CO2',                  name:'Umweltfußabdruck CO2',                   level:'method', code:'1.1.2', parent:'APG_LCA_BASED'},
-  {id:'APM_CF_H2O',                  name:'Umweltfußabdruck H2O',                   level:'method', code:'1.1.3', parent:'APG_LCA_BASED'},
-  {id:'APM_GHG',                     name:'Treibhausgasbilanzierung',              level:'method', code:'1.1.4', parent:'APG_LCA_BASED'},
-  {id:'APM_MFA',                     name:'Stoff- & Materialstromanalyse',          level:'method', code:'1.2.1', parent:'APG_SUBSTANCE_RESOURCE'},
-  {id:'APM_POLLUTANT',              name:'Schadstoffbilanzierung',                level:'method', code:'1.2.2', parent:'APG_SUBSTANCE_RESOURCE'},
-  {id:'APM_CED',                     name:'kumulierter Energieverbrauch',           level:'method', code:'1.2.3', parent:'APG_SUBSTANCE_RESOURCE'},
-  {id:'APM_CIRCULARITY',            name:'Zirkularitätsbewertung',                level:'method', code:'1.2.4', parent:'APG_SUBSTANCE_RESOURCE'},
-  {id:'APM_MFCA',                    name:'Materialfluss-Kostenrechnung',           level:'method', code:'1.3.1', parent:'APG_ECO_ECONOMIC'},
-  {id:'APM_ECO_EFFICIENCY',         name:'Ökoeffizienz Bewertung',                level:'method', code:'1.3.2', parent:'APG_ECO_ECONOMIC'},
-  {id:'APM_EEA',                     name:'Umwelt-ökon. Gesamtrechnung',           level:'method', code:'1.3.3', parent:'APG_ECO_ECONOMIC'},
-  {id:'APM_PROSPECTIVE_LCA',        name:'prospektive Ökobilanzierung',           level:'method', code:'2.1.1', parent:'APG_PROSPECTIVE_LCA'},
-  {id:'APM_DYNAMIC_LCA',            name:'dynamische Ökobilanzierung',            level:'method', code:'2.1.2', parent:'APG_PROSPECTIVE_LCA'},
-  {id:'APM_CONSEQUENTIAL_LCA',      name:'konsequenzielle Ökobilanzierung',       level:'method', code:'2.1.3', parent:'APG_PROSPECTIVE_LCA'},
-  {id:'APM_HYBRID_LCA',            name:'hybride Ökobilanzierung',               level:'method', code:'2.1.4', parent:'APG_PROSPECTIVE_LCA'},
-  {id:'APM_SCENARIO_ASSESSMENT',   name:'Szenario-gestützte Umweltbewertung',    level:'method', code:'2.2.1', parent:'APG_SCENARIO_BASED'},
-  {id:'APM_CROSS_IMPACT',          name:'Cross-Impact Wirkungsanalyse',          level:'method', code:'2.2.2', parent:'APG_SCENARIO_BASED'},
-  {id:'APM_ROBUSTNESS',            name:'Robustheits- und Resilienzanalyse',     level:'method', code:'2.2.3', parent:'APG_SCENARIO_BASED'},
-  {id:'APM_IMPACT_CHAIN',          name:'Wirkkettenanalyse',                     level:'method', code:'2.3.1', parent:'APG_IMPACT_UNCERTAINTY'},
-  {id:'APM_UNCERTAINTY_SENSITIVITY', name:'Unsicherheits- und Sensitivitätsanalyse', level:'method', code:'2.3.2', parent:'APG_IMPACT_UNCERTAINTY'},
-  {id:'APM_HOTSPOT',               name:'Hotspot-Analyse',                       level:'method', code:'2.3.3', parent:'APG_IMPACT_UNCERTAINTY'},
-  {id:'APM_DPP',                    name:'Digitaler Produktpass',                 level:'method', code:'3.2.1', parent:'APG_MODEL_TRANSPARENCY'},
-  {id:'APM_ENV_KG',                name:'Umwelt-Wissensgraph',                   level:'method', code:'3.2.2', parent:'APG_MODEL_TRANSPARENCY'}
+  {id:'APM_LCA',                      name:'Life cycle assessment',                                       level:'method',    code:'1.1.1',  parent:'APG_LCA_BASED'},
+  {id:'APM_CF_CO2',                   name:'Carbon footprint (CO2)',                                      level:'method',    code:'1.1.2',  parent:'APG_LCA_BASED'},
+  {id:'APM_CF_H2O',                   name:'Water footprint (H2O)',                                       level:'method',    code:'1.1.3',  parent:'APG_LCA_BASED'},
+  {id:'APM_GHG',                      name:'Greenhouse gas accounting',                                   level:'method',    code:'1.1.4',  parent:'APG_LCA_BASED'},
+  {id:'APM_MFA',                      name:'Substance and material flow analysis',                        level:'method',    code:'1.2.1',  parent:'APG_SUBSTANCE_RESOURCE'},
+  {id:'APM_POLLUTANT',                name:'Pollutant accounting',                                        level:'method',    code:'1.2.2',  parent:'APG_SUBSTANCE_RESOURCE'},
+  {id:'APM_CED',                      name:'Cumulative energy demand',                                    level:'method',    code:'1.2.3',  parent:'APG_SUBSTANCE_RESOURCE'},
+  {id:'APM_CIRCULARITY',              name:'Circularity assessment',                                      level:'method',    code:'1.2.4',  parent:'APG_SUBSTANCE_RESOURCE'},
+  {id:'APM_MFCA',                     name:'Material flow cost accounting',                               level:'method',    code:'1.3.1',  parent:'APG_ECO_ECONOMIC'},
+  {id:'APM_ECO_EFFICIENCY',           name:'Eco-efficiency assessment',                                   level:'method',    code:'1.3.2',  parent:'APG_ECO_ECONOMIC'},
+  {id:'APM_EEA',                      name:'Environmental-economic accounting',                           level:'method',    code:'1.3.3',  parent:'APG_ECO_ECONOMIC'},
+  {id:'APM_PROSPECTIVE_LCA',          name:'Prospective life cycle assessment',                           level:'method',    code:'2.1.1',  parent:'APG_PROSPECTIVE_LCA'},
+  {id:'APM_DYNAMIC_LCA',              name:'Dynamic life cycle assessment',                               level:'method',    code:'2.1.2',  parent:'APG_PROSPECTIVE_LCA'},
+  {id:'APM_CONSEQUENTIAL_LCA',        name:'Consequential life cycle assessment',                         level:'method',    code:'2.1.3',  parent:'APG_PROSPECTIVE_LCA'},
+  {id:'APM_HYBRID_LCA',               name:'Hybrid life cycle assessment',                                level:'method',    code:'2.1.4',  parent:'APG_PROSPECTIVE_LCA'},
+  {id:'APM_SCENARIO_ASSESSMENT',      name:'Scenario-supported environmental assessment',                 level:'method',    code:'2.2.1',  parent:'APG_SCENARIO_BASED'},
+  {id:'APM_CROSS_IMPACT',             name:'Cross-impact analysis',                                       level:'method',    code:'2.2.2',  parent:'APG_SCENARIO_BASED'},
+  {id:'APM_ROBUSTNESS',               name:'Robustness and resilience analysis',                          level:'method',    code:'2.2.3',  parent:'APG_SCENARIO_BASED'},
+  {id:'APM_IMPACT_CHAIN',             name:'Impact chain analysis',                                       level:'method',    code:'2.3.1',  parent:'APG_IMPACT_UNCERTAINTY'},
+  {id:'APM_UNCERTAINTY_SENSITIVITY',  name:'Uncertainty and sensitivity analysis',                        level:'method',    code:'2.3.2',  parent:'APG_IMPACT_UNCERTAINTY'},
+  {id:'APM_HOTSPOT',                  name:'Hotspot analysis',                                            level:'method',    code:'2.3.3',  parent:'APG_IMPACT_UNCERTAINTY'},
+  {id:'APM_DPP',                      name:'Digital product passport',                                    level:'method',    code:'3.2.1',  parent:'APG_MODEL_TRANSPARENCY'},
+  {id:'APM_ENV_KG',                   name:'Environmental knowledge graph',                               level:'method',    code:'3.2.2',  parent:'APG_MODEL_TRANSPARENCY'}
 ] AS row
 MERGE (ap:AssessmentApproach {id: row.id})
   SET ap.name = row.name, ap.level = row.level, ap.code = row.code

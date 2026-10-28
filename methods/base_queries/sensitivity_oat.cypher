@@ -1,6 +1,6 @@
-// sensitivity_oat.cypher  --  One-at-a-time-Sensitivität auf den Klimawert.
-// Variiert je Werkstoff-GWP-Literal um +-$delta und zeigt die Wirkung auf den
-// Greifer-Klimawert (Variante-B-Logik).  Parameter: $artifactId, $delta (z.B. 0.1).
+// sensitivity_oat.cypher  --  one-at-a-time sensitivity on the climate value.
+// Varies each material GWP literal by +-$delta and shows the effect on the
+// gripper climate value (Variant B logic).  Parameters: $artifactId, $delta (e.g. 0.1).
 WITH coalesce($delta, 0.1) AS delta
 MATCH (art:Artifact {id:$artifactId})-[:HAS_COMPONENT]->(:Assembly)-[hc:HAS_COMPONENT]->(p:Part)
       -[:USES_MATERIAL]->(m:Material)

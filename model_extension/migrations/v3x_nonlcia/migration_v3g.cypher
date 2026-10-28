@@ -1,7 +1,7 @@
 // ============================================================================
 // migration_v3g.cypher  --  Module v3.g: Cross-Impact & scenario assessment
-//   2.2.2 Cross-Impact-Wirkungsanalyse  (INFLUENCES matrix)
-//   2.2.1 Szenario-gestützte Umweltbewertung  (results under SC_RECYCLED_ALU)
+//   2.2.2 Cross-impact analysis  (INFLUENCES matrix)
+//   2.2.1 Scenario-supported environmental assessment  (results under SC_RECYCLED_ALU)
 // Additive. Re-MATCH by id in every statement. Rollback at bottom. 2026-08-28
 //
 // INFLUENCES sign convention:

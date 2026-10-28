@@ -1,8 +1,8 @@
-// scenario_compare.cypher  --  Szenario-gestützte Umweltbewertung (2.2.1).
-// Vergleicht einen Indikator je Greifer über die ModelScenario-Knoten.
-// Baseline = die Variante-B-Ergebnisse (scenarioRef IS NULL / 'SC_BASELINE'),
-// Szenarien = ImpactResult mit gesetztem scenarioRef.
-// Parameter: $resultType (default 'Climate change'), $artifactId (oder null).
+// scenario_compare.cypher  --  scenario-supported environmental assessment (2.2.1).
+// Compares an indicator per gripper across the ModelScenario nodes.
+// Baseline = the Variant B results (scenarioRef IS NULL / 'SC_BASELINE'),
+// scenarios = ImpactResult with scenarioRef set.
+// Parameters: $resultType (default 'Climate change'), $artifactId (or null).
 MATCH (as:Assessment)-[:ASSESSES]->(art:Artifact)
 MATCH (as)-[:HAS_RESULT]->(ir:ImpactResult)
 WHERE ir.resultType = coalesce($resultType,'Climate change')

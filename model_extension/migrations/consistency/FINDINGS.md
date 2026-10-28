@@ -142,7 +142,7 @@ prepared-only AI/ML material was removed from graph and docs in full:
 `PM_GWP_SURROGATE` (`:PredictionModel`), `REC_DEMO_LIGHTWEIGHT_CONTACT`
 (`:Recommendation`), `ASSESS_AI_PREPARED`. Labels `PredictionModel` /
 `Recommendation` and rel types `PREDICTS` / `ESTIMATED_BY` / `RECOMMENDS_FOR`
-fall out of use. **Kept:** `AP_LERNEND` root + `APG_MODEL_TRANSPARENCY` +
+fall out of use. **Kept:** `AP_LEARNING` root + `APG_MODEL_TRANSPARENCY` +
 `APM_DPP` + `APM_ENV_KG` (real, not AI); `ImpactResult.provenance`/`.confidence`
 (general). Rollback block in the migration. Docs scrubbed:
 `base_queries/design_recommendation.cypher` + 6 method one-pagers (3.1.1–3.1.3,

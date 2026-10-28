@@ -1,7 +1,7 @@
-// water_footprint.cypher  --  Umweltfußabdruck H2O (ISO 14046), Näherung.
-// Nutzt die vorhandenen IC_EF_WATER_USE-Charakterisierungsfaktoren (AWARE-artig,
-// regionalisiert via CHARACTERIZES.location) auf den MODELED_BY-Datensätzen.
-// Parameter: $artifactId (oder null).
+// water_footprint.cypher  --  water footprint H2O (ISO 14046), approximation.
+// Uses the existing IC_EF_WATER_USE characterisation factors (AWARE-like,
+// regionalised via CHARACTERIZES.location) on the MODELED_BY datasets.
+// Parameters: $artifactId (or null).
 CALL {
   MATCH (ds:Process)<-[:MODELED_BY]-(:Material)
   WITH DISTINCT ds

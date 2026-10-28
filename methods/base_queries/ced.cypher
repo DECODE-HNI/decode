@@ -1,8 +1,8 @@
-// ced.cypher  --  kumulierter Energieverbrauch (CED), Näherung.
-// A3-Anteil: Fertigungsstrom (Process.energyIntensity_kWh_per_kg x Bauteilmasse).
-// A1-Anteil: fossiler Ressourceneinsatz aus IC_EF_EF_RESOURCE_USE_FOSSILS (MJ)
-// auf den MODELED_BY-Datensätzen, wo Faktoren vorhanden sind.
-// Parameter: $artifactId (oder null).  1 kWh = 3.6 MJ.
+// ced.cypher  --  cumulative energy demand (CED), approximation.
+// A3 share: manufacturing electricity (Process.energyIntensity_kWh_per_kg x part mass).
+// A1 share: fossil resource use from IC_EF_EF_RESOURCE_USE_FOSSILS (MJ)
+// on the MODELED_BY datasets where factors exist.
+// Parameters: $artifactId (or null).  1 kWh = 3.6 MJ.
 MATCH (art:Artifact)
 WHERE ($artifactId IS NULL OR art.id = $artifactId)
 

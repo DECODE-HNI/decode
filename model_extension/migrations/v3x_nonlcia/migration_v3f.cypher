@@ -1,8 +1,8 @@
 // ============================================================================
 // migration_v3f.cypher  --  Module v3.f: Emissions & pollutant accounting
-//   1.1.4 THG-Bilanzierung nach Scope (GHG Protocol)
-//   1.2.2 Schadstoffbilanzierung (GHS-Register)
-//   1.1.3 Wasser-Fußabdruck (Kategorie-Einheit + Demonstrator)
+//   1.1.4 Greenhouse gas accounting by scope (GHG Protocol)
+//   1.2.2 Pollutant accounting (GHS register)
+//   1.1.3 Water footprint (category unit + demonstrator)
 // Additive. Each ';'-statement is independent -> re-MATCH by id.
 // Rollback at bottom. Date: 2026-08-28
 // ============================================================================

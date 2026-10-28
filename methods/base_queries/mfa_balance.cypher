@@ -1,8 +1,8 @@
-// mfa_balance.cypher  --  Stoff- & Materialstromanalyse (MFA).
-// Massenbilanz je Fertigungs-/Assembly-Prozess des Greifer-Vordergrunds:
-// Eingangsmasse (Material) vs. Ausgangsmasse (Bauteil + Verschnitt).
-// Nutzt Part.mass_g (v2-data) und Process.materialFactor.
-// Parameter: $artifactId (oder null).
+// mfa_balance.cypher  --  substance and material flow analysis (MFA).
+// Mass balance per manufacturing/assembly process of the gripper foreground:
+// input mass (material) vs. output mass (part + scrap).
+// Uses Part.mass_g (v2-data) and Process.materialFactor.
+// Parameters: $artifactId (or null).
 MATCH (art:Artifact)-[:HAS_PROCESS_PLAN]->(:ProcessPlan)-[:CONTAINS_PROCESS]->(pr:Process)
 WHERE ($artifactId IS NULL OR art.id = $artifactId)
 OPTIONAL MATCH (pr)-[:APPLIES_TO]->(p:Part)<-[:HAS_COMPONENT]-(:Assembly)<-[:HAS_COMPONENT]-(art)

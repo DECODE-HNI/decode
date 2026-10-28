@@ -7,7 +7,7 @@
 // rule-based 3.3.3 automated-design-recommendation branch.
 //
 // KEPT on purpose:
-//   * AP_LERNEND (root)            -- still parents APG_MODEL_TRANSPARENCY
+//   * AP_LEARNING (root)           -- still parents APG_MODEL_TRANSPARENCY
 //   * APG_MODEL_TRANSPARENCY + APM_DPP + APM_ENV_KG  -- real, backed by
 //     dpp_view.cypher / kg_self_description.cypher, not AI
 //   * ImpactResult.provenance / .confidence properties -- general, not AI-only
@@ -45,24 +45,24 @@ MATCH (n) WHERE n:PredictionModel OR n:Recommendation
 RETURN 'residual AI nodes' AS check, count(n) AS n;   // expect 0
 MATCH ()-[r:PREDICTS|ESTIMATED_BY|RECOMMENDS_FOR]->()
 RETURN 'residual AI rels' AS check, count(r) AS n;    // expect 0
-MATCH (ap:AssessmentApproach {id:'AP_LERNEND'})<-[:BROADER]-(child)
-RETURN 'AP_LERNEND children kept' AS check, collect(child.id) AS n;  // expect [APG_MODEL_TRANSPARENCY]
+MATCH (ap:AssessmentApproach {id:'AP_LEARNING'})<-[:BROADER]-(child)
+RETURN 'AP_LEARNING children kept' AS check, collect(child.id) AS n;  // expect [APG_MODEL_TRANSPARENCY]
 
 // ============================================================================
 // ROLLBACK  --  restores the 11 nodes + 19 relationships exactly.
 // ----------------------------------------------------------------------------
-// CREATE (:AssessmentApproach {id:'APG_AI_FORECAST', name:'KI-gestützte Umweltwirkungsprognose', code:'3.1', level:'group'});
-// CREATE (:AssessmentApproach {id:'APG_ADAPTIVE_DECISION', name:'adaptive Szenarien- & Entscheidungsunterstützung', code:'3.3', level:'group'});
-// CREATE (:AssessmentApproach {id:'APM_IMPACT_FORECAST', name:'Umweltwirkungsprognosen', code:'3.1.1', level:'method'});
-// CREATE (:AssessmentApproach {id:'APM_AI_LCA_MODELING', name:'KI-Lebenszyklusmodellierung', code:'3.1.2', level:'method'});
-// CREATE (:AssessmentApproach {id:'APM_SURROGATE', name:'Ersatz- und Näherungsmodelle', code:'3.1.3', level:'method'});
-// CREATE (:AssessmentApproach {id:'APM_LEARNING_SCENARIO', name:'lernende Szenario Modelle', code:'3.3.1', level:'method'});
-// CREATE (:AssessmentApproach {id:'APM_PREDICTIVE_ASSESSMENT', name:'prädiktive Umweltfolgeabschätzungen', code:'3.3.2', level:'method'});
-// CREATE (:AssessmentApproach {id:'APM_AUTO_DESIGN', name:'automatisierte Designempfehlung', code:'3.3.3', level:'method'});
+// CREATE (:AssessmentApproach {id:'APG_AI_FORECAST', name:'AI-based environmental impact forecasting', code:'3.1', level:'group'});
+// CREATE (:AssessmentApproach {id:'APG_ADAPTIVE_DECISION', name:'Adaptive scenario and decision support', code:'3.3', level:'group'});
+// CREATE (:AssessmentApproach {id:'APM_IMPACT_FORECAST', name:'Environmental impact forecasts', code:'3.1.1', level:'method'});
+// CREATE (:AssessmentApproach {id:'APM_AI_LCA_MODELING', name:'AI life cycle modelling', code:'3.1.2', level:'method'});
+// CREATE (:AssessmentApproach {id:'APM_SURROGATE', name:'Surrogate and approximation models', code:'3.1.3', level:'method'});
+// CREATE (:AssessmentApproach {id:'APM_LEARNING_SCENARIO', name:'Learning scenario models', code:'3.3.1', level:'method'});
+// CREATE (:AssessmentApproach {id:'APM_PREDICTIVE_ASSESSMENT', name:'Predictive environmental impact assessment', code:'3.3.2', level:'method'});
+// CREATE (:AssessmentApproach {id:'APM_AUTO_DESIGN', name:'Automated design recommendation', code:'3.3.3', level:'method'});
 // CREATE (:PredictionModel {id:'PM_GWP_SURROGATE', kind:'surrogate', module:'v3.i', status:'prepared', target:'IC_CLIMATE', algorithm:'(not trained)', trainingDataRef:'would draw on ImpactResult{provenance:"LCI-calculated"}', note:'attachment point for 3.1.3 surrogate models; weights and training live outside the graph'});
 // CREATE (:Recommendation {id:'REC_DEMO_LIGHTWEIGHT_CONTACT', module:'v3.i', status:'prepared', provenance:'illustrative', confidence:0.5, basis:'design_recommendation.cypher ranking + v3.g INFLUENCES matrix', text:'Prefer a replaceable printed contact element where payload allows: raises repairability and circularity at a small climate cost.'});
 // CREATE (:Assessment {id:'ASSESS_AI_PREPARED', name:'AI methods - prepared (no model executed)', assessmentType:'preparation marker', status:'prepared', methodology:'attachment points only: PredictionModel/Recommendation types, ImpactResult.provenance/confidence, BASED_ON, ESTIMATED_BY'});
-// MATCH (ler:AssessmentApproach {id:'AP_LERNEND'}) MATCH (g:AssessmentApproach) WHERE g.id IN ['APG_AI_FORECAST','APG_ADAPTIVE_DECISION'] MERGE (g)-[:BROADER]->(ler);
+// MATCH (ler:AssessmentApproach {id:'AP_LEARNING'}) MATCH (g:AssessmentApproach) WHERE g.id IN ['APG_AI_FORECAST','APG_ADAPTIVE_DECISION'] MERGE (g)-[:BROADER]->(ler);
 // MATCH (f:AssessmentApproach {id:'APG_AI_FORECAST'}) MATCH (m:AssessmentApproach) WHERE m.id IN ['APM_IMPACT_FORECAST','APM_AI_LCA_MODELING','APM_SURROGATE'] MERGE (m)-[:BROADER]->(f);
 // MATCH (d:AssessmentApproach {id:'APG_ADAPTIVE_DECISION'}) MATCH (m:AssessmentApproach) WHERE m.id IN ['APM_LEARNING_SCENARIO','APM_PREDICTIVE_ASSESSMENT','APM_AUTO_DESIGN'] MERGE (m)-[:BROADER]->(d);
 // MATCH (a:Assessment {id:'ASSESS_AI_PREPARED'}) MATCH (m:AssessmentApproach) WHERE m.id IN ['APM_IMPACT_FORECAST','APM_AI_LCA_MODELING','APM_SURROGATE','APM_LEARNING_SCENARIO','APM_PREDICTIVE_ASSESSMENT'] MERGE (a)-[:APPLIES_APPROACH]->(m);

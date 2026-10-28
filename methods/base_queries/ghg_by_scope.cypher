@@ -1,9 +1,9 @@
-// ghg_by_scope.cypher  --  Treibhausgasbilanzierung nach GHG-Protocol-Scope (1.1.4).
-// Re-partitioniert die cradle-to-gate-Klimazahl (Variante B: A1 Werkstoffe +
-// A3 Strom) in Scope 1 / Scope 2 / Scope 3-upstream. Gleiches Systemmodell wie
-// v2_data/lca_from_literals.cypher, daher gilt  S2 + S3UP == Variante-B-Klima.
-// Scope 1 = 0 (keine standorteigene fossile Verbrennung modelliert) -> Luecke.
-// Parameter: $artifactId (oder null), $electricityCF (default 0.38 = DE-Netz).
+// ghg_by_scope.cypher  --  greenhouse gas accounting by GHG Protocol scope (1.1.4).
+// Re-partitions the cradle-to-gate climate figure (Variant B: A1 materials +
+// A3 electricity) into scope 1 / scope 2 / scope 3 upstream. Same system model as
+// v2_data/lca_from_literals.cypher, hence  S2 + S3UP == Variant B climate figure.
+// Scope 1 = 0 (no on-site fossil combustion modelled) -> gap.
+// Parameters: $artifactId (or null), $electricityCF (default 0.38 = DE grid).
 WITH coalesce($electricityCF, 0.38) AS eCF
 MATCH (art:Artifact)-[:HAS_PROCESS_PLAN]->(:ProcessPlan)-[:CONTAINS_PROCESS]->(mp:Process {processType:'Manufacturing'})
 WHERE $artifactId IS NULL OR art.id = $artifactId

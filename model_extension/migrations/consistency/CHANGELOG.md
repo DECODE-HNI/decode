@@ -11,7 +11,7 @@
   `AssessmentApproach` nodes of the 3.1.x/3.3.x branches, `PM_GWP_SURROGATE`,
   `REC_DEMO_LIGHTWEIGHT_CONTACT`, `ASSESS_AI_PREPARED`). Labels
   `PredictionModel`/`Recommendation` and relationship types `PREDICTS`/
-  `ESTIMATED_BY`/`RECOMMENDS_FOR` fall out of use. Kept: `AP_LERNEND` +
+  `ESTIMATED_BY`/`RECOMMENDS_FOR` fall out of use. Kept: `AP_LEARNING` +
   `APG_MODEL_TRANSPARENCY` + `APM_DPP`/`APM_ENV_KG`. Rollback block in the file.
   Docs updated throughout; `design_recommendation.cypher` + 6 one-pagers
   (3.1.1–3.1.3, 3.3.1–3.3.3) deleted; `migration_v3.cypher` /

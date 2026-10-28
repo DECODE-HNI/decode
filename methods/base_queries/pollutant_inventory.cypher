@@ -1,8 +1,8 @@
-// pollutant_inventory.cypher  --  Schadstoffbilanzierung (1.2.2), Naeherung.
-// Aggregiert charakterisierte Emissionsfluesse aus den MODELED_BY-Datensaetzen,
-// gruppiert nach Stoff, skaliert auf den Greifer, und haengt die v3.f-
-// Gefahrenklassifikation (Flow.hazardClass + HAS_HAZARD -> HazardStatement) an.
-// Parameter: $artifactId (oder null), $topN, $hazardOnly (true -> nur klassifizierte).
+// pollutant_inventory.cypher  --  pollutant accounting (1.2.2), approximation.
+// Aggregates characterised emission flows from the MODELED_BY datasets,
+// grouped by substance, scaled to the gripper, and attaches the v3.f
+// hazard classification (Flow.hazardClass + HAS_HAZARD -> HazardStatement).
+// Parameters: $artifactId (or null), $topN, $hazardOnly (true -> classified only).
 CALL {
   MATCH (ds:Process)<-[:MODELED_BY]-(:Material)
   WITH DISTINCT ds

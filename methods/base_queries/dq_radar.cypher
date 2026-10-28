@@ -1,7 +1,7 @@
 // ============================================================================
 // dq_radar.cypher  --  data-quality radar + phase gate for one LCA assessment
 // ----------------------------------------------------------------------------
-// Reads the auto-derived DQ layer (model_versions/dq_concept/). Returns the
+// Reads the auto-derived DQ layer (model_extension/migrations/dq_concept/). Returns the
 // 8-criterion score vector (radar axes), the selected phase's target vector,
 // and a per-axis + overall pass/fail. The gate is MIN-based: gatePass is true
 // iff EVERY criterion meets its target -- there is no averaging and no index.

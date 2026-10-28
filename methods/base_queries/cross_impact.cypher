@@ -1,10 +1,10 @@
-// cross_impact.cypher  --  Cross-Impact-Wirkungsanalyse (2.2.2).
-// Nutzt die v3.g-INFLUENCES-Matrix (sign x strength, engineering-reasoned).
-// sign '+' = verbessert die Ziel-Kategorie, '-' = verschlechtert sie; strength 1..3.
-// $mode:  'lever' (default) -> Wirkungen eines Hebels/einer Kategorie ($leverId)
-//         'tradeoff'        -> Hebel, die >=2 Kategorien mit gemischten Vorzeichen treiben
+// cross_impact.cypher  --  cross-impact analysis (2.2.2).
+// Uses the v3.g INFLUENCES matrix (sign x strength, engineering-reasoned).
+// sign '+' = improves the target category, '-' = worsens it; strength 1..3.
+// $mode:  'lever' (default) -> effects of one lever/category ($leverId)
+//         'tradeoff'        -> levers that drive >=2 categories with mixed signs
 
-// --- Modus 'lever' ---------------------------------------------------------
+// --- mode 'lever' ----------------------------------------------------------
 MATCH (src {id:$leverId})-[r:INFLUENCES]->(ic:ImpactCategory)
 WHERE coalesce($mode,'lever') = 'lever'
 RETURN 'lever'                    AS report,
@@ -18,7 +18,7 @@ ORDER BY strength DESC, impactCategory
 
 UNION
 
-// --- Modus 'tradeoff' ----------------------------------------------------
+// --- mode 'tradeoff' -------------------------------------------------------
 MATCH (src)-[r:INFLUENCES]->(ic:ImpactCategory)
 WHERE $mode = 'tradeoff'
 WITH src, collect(DISTINCT r.sign) AS signs,
